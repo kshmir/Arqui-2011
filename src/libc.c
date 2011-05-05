@@ -16,9 +16,7 @@ void k_clear_screen()
 		vidmem[i]= ' ';
 		i++;
 		vidmem[i] = WHITE_TXT;
-
 		i++;
-		
 	};
 }
 
