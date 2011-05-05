@@ -7,4 +7,10 @@ gcc -c ../src/kernel.c -o kernel.o -fno-builtin
 gcc -c ../src/libc.c  -o libc.o -fno-builtin
 ld -T ../src/link.ld -o kernel.bin kernel.o kstart.o libc.o libasm.o
 
+date > ../compiled
+touch ../compiled
+sleep 1
+date > ../compiled
+touch ../compiled
+
 echo "Compila end"
