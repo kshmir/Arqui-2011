@@ -1,5 +1,4 @@
-cd ./bin
-rm -rf *
+cd bin
 nasm -f aout ../src/libasm.asm -o libasm.o
 nasm -f aout ../src/kstart.asm -o kstart.o
 nasm -f aout ../src/loader.asm -o kstart.o
