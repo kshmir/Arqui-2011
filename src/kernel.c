@@ -5,12 +5,9 @@ DESCR_INT idt[0xA];			/* IDT de 10 entradas*/
 IDTR idtr;				/* IDTR */
 
 int tickpos=640;
-
 void int_08() {
-
     char *video = (char *) 0xb8000;
-    video[tickpos+=2]='*';
-
+    video[tickpos+=2]=tickpos * 4;
 }
 
 /**********************************************
@@ -18,10 +15,12 @@ kmain()
 Punto de entrada de cóo C.
 *************************************************/
 
+
+
 kmain() 
 {
 
-        int i,num;
+	int i,num;
 
 /* Borra la pantalla. */ 
 

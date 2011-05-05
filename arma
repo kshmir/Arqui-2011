@@ -1,3 +1,5 @@
-./compila
-cd ./bin
-mcopy kernel.bin b:boot/ -o
+mcopy -o bin/kernel.bin b:/boot/
+echo "Armado"
+VBoxManage controlvm tpe reset
+echo "Arrancando VBOX"
+rm ../compiled
