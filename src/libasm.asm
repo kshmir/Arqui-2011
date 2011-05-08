@@ -6,10 +6,7 @@ GLOBAL  _debug
 EXTERN  int_08
 
 
-
-
 SECTION .text
-
 
 
 _Cli:
