@@ -19,6 +19,7 @@ void		_Cli(void);        /* Deshabilita interrupciones  */
 void		_Sti(void);	 /* Habilita interrupciones  */
 
 void		_int_08_hand();      /* Timer tick */
+void		_int_09_hand();      /* Teclado */
 
 void		_debug (void);
 
