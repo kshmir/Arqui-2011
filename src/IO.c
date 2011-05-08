@@ -52,11 +52,11 @@ void controlKey(char scancode){
 		rShift=1;
 	else{
 		lShift=rShift=0; 
-	//if (scancode == 0xaa)
-	//	lShift=0;
-	//else if(scancode == 0xb6)
-	//	rShift=0;
-	//else 
+	if (scancode == 0xaa)
+		lShift=0;
+	else if(scancode == 0xb6)
+		rShift=0;
+	else 
 	if(scancode == 0x1c)
 		enter();
 	else if(scancode == 0x38)
@@ -75,10 +75,14 @@ void controlKey(char scancode){
 		backSpace();
 	else if(scancode == 0x3A)
 		capsLock=capsLock?0:1;
-	else if(scancode == 0x39)
-		putC(' ');
-	else if(scancode == 0x0f)
-		putC('	');
+	else if(scancode == 0x39){ //space
+		pushC(scancode);
+		shellKBInterrupt();
+	}else if(scancode == 0x0f){
+		//putC('	');
+		pushC(scancode);
+		shellKBInterrupt();
+		}
 	}
 }
 
@@ -86,7 +90,7 @@ void escRelease(){
 	return;
 	}
 
-void backSpace(){
+void removeLastC(){
 	decrementCursor();
 	putC(' ');
 	decrementCursor();
@@ -102,12 +106,14 @@ int isShift(){
 	return lShift || rShift;
 	}
 void enter(){
-	cursorX=0;
-	if(cursorY<MAX_ROWS)
-		cursorY++;
-	else 
-		cursorY=0;
+	nextRow();
+	//cursorX=0;
+	//if(cursorY<MAX_ROWS)
+	//	cursorY++;
+	//else 
+	//	cursorY=0;
 	}
+
 
 char getC(){
 	if(charBufferPointer<0)
@@ -122,3 +128,24 @@ void putC(char c){
 	video[a+1] = style;
 	incrementCursor();
 }
+
+int getCursorX(){
+	return cursorX;
+	}
+int getCursorY(){
+	return cursorY;
+	}
+void setCursorX(int x){
+	if(x>=0 && x<=MAX_COLS)
+		cursorX=x;
+	}
+
+void setCursorY(int y){
+	if(y>=0 && y<=MAX_ROWS)
+		cursorY=y;
+	}	
+
+void moveCursorToStart(){
+	cursorX=0;
+	cursorY=0;
+	}

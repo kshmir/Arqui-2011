@@ -2,6 +2,8 @@
 #include "../include/defs.h"
 #include "../src/keyboard.h"
 #include "../src/IO.h"
+#include "../src/shell.h"
+
 
 DESCR_INT idt[0xA];			/* IDT de 10 entradas*/
 IDTR idtr;				/* IDTR */
@@ -29,7 +31,8 @@ void int_09(char scancode) {
     flag=flag || (scancode >=0x2b && scancode <=0x35);
     if(flag) {
 		pushC(scanCodeToChar(scancode)); //guarda un char en el stack
-		putC(getC());
+		shellKBInterrupt();
+		//putC(getC());
 	}else
 		controlKey(scancode);
 
@@ -48,7 +51,8 @@ kmain()
 /* Borra la pantalla. */ 
 
 	k_clear_screen();
-
+	
+	shellStart();
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 

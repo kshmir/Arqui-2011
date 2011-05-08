@@ -13,9 +13,14 @@ int capsOn();
 int isShift();
 int isCapital();
 void escRelease();
-void backSpace();
+void removeLastC();
 void controlKey(char scancode);
 void putC(char c);
 void pushC(char c);
 char getC();
+int getCursorX();
+int getCursorY();
+void setCursorX(int x);
+void setCursorY(int y);
+void moveCursorToStart();
 #endif
