@@ -13,10 +13,10 @@ void k_clear_screen()
 	unsigned int i=0;
 
 	while(i < (80*25*2))
-	{		
-		vidmem[i]= ' ';
+	{
+		vidmem[i]='7';
 		i++;
-		vidmem[i] = WHITE_TXT;
+		vidmem[i]=WHITE_TXT;
 		i++;
 	}
 }
@@ -34,7 +34,6 @@ void k_maxi_screen(){
 		a++;
 	}
 }
-
 
 /***************************************************************
 *setup_IDT_entry

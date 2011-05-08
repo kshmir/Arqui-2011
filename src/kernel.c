@@ -9,6 +9,7 @@ IDTR idtr;				/* IDTR */
 int tickpos=640;
 
 void int_08() {
+
 	//k_maxi_screen();
     //char *video = (char *   ) 0xb8000;
     //video[tickpos+=2]='a';
@@ -31,6 +32,7 @@ void int_09(char scancode) {
 		putC(getC());
 	}else
 		controlKey(scancode);
+
 }
 
 /**********************************************
@@ -38,12 +40,10 @@ kmain()
 Punto de entrada de cóo C.
 *************************************************/
 
-
-
 kmain() 
 {
 
-	int i,num;
+        int i,num;
 
 /* Borra la pantalla. */ 
 
