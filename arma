@@ -3,4 +3,3 @@ mcopy -o kernel.bin b:/boot/
 echo "Armado"
 VBoxManage controlvm tpe reset
 echo "Arrancando VBOX"
-rm ../compiled
