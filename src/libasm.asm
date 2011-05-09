@@ -1,10 +1,11 @@
 GLOBAL  _read_msw,_lidt
 GLOBAL  _int_08_hand
+GLOBAL  _int_09_hand
 GLOBAL  _mascaraPIC1,_mascaraPIC2,_Cli,_Sti
 GLOBAL  _debug
 
 EXTERN  int_08
-
+EXTERN  int_09
 
 SECTION .text
 
@@ -66,6 +67,25 @@ _int_08_hand:				; Handler de INT 8 ( Timer tick)
         pop     ds
         iret
 
+_int_09_hand:				; Handler de INT 9 ( Teclado )
+        push    ds
+        push    es                      ; Se salvan los registros
+        pusha                           ; Carga de DS y ES con el valor del selector
+
+	in al, 60h	;Leo el puerto del teclado
+	push ax		;Le envio el SCAN CODE como parametro a la funcion int_09
+	call int_09	;Llamo a la interrupcion que maneja el SCAN CODE en C
+	pop ax		;Quito el parametro del stack
+
+        mov	al,20h			; Envio de EOI generico al PIC
+	out	20h,al
+
+	popa
+        pop     es
+        pop     ds
+        iret
+
+
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
@@ -81,3 +101,6 @@ vuelve:	mov     ax, 1
 	pop	ax
 	pop     bp
         retn
+
+
+	

@@ -1,6 +1,4 @@
-#include "../include/kc.h"
-
-
+#include "../src/libc.h"
 /***************************************************************
 *k_clear_screen
 *
@@ -9,15 +7,28 @@
 
 void k_clear_screen() 
 {
-	char *vidmem = (char *) 0xb8000;
-	unsigned int i=0;
-	while(i < (80*25*2))
+	int i=0;
+	moveCursorToStart();
+	while(i++ < (MAX_COLS*(MAX_ROWS+1)))
 	{
-		vidmem[i]='7';
-		i++;
-		vidmem[i]=WHITE_TXT;
-		i++;
-	};
+		putC(' ');
+	}
+	moveCursorToStart();
+}
+
+void k_maxi_screen(){
+	char *vidmem = (char *) 0xb8000;
+	unsigned int i=0,j=0;
+	char a='a';
+	while(j<80){
+		while(i<25*2){
+			vidmem[i*j]=a;
+			i++;
+			vidmem[i++]=WHITE_TXT;
+		}
+		j++;
+		a++;
+	}
 }
 
 /***************************************************************
@@ -39,3 +50,5 @@ void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset, byte access,
   item->access = access;
   item->cero = cero;
 }
+
+
