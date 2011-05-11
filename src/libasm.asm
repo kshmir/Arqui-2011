@@ -116,15 +116,20 @@ _int_80_hand:
     push ds
     push es
     pusha
-    push edx            ; cantidad de caracteres a escribir
-    push ecx            ; direccion de la cadena a escribir
-    push ebx           	; file descriptor
-    push eax			; system call
-    call int_80
-    pop eax             ; saco parametros
-    pop eax
-    pop eax
-    pop eax
+    ;mov edx,0xb8000
+    mov al,'a'
+    mov ah,0x07
+    mov 0xb8000,al
+    mov 0xb8001,ah
+    ;push edx            ; cantidad de caracteres a escribir
+    ;push ecx            ; direccion de la cadena a escribir
+    ;push ebx           	; file descriptor
+    ;push eax			; system call
+    ;call int_80
+    ;pop eax             ; saco parametros
+    ;pop eax
+    ;pop eax
+    ;pop eax
     popa
     pop es
     pop ds
@@ -132,18 +137,21 @@ _int_80_hand:
     iret	
 
 _write:
-	push ebp
-	mov ebp, esp
-	pusha
-	mov eax, 0		; eax en 0 para write
-	mov ebx, [ebp+8]	; file descriptor
-	mov ecx, [ebp+12]	; buffer a escribir
-	mov edx, [ebp+16]	; cantidad
 	int 80h
-	popa
-	mov esp, ebp
-	pop ebp
 	ret
+;_write:
+;	push ebp
+;	mov ebp, esp
+;	pusha
+;	mov eax, 0		; eax en 0 para write
+;	mov ebx, [ebp+8]	; file descriptor
+;	mov ecx, [ebp+12]	; buffer a escribir
+;	mov edx, [ebp+16]	; cantidad
+;	int 80h
+;	popa
+;	mov esp, ebp
+;	pop ebp
+;	ret
 
 _read:
 	push ebp
