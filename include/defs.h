@@ -6,6 +6,14 @@
 #ifndef _defs_
 #define _defs_
 
+#define EOI 0x20
+#define WRITE 0
+#define READ 1
+#define KEYBOARD 0
+#define STDOUT 1
+#define PIC1 2
+#define PIC2 3
+
 #define byte unsigned char
 #define word short int
 #define dword int
