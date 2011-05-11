@@ -5,7 +5,7 @@
 void shellStart();
 
 void drawComandLine();
-void excecute(char* c);
+void execute(char* c);
 void nextRow();
 void reDrawLines();
 
