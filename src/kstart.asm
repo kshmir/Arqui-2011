@@ -1,8 +1,8 @@
 ;*****************************************************
 ; kstart.asm
 ;
-;Punto de entrada de la imagen.
-;Header para multiboot.
+;	Punto de entrada de la imagen.
+;	Header para multiboot.
 ;******************************************************
 
 
@@ -15,11 +15,17 @@
 [extern hola]; en kernel.c
 
 start:
+<<<<<<< HEAD
 	call kmain
 	jmp $ ; si retorna de kmain se detiene
 
 
 
+=======
+  call kmain
+ 
+  jmp $ ; si retorna de kmain se detiene
+>>>>>>> 54ff8e5d9c672b9e0a58ed95ea1c6b0bb19b1387
 ;**************************************************************
 ; header para el GRUB. El orden de los datos estan especificados
 ; en la Multiboot Specification.
@@ -30,19 +36,19 @@ EXTERN code, bss, end
 
 ALIGN 4
 mboot:
-	dd MULTIBOOT_HEADER_MAGIC  ; Numero que identifica al header
-				   ; debe ser 0x1BADB002
-	dd MULTIBOOT_HEADER_FLAGS  ; Los bits de 0-15 indican requerimientos
-				   ; de la imagen.
-				   ; Los bits 16-31 indican features opcionales
+	dd MULTIBOOT_HEADER_MAGIC  	; Numero que identifica al header
+				   									 	; debe ser 0x1BADB002
+	dd MULTIBOOT_HEADER_FLAGS  	; Los bits de 0-15 indican requerimientos
+				   									 	; de la imagen.
+				   									 	; Los bits 16-31 indican features opcionales
 	dd MULTIBOOT_CHECKSUM
 
 ; Comienzo de Offsets 8-24 del header, son validos por estar seteado el flag 16.
 
-	dd mboot	; Dirección de comienzo del header.
-	dd code		; Direccion de comienzo del segmento text.
-	dd bss		; Direccion del final del segmento de datos. Implica que el 
-			; Codigo y el dato deben estar consecutivos. ( lo cumple el formato
-			; a.out )
-	dd end		; Direccion del final del segmento bss.
-	dd start	; Punto de entrada de la imagen.
+	dd mboot										; Direccion de comienzo del header.
+	dd code											; Direccion de comienzo del segmento text.
+	dd bss											; Direccion del final del segmento de datos. Implica que el
+															; Codigo y el dato deben estar consecutivos.
+															; ( lo cumple el formato a.out )
+	dd end											; Direccion del final del segmento bss.
+	dd start										; Punto de entrada de la imagen.
