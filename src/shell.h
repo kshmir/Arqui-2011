@@ -14,5 +14,5 @@ void putSpace();
 void backSpace();
 void onEscape();
 void removeTab();
-	
+
 void shellKBInterrupt();
