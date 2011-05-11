@@ -12,9 +12,11 @@
 
 [global start]
 [extern kmain] ; en kernel.c
+[extern hola]; en kernel.c
 
 start:
-  call kmain
+  call hola
+ 
   jmp $ ; si retorna de kmain se detiene
 
 

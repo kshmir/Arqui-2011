@@ -40,3 +40,5 @@ void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset, byte access,
   item->access = access;
   item->cero = cero;
 }
+
+
