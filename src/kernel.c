@@ -14,7 +14,7 @@ char *vidmem = (char *) 0xb8000;
 
 void setVideoPos(int a){
 	videoPos=a;
-	}
+}
 
 void int_08() {
 
