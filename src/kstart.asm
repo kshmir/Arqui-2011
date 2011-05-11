@@ -15,9 +15,15 @@
 [extern hola]; en kernel.c
 
 start:
+<<<<<<< HEAD
   call hola
  
   jmp $ ; si retorna de kmain se detiene
+=======
+	call kmain
+	jmp $ ; si retorna de kmain se detiene
+
+>>>>>>> 397fde00e61b3d75bb14d4111e0c8896d4941fed
 
 
 ;**************************************************************
