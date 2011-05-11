@@ -14,8 +14,12 @@
 #define SU 4
 #define LOGOUT 5
 #define REBOOT 6
+#define TRUE 0
+#define FALSE 1
 
 #define BORRA_BUFFER while (getchar() != '\n')
+
+void internalswap(char* answ,int pos);
 
 void printHelp();
 
@@ -37,13 +41,14 @@ int getint(const char mensaje[], ... );
 
 char* getusr();
 
-void myftoa(int number, char* answ);
+void myftoa(float number, char* answ);
 
 
 int main(){
 
 	char* usr;
 	int cmd;
+	printfloat(1.23456,usr);
 	init();
 	usr = getusr();
 	do{
@@ -167,42 +172,91 @@ void myprintf(char* string, ...){
 
 }
 
-void myitoa(int number, char* answ){
 
-	char ascii0 = 0x30;
-	int pos = 0;
-	
-	char sign = number<0?'-':'0';
-	
-	while(number!=0){
-		answ[pos++]=(number%10)+0x30;
-		number/=10;
-	}
-	answ[pos++]=sign;
-	answ[pos]='\0';
-}
 
 void printint(int number, char* format){
 		
 		char charint[20];
+		int j;
 		myitoa(number, charint);
+		
+		
+		
 		int i=0;
 		while (charint[i]!='\0')
-			putchar(charint[i++])		;
+				putchar(charint[i++]);
+		
 		
 }
 
-void myftoa(int number, char* answ){
+void myftoa(float number, char* answ){
 
 	char ascii0 = ASCIICERO;
 	int pos = 0;
+	int decimal = 0;
 	
-	char sign = number<0?'-':'';
+	char sign = number<0?TRUE:FALSE;
+	answ[pos++]='\0';
+	/*
+	 * This while is used to count the decimal caracters needed.
+	 * 
+	 */ 
+	while(number-(int)number!=0){
+		number*=10;
+		decimal++;
+	}
+	while(decimal){
+		answ[pos++]=(int)number%10+ASCIICERO;
+		decimal--;
+	}
+	answ[pos++]='.';
+	while((int)number!=0){
+		answ[pos++]=(int)number%10+ASCIICERO;
+		number/=10;
+	}
+	if(sign == TRUE)
+		answ[pos++]='-';
+	
+	internalswap(answ,pos-1);
+	
+	
+}
+
+void internalswap(char* answ,int pos){
+
+	
+	int correccion=0;
+	int i = 0;
+	
+	correccion += pos%2;
+	while(i<(pos-correccion)/2){
+		char aux = answ[i];
+		answ[i]=answ[pos-i];
+		answ[pos-i]=aux;
+		i++;
+	} 
+}
+
+void myitoa(int number, char* answ){
+
+	int pos = 0;
+	
+	char sign;
+	if (number<0){
+		sign = number<0?TRUE:FALSE;
+		number*=-1;
+	}
+		
+	answ[pos++]='\0';
 	
 	while(number!=0){
 		answ[pos++]=(number%10)+ASCIICERO;
 		number/=10;
 	}
-	answ[pos++]=sign;
-	answ[pos]='\0';
+	if(sign == TRUE)
+		answ[pos++]='-';
+
+	internalswap(answ,pos-1);
+	
 }
+
