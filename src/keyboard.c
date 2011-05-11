@@ -101,8 +101,6 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 };
 
 char scanCodeToChar(char scanCode) {
-
-	// TODO: Define this!
 	if (scanCode >= 0x02 && scanCode <= 0x0d)
 		return keyboard[scanCode][isShifted()];
 	return keyboard[scanCode][isCapital()];
