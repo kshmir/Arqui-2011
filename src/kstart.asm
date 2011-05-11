@@ -12,11 +12,12 @@
 
 [global start]
 [extern kmain] ; en kernel.c
+[extern hola]; en kernel.c
 
 start:
-	call kmain
-	jmp $ ; si retorna de kmain se detiene
-
+  call kmain
+ 
+  jmp $ ; si retorna de kmain se detiene
 ;**************************************************************
 ; header para el GRUB. El orden de los datos estan especificados
 ; en la Multiboot Specification.
