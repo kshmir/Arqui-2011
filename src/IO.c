@@ -66,8 +66,11 @@ void myitoa(int number, char answ[]){
 
 	char sign = number<0?'-':'0';
 
+	if (sign != '0')
+		number *= -1;
+
 	while(number!=0){
-		answ[pos++]=(number%10)+0x30;
+		answ[pos++]=(number%10)+'0';
 		number/=10;
 	}
 	answ[pos++]=sign;
@@ -77,10 +80,10 @@ void myitoa(int number, char answ[]){
 void printint(int number, char format[]){
 
 		char charint[20];
-		myitoa(number, charint);
+        myitoa(number, charint);
 		int i=0;
 		while (charint[i]!='\0')
-			putC(charint[i++]);
+			putChar(charint[i++]);
 
 }
 
@@ -91,11 +94,9 @@ void controlKey(char scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
-		printint(scancode,"");
-		//lShift=rShift=0;
-		if (scancode == 170)
+		if (scancode == 0xFFFFFFAA)
 			lShift = 0;
-		else if (scancode == 0xb6)
+		else if (scancode == 0xFFFFFFB6)
 			rShift = 0;
 		else if (scancode == 0x1c)
 			enter();
