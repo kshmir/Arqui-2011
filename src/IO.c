@@ -59,6 +59,31 @@ void decrementCursor() {
 	setCursorX(getCursorX() - 1);
 }
 
+void myitoa(int number, char answ[]){
+
+	char ascii0 = 0x30;
+	int pos = 0;
+
+	char sign = number<0?'-':'0';
+
+	while(number!=0){
+		answ[pos++]=(number%10)+0x30;
+		number/=10;
+	}
+	answ[pos++]=sign;
+	answ[pos]='\0';
+}
+
+void printint(int number, char format[]){
+
+		char charint[20];
+		myitoa(number, charint);
+		int i=0;
+		while (charint[i]!='\0')
+			putC(charint[i++]);
+
+}
+
 void controlKey(char scancode) {
 	// TODO: MID Defines for all the scan codes!
 	if (scancode == 42) //SHIFT IZQ
@@ -66,8 +91,7 @@ void controlKey(char scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
-
-		putC(scancode % 0x0f);
+		printint(scancode,"");
 		//lShift=rShift=0;
 		if (scancode == 170)
 			lShift = 0;

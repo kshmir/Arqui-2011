@@ -8,6 +8,7 @@ GLOBAL	_read
 GLOBAL	_write
 GLOBAL	_in
 GLOBAL	_out
+GLOBAL  __stack_chk_fail
 
 EXTERN  int_08
 EXTERN  int_09
@@ -72,6 +73,9 @@ _int_08_hand:				; Handler de INT 8 ( Timer tick)
         pop     es
         pop     ds
         iret
+
+__stack_chk_fail:
+				ret
 
 _int_09_hand:				; Handler de INT 9 ( Teclado )
         push    ds
