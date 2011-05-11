@@ -31,7 +31,7 @@ void drawComandLine() {
 }
 /**TODO: aca se debe analizar lo que se recibe y ejecutar alguna
  * funcion*/
-void excecute(char* c) {
+void execute(char* c) {
 
 }
 
@@ -41,7 +41,7 @@ void excecute(char* c) {
 /**	Chequeo que instruccion se recibe y la ejecuto*/
 
 void nextRow() {
-	/*int i=0,j=0;	//ESTO DEBERIA ANDAR CHEQUEAR. TIRA ERROR EL COMPILADOR. void excecute(char[] command)
+	/*int i=0,j=0;	//ESTO DEBERIA ANDAR CHEQUEAR. TIRA ERROR EL COMPILADOR. void execute(char[] command)
 	 char c[MAX_COLS];
 	 for (i=0;i<MAX_COLS;i++){
 	 c[i]=0;}
@@ -51,11 +51,11 @@ void nextRow() {
 	 flag=1;
 	 }
 	 if (flag){
-	 excecute(c);
+	 execute(c);
 	 }
 	 //** TODOS LOS COMANDOS QUE SE QUIERAN AGREGAR DEBEN IR EN ESA FUNCION*/
 	//** *******************************************************/
-	//excecute(0);	
+	//execute(0);	
 
 	setCursorX(0);
 	x = 0;
@@ -78,8 +78,6 @@ void nextRow() {
 		drawComandLine();
 
 	}
-	//int y=MAX_;
-	//setCursorY(0);
 }
 /**	Copia todo lo que hay en el BUFFER DE PANTALLA (no en la placa de 
  * video) y lo vuelve a imprimir*/

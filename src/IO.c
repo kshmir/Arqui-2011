@@ -66,7 +66,14 @@ void controlKey(char scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
+<<<<<<< HEAD
 		if (scancode == 0xaa)
+=======
+
+		putC(scancode % 0x0f);
+		//lShift=rShift=0;
+		if (scancode == 170)
+>>>>>>> 4d914bab6068dfb2234578fbe6226033b2fb2464
 			lShift = 0;
 		else if (scancode == 0xb6)
 			rShift = 0;

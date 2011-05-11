@@ -129,7 +129,7 @@ _int_80_hand:
     pop es
     pop ds
     sti
-    iret	
+    iret
 
 _write:
 	int 80h
