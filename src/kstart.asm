@@ -14,7 +14,6 @@
 [extern kmain] ; en kernel.c
 
 start:
-
 	call kmain
 	jmp $ ; si retorna de kmain se detiene
 

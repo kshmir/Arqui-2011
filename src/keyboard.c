@@ -8,6 +8,7 @@
 
 unsigned char keyboard[][2] = {
 	{NPRTBL,NPRTBL},//000
+
 	{NPRTBL,NPRTBL},//001 ESCAPE
 	{'1','!'},	//002
 	{'2','\"'},	//003

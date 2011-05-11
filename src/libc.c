@@ -17,7 +17,7 @@ void k_clear_screen()
 }
 
 void k_maxi_screen(){
-		char *vidmem = (char *) 0xb8000;
+	char *vidmem = (char *) 0xb8000;
 	unsigned int i=0,j=0;
 	char a='a';
 	while(j<80){
