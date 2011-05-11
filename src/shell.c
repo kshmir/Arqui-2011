@@ -144,7 +144,6 @@ void putChar(char c) {
 
 void onEscape() {
 	shellStart();
-	putChar('R');
 }
 
 /**	Cada vez que se presiona una tecla el kernel le avisa a esta 

@@ -102,13 +102,14 @@ void controlKey(char scancode) {
 			enter();
 		else if (scancode == 0x38)
 			lAlt = 1;
-		else if (scancode == 0xB8)
+		// TODO: Test scancodes with a "test keys" program
+		else if (scancode == 0xFFFFFFB8)
 			lAlt = 0;
 		else if (scancode == 0x1D)
 			lCtrl = 1;
-		else if (scancode == 0x9D)
+		else if (scancode == 0xFFFFFF9D)
 			lCtrl = 0;
-		else if (scancode == 0x81) //release esc
+		else if (scancode == 0xFFFFFF81) //release esc
 			escRelease();
 		else if (scancode == 0x45)
 			numLock = numLock ? 0 : 1;
