@@ -59,6 +59,13 @@ void decrementCursor() {
 	setCursorX(getCursorX() - 1);
 }
 
+void printString(char* c)
+{
+	int i = 0;
+	while (c[i] != 0)
+		putChar(c[i++]);
+}
+
 void myitoa(int number, char answ[]){
 
 	char ascii0 = 0x30;

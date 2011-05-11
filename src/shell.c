@@ -32,8 +32,12 @@ void drawComandLine() {
 /**TODO: aca se debe analizar lo que se recibe y ejecutar alguna
  * funcion*/
 void execute(char* c) {
-
+	int i = 0;
+	while (c[i] != 0 && c[i] != ' ')
+		putChar(c[i++]);
 }
+
+
 
 /** Esta funcion es invocada cuando IO recibe un '. Salta de renglon
  *  y en caso de llegar al final corre todas las lineas previa hacia 
@@ -41,43 +45,44 @@ void execute(char* c) {
 /**	Chequeo que instruccion se recibe y la ejecuto*/
 
 void nextRow() {
-	/*int i=0,j=0;	//ESTO DEBERIA ANDAR CHEQUEAR. TIRA ERROR EL COMPILADOR. void execute(char[] command)
-	 char c[MAX_COLS];
-	 for (i=0;i<MAX_COLS;i++){
-	 c[i]=0;}
-	 int flag=0;
-	 for(j=CLSIZE;(j<MAX_COLS && lines[j][y]!=0);j++){
-	 c[i-CLSIZE]=lines[i][y];
-	 flag=1;
-	 }
-	 if (flag){
-	 execute(c);
-	 }
-	 //** TODOS LOS COMANDOS QUE SE QUIERAN AGREGAR DEBEN IR EN ESA FUNCION*/
-	//** *******************************************************/
-	//execute(0);	
-
-	setCursorX(0);
-	x = 0;
-	if (y < MAX_ROWS - 1) {
-		setCursorY(++y);
-		drawComandLine();
-	} else {
-		int i, j;
-		for (i = 0; i < MAX_COLS; i++) {
-			for (j = 0; j < MAX_ROWS - 1; j++)
-				lines[i][j] = lines[i][j + 1];
-		}
-		for (i = 0; i < MAX_COLS; i++)
-			lines[i][MAX_ROWS - 1] = 0;
-		reDrawLines();
-		x = 0;
-		y = MAX_ROWS - 1;
-		setCursorX(x);
-		setCursorY(y);
-		drawComandLine();
-
+	int i = 0, j = 0; //ESTO DEBERIA ANDAR CHEQUEAR. TIRA ERROR EL COMPILADOR. void execute(char[] command)
+	char c[MAX_COLS];
+	for (i = 0; i < MAX_COLS; i++) {
+		c[i] = 0;
 	}
+	int flag = 0;
+	for (j = CLSIZE; (j < MAX_COLS && lines[j][y] != 0); j++) {
+		c[j - CLSIZE] = lines[j][y];
+		flag = 1;
+	}
+	if (flag) {
+		execute(c);
+	}
+		//** TODOS LOS COMANDOS QUE SE QUIERAN AGREGAR DEBEN IR EN ESA FUNCION*/
+		//** *******************************************************/
+
+
+		setCursorX(0);
+		x = 0;
+		if (y < MAX_ROWS - 1) {
+			setCursorY(++y);
+			drawComandLine();
+		} else {
+			int i, j;
+			for (i = 0; i < MAX_COLS; i++) {
+				for (j = 0; j < MAX_ROWS - 1; j++)
+					lines[i][j] = lines[i][j + 1];
+			}
+			for (i = 0; i < MAX_COLS; i++)
+				lines[i][MAX_ROWS - 1] = 0;
+			reDrawLines();
+			x = 0;
+			y = MAX_ROWS - 1;
+			setCursorX(x);
+			setCursorY(y);
+			drawComandLine();
+
+		}
 }
 /**	Copia todo lo que hay en el BUFFER DE PANTALLA (no en la placa de 
  * video) y lo vuelve a imprimir*/

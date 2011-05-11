@@ -96,7 +96,7 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		{ NPRTBL, NPRTBL },//087 F11
 		{ NPRTBL, NPRTBL },//088 F12
 		{ '+', '*' }, //089
-		{ '+', '*' } //090
+		{ '+', '*' }  //090
 		//Para asegurarme podria llenar con NPRTBL lo que queda
 };
 

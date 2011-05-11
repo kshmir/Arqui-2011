@@ -1,7 +1,7 @@
 #ifndef BUFFER_SIZE
 
 #define BUFFER_SIZE 200
-#define MAX_ROWS 24
+#define MAX_ROWS 25
 #define MAX_COLS 80
 #define VIDEO 0xb8000
 
