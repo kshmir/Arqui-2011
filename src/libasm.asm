@@ -116,20 +116,15 @@ _int_80_hand:
     push ds
     push es
     pusha
-    ;mov edx,0xb8000
-    mov al,'a'
-    mov ah,0x07
-    mov 0xb8000,al
-    mov 0xb8001,ah
-    ;push edx            ; cantidad de caracteres a escribir
-    ;push ecx            ; direccion de la cadena a escribir
-    ;push ebx           	; file descriptor
-    ;push eax			; system call
-    ;call int_80
-    ;pop eax             ; saco parametros
-    ;pop eax
-    ;pop eax
-    ;pop eax
+    push edx            ; cantidad de caracteres a escribir
+    push ecx            ; direccion de la cadena a escribir
+    push ebx           	; file descriptor
+    push eax			; system call
+    call int_80
+    pop eax             ; saco parametros
+    pop eax
+    pop eax
+    pop eax
     popa
     pop es
     pop ds

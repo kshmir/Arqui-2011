@@ -66,7 +66,6 @@ void controlKey(char scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
-		//lShift=rShift=0;
 		if (scancode == 0xaa)
 			lShift = 0;
 		else if (scancode == 0xb6)
