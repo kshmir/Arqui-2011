@@ -18,9 +18,6 @@ void setVideoPos(int a){
 
 void int_08() {
 
-	//k_maxi_screen();
-    //char *video = (char *   ) 0xb8000;
-    //video[tickpos+=2]='a';
 }
 /* Handler del teclado */
 void
