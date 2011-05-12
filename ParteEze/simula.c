@@ -19,6 +19,8 @@
 
 #define BORRA_BUFFER while (getchar() != '\n')
 
+double myatof(char*string);
+
 int myatoi(char* string);
 
 void printdouble(double number, char* format);
@@ -58,6 +60,10 @@ int main(){
 	printstring("\n");
 	printstring("hola%\n");
 	myprintf("hola %f charola %d soy %c y vos sos %s \n", 123.7, 25, 'h',"sofia");
+	myprintf("%s -> %d\n","1567", myatoi("1567"));
+	myprintf("%s -> %d\n","-1567", myatoi("-1567"));
+	myprintf("%s -> %f\n","1.567", myatof("1.567"));
+	myprintf("%s -> %f\n","-1.567", myatof("-1.567"));
 	init();
 	usr = getusr();
 	do{
@@ -229,6 +235,9 @@ void myftoa(float number, char* answ){
 	}
 	answ[pos++]='\0';
 	
+	if ((int)number==0){
+				answ[pos++]='0';
+	}
 	/*
 	 * This is used to get a integer number.
 	 * 
@@ -284,16 +293,18 @@ void myitoa(int number, char* answ){
 	}
 		
 	answ[pos++]='\0';
+	if (number ==0)
+		answ[pos++]=ASCIICERO;
+	else{	
+		while(number!=0){
+			answ[pos++]=(number%10)+ASCIICERO;
+			number/=10;
+		}
+		if(sign == TRUE)
+			answ[pos++]='-';
 	
-	while(number!=0){
-		answ[pos++]=(number%10)+ASCIICERO;
-		number/=10;
+		internalswap(answ,pos-1);
 	}
-	if(sign == TRUE)
-		answ[pos++]='-';
-
-	internalswap(answ,pos-1);
-	
 }
 
 void printstring(char* message){
@@ -324,11 +335,46 @@ int myatoi(char* string){
 	int sign =1;
 	
 	while(string[i]!='\0'){
-		if(string[i]=='-')
+		if(string[i]=='-'){
 			sign=-1;
-		result+=(string[i]-ASCIICERO);
+			i++;
+		}
+		result=result*10 + (string[i]-ASCIICERO);
 		i++;
 	}
 	return result*sign;
 		
+}
+
+double myatof(char*string){
+	int sign = 1;
+	int decount=0;
+	int i=0;
+	double result= 0.0;
+	double decimals = 0.1;
+
+	while(string[i]!='\0'){
+		if (string[i]=='.'){
+			decount=1;
+			i++;
+		}
+		else{
+			if(!decount){
+				if(string[i]=='-'){
+					i++;
+					sign=-1;
+				}
+				else{
+					result=result*10 + (string[i]-ASCIICERO);
+					i++;
+				}
+			}
+			else {
+				result=result + decimals*(string[i]-ASCIICERO);
+				decimals/=10;
+				i++;
+			}
+		}
+	}
+	return result*sign;
 }
