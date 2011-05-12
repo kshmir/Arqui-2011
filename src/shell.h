@@ -1,4 +1,3 @@
-
 #ifndef _START_H_
 #include "../src/drivers/video.h"
 #include <stdarg.h>
@@ -8,7 +7,6 @@
 
 void shellStart();
 
-#define ASCIICERO 0x30
 #define MARIO 0
 #define LUIGI 1
 #define MARIOST "mario"
@@ -21,28 +19,21 @@ void shellStart();
 #define SU 4
 #define LOGOUT 5
 #define REBOOT 6
-#define TRUE 1
-#define FALSE 0
 
 #define BORRA_BUFFER while (getchar() != '\n')
 
-double myatof(char*string);
-
-int myatoi(char* string);
+void printHelp();
 
 void printdouble(double number, char* format);
 
 void internalswap(char* answ, int pos);
 
-void printHelp();
-
 void printstring(char* message);
-
-void myitoa(int number, char* resp);
 
 void printint(int number, char* format);
 
-void myprintf(char* string, ...);
+
+
 
 void selectcmd(int value, char** usr);
 
@@ -55,9 +46,6 @@ int getcommand();
 int getint(char* mensaje, ...);
 
 char* getusr();
-
-void myftoa(float number, char* answ);
-
 
 #endif
 

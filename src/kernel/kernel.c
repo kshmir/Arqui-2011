@@ -80,7 +80,7 @@ kmain() {
 
 	/* Borra la pantalla. */
 
-	clear_screen();
+
 
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 
@@ -109,6 +109,7 @@ kmain() {
 	_mascaraPIC2(0xFF);
 	_Sti();
 
+	initVideo();
 	shellStart();
 
 	/* KeepAlive loop */

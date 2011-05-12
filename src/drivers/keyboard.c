@@ -20,7 +20,7 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		{ '9', ')' }, //010
 		{ '0', '=' }, //011
 		{ '\'', '?' }, //012
-		{ ' ', ' ' }, //013
+		{ '\n', '\n' }, //013
 		{ '\b', '\b' }, //014 BACKSPACE
 		{ '\t', '\t' }, //015 TAB
 		{ 'q', 'Q' }, //016
@@ -139,6 +139,7 @@ char scanCodeToChar(char scanCode) {
 
 int controlKey(char scancode) {
 	// TODO: MID Defines for all the scan codes!
+	// TODO: Test scancodes with a "test keys" program
 	if (scancode == 42) //SHIFT IZQ
 		lShift = 1;
 	else if (scancode == 54) //054 SHIFT DER
@@ -149,10 +150,9 @@ int controlKey(char scancode) {
 		else if (scancode == 0xFFFFFFB6)
 			rShift = 0;
 		else if (scancode == 0x1c)
-			capsOn();//TODO: Remap enter();
+			pushC('\n');
 		else if (scancode == 0x38)
 			lAlt = 1;
-		// TODO: Test scancodes with a "test keys" program
 		else if (scancode == 0xFFFFFFB8)
 			lAlt = 0;
 		else if (scancode == 0x1D)

@@ -53,24 +53,29 @@ void init() {
 
 }
 
-char* getusr() {
+char* getusr(){
 	int usrid;
 	int flag = 0;
-	do {
-		myprintf("Please Select User:\n");
-		usrid = getint("0-> Mario (root) \n1-> Luigi\nOption:");
-		if (usrid == MARIO) {
-			flag = 1;
-			return MARIOST;
-		} else if (usrid == LUIGI) {
-			flag = 1;
-			return LUIGIST;
-		}
-	} while (!flag);
-
-
-}
-
+	do{
+	myprintf("Please Select User:\n");
+	usrid= getint("0-> Mario (root) \n1-> Luigi\nOption:");
+	if (usrid ==MARIO){
+		flag=1;
+		return MARIOST;
+	}
+	else if (usrid == LUIGI){
+		flag=1;
+		return LUIGIST;
+	}
+	else{
+		/*
+		 * this is made to turn off all warnings
+		 */
+		char* end = MARIOST;
+		return end;
+	}
+	}while(!flag);
+	
 int getcommand() {
 	return getint("");
 

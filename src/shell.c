@@ -5,7 +5,7 @@
 
 void shellStart() {
 	int i = 0;
-	myprintf("Murcielag O.S. is loading");
+	printf("Murcielag O.S. is loading");
 
 	for (; i < 20; i++) {
 		int j = 0;
@@ -14,25 +14,17 @@ void shellStart() {
 		}
 		putchar('.');
 	}
-	myprintf("100 %% \n");
+	printf("100 %% \n");
 }
 
 void init() {
 	char* usr;
 	int cmd;
-	printdouble(1.23456, usr);
-	printstring("\n");
-	printstring("hola%\n");
-	myprintf("hola %f charola %d soy %c y vos sos %s \n", 123.7, 25, 'C',
-			"sofia");
-	myprintf("%s -> %d\n", "1567", myatoi("1567"));
-	myprintf("%s -> %d\n", "-1567", myatoi("-1567"));
-	myprintf("%s -> %f\n", "1.567", myatof("1.567"));
-	myprintf("%s -> %f\n", "-1.567", myatof("-1.567"));
+
 	usr = getusr();
 	do {
 		do {
-			myprintf("%s%s ", usr, OSDEFST);
+			printf("%s%s ", usr, OSDEFST);
 			cmd = getcommand();
 		} while (cmd < HELP || cmd > LOGOUT);
 		selectcmd(cmd, &usr);
@@ -48,10 +40,10 @@ int getint(char* mensaje, ...) {
 
 	do {
 
-		myprintf(mensaje);
+		printf(mensaje);
 
-		if (getint("") != 1) {
-			myprintf("\nInvalid Value, please Try agian\n");
+		if (getchar() != '1') {
+			printf("\nInvalid Value, please Try agian\n");
 			BORRA_BUFFER;
 		} else
 			salir = 1;
@@ -66,7 +58,7 @@ char* getusr() {
 	int usrid;
 	int flag = 0;
 	do {
-		myprintf("Please Select User:\n");
+		printf("Please Select User:\n");
 		usrid = getint("0-> Mario (root) \n1-> Luigi\nOption:");
 		if (usrid == MARIO) {
 			flag = 1;
@@ -86,17 +78,17 @@ int getcommand() {
 
 void printHelp() {
 
-	myprintf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
-	myprintf(
+	printf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
+	printf(
 			"These shell commands are defined internally.  Type `help' to see this list.\n");
-	myprintf("Type `help name' to find out more about the function `name'.\n");
-	myprintf("Use `info bash' to find out more about the shell in general.\n\n");
-	myprintf("%d->help [pattern ...]\n", HELP);
-	myprintf("%d->clear\n", CLEAR);
-	myprintf("%d->echo [arg ...]\n", ECHO);
-	myprintf("%d->cpuspeed\n", CPUSPEED);
-	myprintf("%d->su\n", SU);
-	myprintf("%d->logout [n]\n", LOGOUT);
+	printf("Type `help name' to find out more about the function `name'.\n");
+	printf("Use `info bash' to find out more about the shell in general.\n\n");
+	printf("%d->help [pattern ...]\n", HELP);
+	printf("%d->clear\n", CLEAR);
+	printf("%d->echo [arg ...]\n", ECHO);
+	printf("%d->cpuspeed\n", CPUSPEED);
+	printf("%d->su\n", SU);
+	printf("%d->logout [n]\n", LOGOUT);
 
 }
 
@@ -109,13 +101,13 @@ void selectcmd(int opt, char** usr) {
 		*usr = su(*usr);
 		break;
 	case CLEAR:
-		myprintf("cablear clear screen maxi\n");
+		printf("cablear clear screen maxi\n");
 		break;
 	case ECHO:
-		myprintf("crear echo\n");
+		printf("crear echo\n");
 		break;
 	case CPUSPEED:
-		myprintf("es muy alta \n");
+		printf("es muy alta \n");
 		break;
 	}
 }
@@ -124,7 +116,7 @@ char* su(char* usr) {
 	return (usr == MARIOST ? LUIGIST : MARIOST);
 }
 
-void myprintf(char* string, ...) {
+void printf(char* string, ...) {
 
 	int i = 0, va_count;
 	va_list ap;
@@ -169,7 +161,7 @@ void printint(int number, char* format) {
 
 	char charint[20];
 
-	myitoa(number, charint);
+	itoa(number, charint);
 
 	int i = 0;
 	while (charint[i] != '\0')
@@ -177,50 +169,6 @@ void printint(int number, char* format) {
 
 }
 
-void myftoa(float number, char* answ) {
-
-	char ascii0 = ASCIICERO;
-	int pos = 0;
-	int decimal = 6;
-
-	char sign = FALSE;
-	if (number < 0) {
-		sign = number < 0 ? TRUE : FALSE;
-		number *= -1;
-	}
-	answ[pos++] = '\0';
-
-	if ((int) number == 0) {
-		answ[pos++] = '0';
-	}
-	/*
-	 * This is used to get a integer number.
-	 *
-	 */
-	number *= 1000000;
-	number = (int) number;
-	while (decimal) {
-		answ[pos++] = (int) number % 10 + ASCIICERO;
-		number /= 10;
-		decimal--;
-	}
-	answ[pos++] = '.';
-	while ((int) number != 0) {
-		answ[pos++] = (int) number % 10 + ASCIICERO;
-		number /= 10;
-
-	}
-
-	/*
-	 * This is because when it get out of the whie it has been divide per 10, one more time
-	 */
-	number *= 10;
-	if (sign == TRUE)
-		answ[pos++] = '-';
-
-	internalswap(answ, pos - 1);
-
-}
 
 void internalswap(char* answ, int pos) {
 
@@ -232,31 +180,6 @@ void internalswap(char* answ, int pos) {
 		answ[i] = answ[pos - i];
 		answ[pos - i] = aux;
 		i++;
-	}
-}
-
-void myitoa(int number, char* answ) {
-
-	int pos = 0;
-
-	char sign = FALSE;
-	if (number < 0) {
-		sign = number < 0 ? TRUE : FALSE;
-		number *= -1;
-	}
-
-	answ[pos++] = '\0';
-	if (number == 0)
-		answ[pos++] = ASCIICERO;
-	else {
-		while (number != 0) {
-			answ[pos++] = (number % 10) + ASCIICERO;
-			number /= 10;
-		}
-		if (sign == TRUE)
-			answ[pos++] = '-';
-
-		internalswap(answ, pos - 1);
 	}
 }
 
@@ -272,7 +195,7 @@ void printdouble(double number, char* format) {
 
 	char chardouble[40];
 
-	myftoa(number, chardouble);
+	ftoa(number, chardouble);
 	int i = 0;
 	while (chardouble[i] != '\0') {
 		putchar(chardouble[i]);
@@ -280,50 +203,5 @@ void printdouble(double number, char* format) {
 	}
 }
 
-int myatoi(char* string) {
 
-	int i = 0;
-	int result = 0;
-	int sign = 1;
 
-	while (string[i] != '\0') {
-		if (string[i] == '-') {
-			sign = -1;
-			i++;
-		}
-		result = result * 10 + (string[i] - ASCIICERO);
-		i++;
-	}
-	return result * sign;
-
-}
-
-double myatof(char*string) {
-	int sign = 1;
-	int decount = 0;
-	int i = 0;
-	double result = 0.0;
-	double decimals = 0.1;
-
-	while (string[i] != '\0') {
-		if (string[i] == '.') {
-			decount = 1;
-			i++;
-		} else {
-			if (!decount) {
-				if (string[i] == '-') {
-					i++;
-					sign = -1;
-				} else {
-					result = result * 10 + (string[i] - ASCIICERO);
-					i++;
-				}
-			} else {
-				result = result + decimals * (string[i] - ASCIICERO);
-				decimals /= 10;
-				i++;
-			}
-		}
-	}
-	return result * sign;
-}

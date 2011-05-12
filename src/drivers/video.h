@@ -13,6 +13,11 @@
 #define VIDEO 0xb8000
 
 
+void initVideo();
+void setVideoMode();
+void setVideoMode();
+
+
 /** Increment's the video card's cursor position */
 void incrementCursor();
 /** Decrements's the video card's cursor position */

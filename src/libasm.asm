@@ -6,6 +6,8 @@ GLOBAL  _mascaraPIC1,_mascaraPIC2,_Cli,_Sti
 GLOBAL  _debug
 GLOBAL	_read
 GLOBAL	_write
+GLOBAL	_setCursor
+GLOBAL	_restart
 GLOBAL	_in
 GLOBAL	_out
 GLOBAL  __stack_chk_fail
@@ -164,6 +166,30 @@ _read:
 	popa
 	mov esp, ebp
 	pop ebp
+	ret
+
+_setCursor:
+	        push ebp
+	mov ebp, esp		; Stack frame
+	mov bx, [ebp+8]  	; lo que se envia
+	mov al,0x0e
+	mov dx,0x03d4
+	out dx, al
+	mov al,bh
+	mov dx,0x03d5
+	out dx, al
+	mov al,0x0f
+	mov dx,0x03d4
+	out dx, al
+	mov al,bl
+	mov dx,0x03d5
+	out dx, al
+	pop ebp
+	ret
+
+_restart:
+	mov al,0xfe
+	out 0x64,al
 	ret
 
 _in:	
