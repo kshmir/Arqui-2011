@@ -92,7 +92,6 @@ void putChar(char c) {
 
 void onEscape() {
 	shellStart();
-	putChar('R');
 }
 
 
