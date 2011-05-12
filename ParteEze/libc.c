@@ -238,26 +238,30 @@ int isdigit(int ch){
 int isalpha(int ch){
 	return ((ch>='A' && ch<='Z' )||(ch>='a' && ch<='z' ));
 }
-/*
+
 void myscanf(char* string, ...){
 	int i = 0, va_count;
+	int c;
+	int percentflag = FALSE;
+	int endFlag = FALSE;
 	va_list ap;
 	
 	va_start(ap, string);
 	
-	while(string[i]!='\0'){
+	while(string[i]!='\0'&& !endFlag){
 		if (string[i]=='%'){
 			i++;
 			switch(string[i]){
-				case 'd':scanint(va_arg(ap,int),string);
+				case 'd':scanint(va_arg(ap,int*));
 				break;
 				case 's':scanstring(va_arg(ap,char*));
 				break;
-				case 'c':getchar(va_arg(ap,int));
+				case 'c':char * ch = va_arg(ap,char*);
+						*(ch)=getchar();
 				break;
-				case 'f':scandouble(va_arg(ap,double),string);
+				case 'f':scandouble(va_arg(ap,double*));
 				break;
-				case '%':getchar();
+				case '%':percentflag=TRUE;
 				break;
 				
 				default: printstring("\n invalid argument type error \n");
@@ -266,14 +270,15 @@ void myscanf(char* string, ...){
 		i++;
 		}
 		else {
-			putchar(string[i]);
-			i++;
+			if (string[i]!=(c=getchar())
+				endFlag=TRUE;
+			//aca tengo que comparar con el code que nos pidieron
 		}
 	}
 	va_end(ap);
 
 }	
-*/
+
 void scanint(int *pint){
 		char result[20];
 		int final;
