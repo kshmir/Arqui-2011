@@ -13,7 +13,7 @@ void shellStart() {
 		lastLine[i] = 0;
 	}
 	x = y = 0;
-	k_clear_screen();
+	clear_screen();
 	drawComandLine();
 }
 
@@ -88,7 +88,7 @@ void nextRow() {
  * video) y lo vuelve a imprimir*/
 void reDrawLines() {
 	int i, j;
-	k_clear_screen();
+	clear_screen();
 	y = 0;
 	for (j = 0; j < MAX_ROWS; j++) {
 		x = 0;

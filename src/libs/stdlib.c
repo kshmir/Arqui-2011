@@ -1,4 +1,4 @@
-#include "../stdlib.h"
+#include "stdlib.h"
 
 char heap_space[1024*1024*4];
 size_t offset;

@@ -1,12 +1,14 @@
+#include "../../include/kernel.h"
 #include "../../include/kasm.h"
 #include "../../include/defs.h"
-#include "../../src/keyboard.h"
-#include "../../src/IO.h"
-#include "../../src/shell.h"
+
+#include "../startup/start.h"
+#include "../libs/keyboard.h"
+#include "../libs/video.h"
+#include "../shell.h"
 
 DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
 IDTR idtr; /* IDTR */
-
 
 int must_update = 0;
 int tickpos = 640;
@@ -31,7 +33,7 @@ void int_09(char scancode) {
 		pushC(scanCodeToChar(scancode)); //guarda un char en el stack
 		must_update++;
 	} else
-		controlKey(scancode);
+		must_update += controlKey(scancode);
 
 
 }
@@ -78,7 +80,7 @@ kmain() {
 
 	/* Borra la pantalla. */
 
-	k_clear_screen();
+	clear_screen();
 
 	shellStart();
 
@@ -119,4 +121,3 @@ kmain() {
 	}
 
 }
-

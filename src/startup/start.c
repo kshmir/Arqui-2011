@@ -1,11 +1,5 @@
-#ifndef LIBC_H
-#define LIBC_H 1
-#include "../include/kc.h"
-#include "../src/IO.h"
-#include "../src/shell.h"
-
-void k_clear_screen();
-void k_maxi_screen();
+#include "../../include/defs.h"
+#include "start.h"
 
 /***************************************************************
  *setup_IDT_entry
@@ -18,7 +12,10 @@ void k_maxi_screen();
  *	 Cero
  ****************************************************************/
 
-void setup_IDT_entry(DESCR_INT *item, byte selector, dword offset, byte access,
-		byte cero);
-#endif
-
+void setup_IDT_entry(DESCR_INT *item, byte selector, dword offset, byte access, byte cero) {
+	item->selector = selector;
+	item->offset_l = offset & 0xFFFF;
+	item->offset_h = offset >> 16;
+	item->access = access;
+	item->cero = cero;
+}
