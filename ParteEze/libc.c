@@ -83,9 +83,9 @@ void myitoa(int number, char* answ){
 		}
 		if(sign == TRUE)
 			answ[pos++]='-';
-	
-		internalswap(answ,pos-1);
 	}
+		internalswap(answ,pos-1);
+	
 }
 
 void printstring(char* message){
@@ -159,6 +159,7 @@ double myatof(char*string){
 	}
 	return result*sign;
 }
+
 void myprintf(char* string, ...){
 	
 	int i = 0, va_count;
@@ -200,7 +201,7 @@ void printint(int number, char* format){
 		char charint[20];
 	
 		myitoa(number, charint);
-				
+						
 		int i=0;
 		while (charint[i]!='\0')
 				putchar(charint[i++]);
@@ -229,4 +230,65 @@ int getint(const char mensaje[], ... ){
 	BORRA_BUFFER;
 	return n;
 }
+
+int isdigit(int ch){
+	return (ch>='0' && ch<='9');
+}
+
+int isalpha(int ch){
+	return ((ch>='A' && ch<='Z' )||(ch>='a' && ch<='z' ));
+}
+/*
+void myscanf(char* string, ...){
+	int i = 0, va_count;
+	va_list ap;
+	
+	va_start(ap, string);
+	
+	while(string[i]!='\0'){
+		if (string[i]=='%'){
+			i++;
+			switch(string[i]){
+				case 'd':scanint(va_arg(ap,int),string);
+				break;
+				case 's':scanstring(va_arg(ap,char*));
+				break;
+				case 'c':getchar(va_arg(ap,int));
+				break;
+				case 'f':scandouble(va_arg(ap,double),string);
+				break;
+				case '%':getchar();
+				break;
+				
+				default: printstring("\n invalid argument type error \n");
+				
+			}
+		i++;
+		}
+		else {
+			putchar(string[i]);
+			i++;
+		}
+	}
+	va_end(ap);
+
+}	
+*/
+void scanint(int *pint){
+		char result[20];
+		int final;
+		int i = 0;
+		char c;
+		while(isdigit(c=getchar())){
+				result[i]=c;
+				i++;
+		}
+		result[i]='\0';
+				
+		i=0;
+		
+		final=myatoi(result);
+		*(pint)=final;
+}
+
 

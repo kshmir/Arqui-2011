@@ -18,3 +18,10 @@ int getint(const char mensaje[], ... );
 
 void myftoa(float number, char* answ);
 
+void myscanf(char* string, ...);
+
+int isdigit(int ch);
+
+int isalpha(int ch);
+
+void scanint(int *pint);
