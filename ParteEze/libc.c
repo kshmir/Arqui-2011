@@ -316,3 +316,13 @@ void scandouble(double *pdouble){
 	
 }
 
+void scanstring(char* pchar){
+	
+	int c, i=0;
+	while((c=getchar())!='\0' && c!='\n'){
+					pchar[i]=c;
+					i++;
+			}
+	pchar[i]='\0';
+}
+

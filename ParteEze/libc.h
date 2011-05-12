@@ -27,3 +27,5 @@ int isalpha(int ch);
 void scanint(int *pint);
 
 void scandouble(double *pdouble);
+
+void scanstring(char* pchar);
