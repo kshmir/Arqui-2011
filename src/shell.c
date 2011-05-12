@@ -1,171 +1,329 @@
-#include "../src/shell.h"
+#include "shell.h"
+#include "libs/stdio.h"
+#include "libs/mcgio.h"
+#include <stdarg.h>
 
-char lines[MAX_COLS][MAX_ROWS];
-char lastLine[MAX_COLS];
-int x = 0, y = 0;
-
-/** Inicio del shell, borra la pantalla y escribe la linea de comandos*/
 void shellStart() {
-	int i, j;
-	for (i = 0; i < MAX_COLS; i++) {
-		for (j = 0; j < MAX_ROWS; j++)
-			lines[i][j] = 0;
-		lastLine[i] = 0;
-	}
-	x = y = 0;
-	k_clear_screen();
-	drawComandLine();
-}
-
-/** Dibuja la linea de comandos estandard. ATENCION: EN CASO DE 
- * MODIFICAR LA CANTIDAD DE CARACTERES DE ESTA LINEA CAMBIAR CLSIZE*/
-void drawComandLine() {
-	lines[x++][y] = ' ';
-	lines[x++][y] = '$';
-	lines[x++][y] = ':';
-	lines[x++][y] = ' ';
-	putC(' ');
-	putC('$');
-	putC(':');
-	putC(' ');
-}
-/**TODO: aca se debe analizar lo que se recibe y ejecutar alguna
- * funcion*/
-void execute(char* c) {
 	int i = 0;
-	while (c[i] != 0 && c[i] != ' ')
-		putChar(c[i++]);
+	myprintf("Murcielag O.S. is loading");
+
+	for (; i < 20; i++) {
+		int j = 0;
+		for (j = 0; j < 100000; j++) {
+			putchar('\0');
+		}
+		putchar('.');
+	}
+	myprintf("100 %% \n");
+}
+
+void init() {
+	char* usr;
+	int cmd;
+	printdouble(1.23456, usr);
+	printstring("\n");
+	printstring("hola%\n");
+	myprintf("hola %f charola %d soy %c y vos sos %s \n", 123.7, 25, 'C',
+			"sofia");
+	myprintf("%s -> %d\n", "1567", myatoi("1567"));
+	myprintf("%s -> %d\n", "-1567", myatoi("-1567"));
+	myprintf("%s -> %f\n", "1.567", myatof("1.567"));
+	myprintf("%s -> %f\n", "-1.567", myatof("-1.567"));
+	usr = getusr();
+	do {
+		do {
+			myprintf("%s%s ", usr, OSDEFST);
+			cmd = getcommand();
+		} while (cmd < HELP || cmd > LOGOUT);
+		selectcmd(cmd, &usr);
+	} while (cmd != LOGOUT);
+
+
+	return;
+}
+
+int getint(char* mensaje, ...) {
+	int n, salir = 0;
+	va_list ap;
+
+	do {
+
+		myprintf(mensaje);
+
+		if (getint("") != 1) {
+			myprintf("\nInvalid Value, please Try agian\n");
+			BORRA_BUFFER;
+		} else
+			salir = 1;
+	} while (!salir);
+	BORRA_BUFFER;
+	return n;
 }
 
 
 
-/** Esta funcion es invocada cuando IO recibe un '. Salta de renglon
- *  y en caso de llegar al final corre todas las lineas previa hacia 
- * arriba y escribe una commandLine()*/
-/**	Chequeo que instruccion se recibe y la ejecuto*/
-
-void nextRow() {
-	int i = 0, j = 0; //ESTO DEBERIA ANDAR CHEQUEAR. TIRA ERROR EL COMPILADOR. void execute(char[] command)
-	char c[MAX_COLS];
-	for (i = 0; i < MAX_COLS; i++) {
-		c[i] = 0;
-	}
+char* getusr() {
+	int usrid;
 	int flag = 0;
-	for (j = CLSIZE; (j < MAX_COLS && lines[j][y] != 0); j++) {
-		c[j - CLSIZE] = lines[j][y];
-		flag = 1;
-	}
-	if (flag) {
-		execute(c);
-	}
-		//** TODOS LOS COMANDOS QUE SE QUIERAN AGREGAR DEBEN IR EN ESA FUNCION*/
-		//** *******************************************************/
+	do {
+		myprintf("Please Select User:\n");
+		usrid = getint("0-> Mario (root) \n1-> Luigi\nOption:");
+		if (usrid == MARIO) {
+			flag = 1;
+			return MARIOST;
+		} else if (usrid == LUIGI) {
+			flag = 1;
+			return LUIGIST;
+		}
+	} while (!flag);
 
+}
 
-		setCursorX(0);
-		x = 0;
-		if (y < MAX_ROWS - 1) {
-			setCursorY(++y);
-			drawComandLine();
+int getcommand() {
+	return getint("");
+
+}
+
+void printHelp() {
+
+	myprintf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
+	myprintf(
+			"These shell commands are defined internally.  Type `help' to see this list.\n");
+	myprintf("Type `help name' to find out more about the function `name'.\n");
+	myprintf("Use `info bash' to find out more about the shell in general.\n\n");
+	myprintf("%d->help [pattern ...]\n", HELP);
+	myprintf("%d->clear\n", CLEAR);
+	myprintf("%d->echo [arg ...]\n", ECHO);
+	myprintf("%d->cpuspeed\n", CPUSPEED);
+	myprintf("%d->su\n", SU);
+	myprintf("%d->logout [n]\n", LOGOUT);
+
+}
+
+void selectcmd(int opt, char** usr) {
+	switch (opt) {
+	case HELP:
+		printHelp();
+		break;
+	case SU:
+		*usr = su(*usr);
+		break;
+	case CLEAR:
+		myprintf("cablear clear screen maxi\n");
+		break;
+	case ECHO:
+		myprintf("crear echo\n");
+		break;
+	case CPUSPEED:
+		myprintf("es muy alta \n");
+		break;
+	}
+}
+
+char* su(char* usr) {
+	return (usr == MARIOST ? LUIGIST : MARIOST);
+}
+
+void myprintf(char* string, ...) {
+
+	int i = 0, va_count;
+	va_list ap;
+
+	va_start(ap, string);
+
+	while (string[i] != '\0') {
+		if (string[i] == '%') {
+			i++;
+			switch (string[i]) {
+			case 'd':
+				printint(va_arg(ap,int),string);
+				break;
+			case 's':
+				printstring( va_arg( ap, char*));
+				break;
+			case 'c':
+				putchar( va_arg( ap, int));
+				break;
+			case 'f':
+				printdouble(va_arg(ap,double),string);
+				break;
+			case '%':
+				putchar('%');
+				break;
+
+			default:
+				printstring("\n invalid argument type error \n");
+
+			}
+			i++;
 		} else {
-			int i, j;
-			for (i = 0; i < MAX_COLS; i++) {
-				for (j = 0; j < MAX_ROWS - 1; j++)
-					lines[i][j] = lines[i][j + 1];
-			}
-			for (i = 0; i < MAX_COLS; i++)
-				lines[i][MAX_ROWS - 1] = 0;
-			reDrawLines();
-			x = 0;
-			y = MAX_ROWS - 1;
-			setCursorX(x);
-			setCursorY(y);
-			drawComandLine();
-
+			putchar(string[i]);
+			i++;
 		}
+	}
+	va_end(ap);
+
 }
-/**	Copia todo lo que hay en el BUFFER DE PANTALLA (no en la placa de 
- * video) y lo vuelve a imprimir*/
-void reDrawLines() {
-	int i, j;
-	k_clear_screen();
-	y = 0;
-	for (j = 0; j < MAX_ROWS; j++) {
-		x = 0;
-		setCursorX(0);
-		setCursorY(y++);
-		for (i = 0; i < MAX_COLS; i++) {
-			if (lines[i][j] == 0x0f) {
-				putTab();
-			} else if (lines[i][j] == 0) {
-				i = MAX_COLS;
+
+void printint(int number, char* format) {
+
+	char charint[20];
+
+	myitoa(number, charint);
+
+	int i = 0;
+	while (charint[i] != '\0')
+		putchar(charint[i++]);
+
+}
+
+void myftoa(float number, char* answ) {
+
+	char ascii0 = ASCIICERO;
+	int pos = 0;
+	int decimal = 6;
+
+	char sign = FALSE;
+	if (number < 0) {
+		sign = number < 0 ? TRUE : FALSE;
+		number *= -1;
+	}
+	answ[pos++] = '\0';
+
+	if ((int) number == 0) {
+		answ[pos++] = '0';
+	}
+	/*
+	 * This is used to get a integer number.
+	 *
+	 */
+	number *= 1000000;
+	number = (int) number;
+	while (decimal) {
+		answ[pos++] = (int) number % 10 + ASCIICERO;
+		number /= 10;
+		decimal--;
+	}
+	answ[pos++] = '.';
+	while ((int) number != 0) {
+		answ[pos++] = (int) number % 10 + ASCIICERO;
+		number /= 10;
+
+	}
+
+	/*
+	 * This is because when it get out of the whie it has been divide per 10, one more time
+	 */
+	number *= 10;
+	if (sign == TRUE)
+		answ[pos++] = '-';
+
+	internalswap(answ, pos - 1);
+
+}
+
+void internalswap(char* answ, int pos) {
+
+	int correccion = 0;
+	int i = 0;
+	correccion += pos % 2;
+	while (i < (pos + correccion) / 2) {
+		char aux = answ[i];
+		answ[i] = answ[pos - i];
+		answ[pos - i] = aux;
+		i++;
+	}
+}
+
+void myitoa(int number, char* answ) {
+
+	int pos = 0;
+
+	char sign = FALSE;
+	if (number < 0) {
+		sign = number < 0 ? TRUE : FALSE;
+		number *= -1;
+	}
+
+	answ[pos++] = '\0';
+	if (number == 0)
+		answ[pos++] = ASCIICERO;
+	else {
+		while (number != 0) {
+			answ[pos++] = (number % 10) + ASCIICERO;
+			number /= 10;
+		}
+		if (sign == TRUE)
+			answ[pos++] = '-';
+
+		internalswap(answ, pos - 1);
+	}
+}
+
+void printstring(char* message) {
+	int i = 0;
+	while (message[i] != '\0') {
+		putchar(message[i]);
+		i++;
+	}
+}
+
+void printdouble(double number, char* format) {
+
+	char chardouble[40];
+
+	myftoa(number, chardouble);
+	int i = 0;
+	while (chardouble[i] != '\0') {
+		putchar(chardouble[i]);
+		i++;
+	}
+}
+
+int myatoi(char* string) {
+
+	int i = 0;
+	int result = 0;
+	int sign = 1;
+
+	while (string[i] != '\0') {
+		if (string[i] == '-') {
+			sign = -1;
+			i++;
+		}
+		result = result * 10 + (string[i] - ASCIICERO);
+		i++;
+	}
+	return result * sign;
+
+}
+
+double myatof(char*string) {
+	int sign = 1;
+	int decount = 0;
+	int i = 0;
+	double result = 0.0;
+	double decimals = 0.1;
+
+	while (string[i] != '\0') {
+		if (string[i] == '.') {
+			decount = 1;
+			i++;
+		} else {
+			if (!decount) {
+				if (string[i] == '-') {
+					i++;
+					sign = -1;
+				} else {
+					result = result * 10 + (string[i] - ASCIICERO);
+					i++;
+				}
 			} else {
-				putC(lines[i][j]);
-				x++;
+				result = result + decimals * (string[i] - ASCIICERO);
+				decimals /= 10;
+				i++;
 			}
 		}
-
 	}
-	//x=0;
-	//setCursorX(0);
-}
-
-void putSpace() {
-	putC(getC());
-	lines[x++][y] = ' ';
-}
-
-void putTab() {
-	putC(' ');
-	putC(' ');
-	putC(' ');
-	putC(' ');
-}
-
-void backSpace() {
-	if (x > CLSIZE) {
-		char c = lines[--x][y];
-		lines[x][y] = 0;
-		if (c == 0x0f)
-			removeTab();
-		else {
-			removeLastC();
-			//setCursorX(getCursorX()-1);
-		}
-	}
-}
-
-void removeTab() {
-	removeLastC();
-	removeLastC();
-	removeLastC();
-	removeLastC();
-}
-
-void putChar(char c) {
-	lines[x++][y] = c;
-	putC(lines[x - 1][y]);
-}
-
-void onEscape() {
-	shellStart();
-}
-
-/**	Cada vez que se presiona una tecla el kernel le avisa a esta 
- * instruccion. */
-void shellKBInterrupt() {
-	char c = getC();
-	if (x < MAX_COLS) {
-		if (c == 0x0f) {
-			if (getCursorX() <= MAX_COLS - 4) {
-				putTab();
-				lines[x++][y] = c;
-			}
-		} else if (c == 0x39)
-			putSpace();
-		else {
-			putChar(c);
-		}
-	}
-
+	return result * sign;
 }

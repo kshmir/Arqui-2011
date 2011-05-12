@@ -1,4 +1,5 @@
-#include "../src/IO.h"
+#include "keyboard.h"
+
 #define MAX 0xff
 /* Pongo 2 coordenadas. 1: tecla normal. 2: Shift. */
 /* Confio en que las entradas no completadas se completan con 0 = NPRTBL */
@@ -19,7 +20,7 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		{ '9', ')' }, //010
 		{ '0', '=' }, //011
 		{ '\'', '?' }, //012
-		{ '¿', '¡' }, //013
+		{ ' ', ' ' }, //013
 		{ '\b', '\b' }, //014 BACKSPACE
 		{ '\t', '\t' }, //015 TAB
 		{ 'q', 'Q' }, //016
@@ -100,8 +101,103 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		//Para asegurarme podria llenar con NPRTBL lo que queda
 };
 
+char charBuffer[BUFFER_SIZE];
+int charBufferPointer = -1;
+
+
+
+// TODO: Bitshift all of these.
+/** Num lock's flag */
+char numLock = 0;
+/** Caps lock's flag */
+char capsLock = 0;
+/** Left shift's flag */
+char lShift = 0;
+/** Right shift's flag */
+char rShift = 0;
+/** Left control's flag */
+char lCtrl = 0;
+/** Right control's flag */
+char rCtrl = 0;
+/** Left Alt's flag */
+char lAlt = 0;
+/** Right Alt's flag */
+char rAlt = 0;
+
+
+void pushC(char c) {
+	if (charBufferPointer >= BUFFER_SIZE - 1)
+		charBufferPointer = BUFFER_SIZE - 2;
+	charBuffer[++charBufferPointer] = c;
+}
+
 char scanCodeToChar(char scanCode) {
 	if (scanCode >= 0x02 && scanCode <= 0x0d)
 		return keyboard[scanCode][isShifted()];
 	return keyboard[scanCode][isCapital()];
+}
+
+int controlKey(char scancode) {
+	// TODO: MID Defines for all the scan codes!
+	if (scancode == 42) //SHIFT IZQ
+		lShift = 1;
+	else if (scancode == 54) //054 SHIFT DER
+		rShift = 1;
+	else {
+		if (scancode == 0xFFFFFFAA)
+			lShift = 0;
+		else if (scancode == 0xFFFFFFB6)
+			rShift = 0;
+		else if (scancode == 0x1c)
+			capsOn();//TODO: Remap enter();
+		else if (scancode == 0x38)
+			lAlt = 1;
+		// TODO: Test scancodes with a "test keys" program
+		else if (scancode == 0xFFFFFFB8)
+			lAlt = 0;
+		else if (scancode == 0x1D)
+			lCtrl = 1;
+		else if (scancode == 0xFFFFFF9D)
+			lCtrl = 0;
+		else if (scancode == 0xFFFFFF81) //release esc
+			capsOn();//TODO: Remap enter();
+		else if (scancode == 0x45)
+			numLock = numLock ? 0 : 1;
+		else if (scancode == 0x0E)
+			capsOn();//TODO: Remap enter();
+		else if (scancode == 0x3A)
+			capsLock = capsLock ? 0 : 1;
+		else if (scancode == 0x39) { //space
+			pushC(scancode);
+			return 1;
+		} else if (scancode == 0x0f) {
+			pushC(scancode);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+char getC() {
+	if (charBufferPointer < 0)
+		return 0;
+	return charBuffer[charBufferPointer--];
+}
+
+int capsOn() {
+	return capsLock;
+}
+
+int isCapital() {
+	return ((lShift || rShift) && !capsLock) || capsLock && !(lShift || rShift);
+}
+int isShifted() {
+	return lShift || rShift;
+}
+
+void removeLastC() {
+	// TODO: LOW Can we improve this?
+	decrementCursor();
+	putC(' ');
+	decrementCursor();
 }

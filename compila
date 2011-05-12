@@ -1,14 +1,17 @@
 cd bin
 
-nasm -f aout ../src/libasm.asm -o libasm.o
-nasm -f aout ../src/kstart.asm -o kstart.o
-nasm -f aout ../src/loader.asm -o kstart.o
+nasm -f aout ../src/kernel/libasm.asm -o libasm.o
+nasm -f aout ../src/startup/kstart.asm -o kstart.o
+nasm -f aout ../src/startup/loader.asm -o loader.o
 
-gcc -c ../src/kernel/kernel.c -o kernel.o -fno-builtin
-gcc -c ../src/libc.c  -o libc.o -fno-builtin
-gcc -c ../src/keyboard.c  -o keyboard.o -fno-builtin
-gcc -c ../src/IO.c  -o IO.o -fno-builtin
-gcc -c ../src/shell.c  -o shell.o -fno-builtin
-ld -T ../src/link.ld -o kernel.bin kernel.o kstart.o libc.o libasm.o keyboard.o IO.o shell.o
+gcc -c ../src/kernel/kernel.c  -o kernel.o   -fno-builtin
+gcc -c ../src/libs/mcgio.c    -o mcgio.o   -fno-builtin
+gcc -c ../src/libs/keyboard.c  -o keyboard.o -fno-builtin
+gcc -c ../src/libs/stdio.c    -o stdio.o   -fno-builtin
+gcc -c ../src/libs/stdlib.c    -o stdlib.o   -fno-builtin
+gcc -c ../src/libs/video.c     -o video.o    -fno-builtin
+gcc -c ../src/startup/start.c  -o start.o 	 -fno-builtin
+gcc -c ../src/shell.c  				 -o shell.o 	 -fno-builtin
+ld -T ../include/link.ld -o kernel.bin libasm.o loader.o kernel.o keyboard.o mcgio.o stdlib.o video.o start.o shell.o stdio.o
 
 echo "Compila end"
