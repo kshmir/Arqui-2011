@@ -75,7 +75,7 @@ char* getusr(){
 		return end;
 	}
 	}while(!flag);
-	
+}	
 int getcommand() {
 	return getint("");
 
