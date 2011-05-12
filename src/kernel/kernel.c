@@ -17,6 +17,7 @@ char *vidmem = (char *) 0xb8000;
 
 void setVideoPos(int a) {
 	videoPos = a;
+	_setCursor(a/2);
 }
 
 void int_08() {
@@ -57,7 +58,6 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 		if (fd == STDOUT) //PANTALL
 		{
 			setBytes(vidmem + videoPos, buffer, 2);
-
 		}
 
 	} else if (systemCall == READ) //read

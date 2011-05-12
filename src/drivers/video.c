@@ -19,7 +19,7 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 void initVideo() {
 	int i = 0;
 	VIDEO_MODE_INFO* default_video = NULL;
-	default_video = buildVideoMode(80, 25, 1, 10, 10, 1);
+	default_video = buildVideoMode(25, 80, 1, 10, 10, 1);
 	current_video_mode = default_video;
 	clear_screen();
 	printf("MAXI GAY\n");
@@ -69,7 +69,6 @@ int getCursorY() {
 void setCursorX(int x) {
 	if (x >= 0 && x <= current_video_mode->width) {
 		current_video_mode->curX = x;
-
 		setVideoPos(
 				(current_video_mode->width * current_video_mode->curY
 						+ current_video_mode->curX) * 2);
