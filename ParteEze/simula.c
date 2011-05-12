@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "libc.h"
 #include "defs.h"
 #include <stdio.h>
@@ -17,20 +16,13 @@ char* getusr();
 int main(){
 
 	char* usr;
-	int cmd, opt;
-	printdouble(1.23456, usr);
-	printstring("\n");
-	printstring("hola%\n");
-	myprintf("hola %f charola %d soy %c y vos sos %s \n", 123.7, 25, 'h',"sofia");
-	myprintf("%s -> %d\n","1567", myatoi("1567"));
-	myprintf("%s -> %d\n","-1567", myatoi("-1567"));
-	myprintf("%s -> %f\n","1.567", myatof("1.567"));
-	myprintf("%s -> %f\n","-1.567", myatof("-1.567"));
-	scanf("%d ",&cmd);
+	int cmd = 8 , opt;
+	myprintf("-->%d\n",0);
+	printf("hola gente --> %d\n",cmd);
+	scanint(&cmd);
 	BORRA_BUFFER;
-	myprintf(" numero %d %d\n",cmd,opt);
-	scanf("a%da%da",&cmd,&opt);
-	myprintf(" numero %d %d\n",cmd,opt);
+	myprintf(" numero %d \n",cmd);
+	
 	//si no se sigue el formato pedido devuelve lo que hay en los punteros
 	init();
 
@@ -60,52 +52,6 @@ void init() {
 	myprintf("100 %% \n");
 
 }
-
-
-char* getusr(){
-	int usrid;
-	int flag = 0;
-	do{
-	myprintf("Please Select User:\n");
-	usrid= getint("0-> Mario (root) \n1-> Luigi\nOption:");
-	if (usrid ==MARIO){
-		flag=1;
-		return MARIOST;
-	}
-	else if (usrid == LUIGI){
-		flag=1;
-		return LUIGIST;
-	}
-	else{
-		/*
-		 * this is made to turn off all warnings
-		 */
-		char* end = MARIOST;
-		return end;
-	}
-	}while(!flag);
-	
-
-int getint(const char mensaje[], ...) {
-	int n, salir = 0;
-	va_list ap;
-
-	do {
-		va_start(ap, mensaje);
-		vprintf(mensaje, ap);
-		va_end(ap);
-
-		if (getint("") != 1) {
-			myprintf("\nInvalid Value, please Try agian\n");
-			BORRA_BUFFER;
-		} else
-			salir = 1;
-	} while (!salir);
-	BORRA_BUFFER;
-	return n;
-}
-
-
 
 char* getusr() {
 	int usrid;
@@ -167,6 +113,6 @@ void selectcmd(int opt, char** usr) {
 }
 
 char* su(char* usr) {
-	return (usr == MARIOST ? LUIGIST : MARIOST);
+	return (usr == MARIOST?LUIGIST:MARIOST);
 }
 
