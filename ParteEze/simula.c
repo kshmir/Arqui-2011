@@ -100,7 +100,7 @@ int getint(const char mensaje[], ...) {
 		vprintf(mensaje, ap);
 		va_end(ap);
 
-		if (getint("") != 1) {
+		if (getchar() != '1') {
 			myprintf("\nInvalid Value, please Try agian\n");
 			BORRA_BUFFER;
 		} else
