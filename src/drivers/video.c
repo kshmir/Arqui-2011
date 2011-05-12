@@ -22,7 +22,7 @@ void initVideo() {
 	default_video = buildVideoMode(80, 25, 1, 10, 10, 1);
 	current_video_mode = default_video;
 	clear_screen();
-	int cx = 0;
+	int cx = 1;
 	int cy = 10;
 	printf("Ancho pantalla: %d\n", cx);
 	printf("Alto  pantalla: %d\n", cy);
