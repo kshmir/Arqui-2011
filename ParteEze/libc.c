@@ -284,11 +284,35 @@ void scanint(int *pint){
 				i++;
 		}
 		result[i]='\0';
-				
-		i=0;
-		
 		final=myatoi(result);
 		*(pint)=final;
 }
 
+void scandouble(double *pdouble){
+		char result[40];
+		double final;
+		int i = 0;
+		int flag = TRUE;
+		char c;
+		/* this is used to get de integer part*/
+		while(isdigit(c=getchar())){
+				result[i]=c;
+				i++;
+		}
+		if (c=='.')
+			result[i++]='.';
+		else
+			flag = FALSE;
+		if (flag){
+			/* this is used to get de decimal part*/
+			while(isdigit(c=getchar())){
+					result[i]=c;
+					i++;
+			}
+			result[i]='\0';
+			final=myatof(result);
+			*(pdouble)=final;
+		}
+	
+}
 
