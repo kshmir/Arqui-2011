@@ -19,9 +19,13 @@
 
 #define BORRA_BUFFER while (getchar() != '\n')
 
+void printdouble(double number, char* format);
+
 void internalswap(char* answ,int pos);
 
 void printHelp();
+
+void printstirng(char* message);
 
 void myitoa(int number, char* resp);
 
@@ -48,7 +52,9 @@ int main(){
 
 	char* usr;
 	int cmd;
-	printfloat(1.23456,usr);
+	printdouble(1.23456, usr);
+	printstirng("\n");
+	printstirng("hola\n");
 	init();
 	usr = getusr();
 	do{
@@ -77,9 +83,7 @@ void init(){
 
 }
 
-int 
-getint(const char mensaje[], ... )
-{
+int getint(const char mensaje[], ... ){
 	int n, salir = 0;
 	va_list ap;
 		
@@ -126,7 +130,7 @@ int getcommand(){
 
 void printHelp(){
 	
-	printf("Murcielago bash, version 1.0.0(1)-release (i686-pc-muricelago)\n");
+	printf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
 	printf("These shell commands are defined internally.  Type `help' to see this list.\n");
 	printf("Type `help name' to find out more about the function `name'.\n");
 	printf("Use `info bash' to find out more about the shell in general.\n\n");
@@ -177,7 +181,7 @@ void myprintf(char* string, ...){
 void printint(int number, char* format){
 		
 		char charint[20];
-		int j;
+	
 		myitoa(number, charint);
 		
 		
@@ -193,27 +197,37 @@ void myftoa(float number, char* answ){
 
 	char ascii0 = ASCIICERO;
 	int pos = 0;
-	int decimal = 0;
+	int decimal = 6;
 	
-	char sign = number<0?TRUE:FALSE;
+	char sign = FALSE;
+	if (number<0){
+		sign = number<0?TRUE:FALSE;
+		number*=-1;
+	}
 	answ[pos++]='\0';
+	
 	/*
-	 * This while is used to count the decimal caracters needed.
+	 * This is used to get a integer number.
 	 * 
 	 */ 
-	while(number-(int)number!=0){
-		number*=10;
-		decimal++;
-	}
+	number*=1000000;
+	number=(int)number; 
 	while(decimal){
 		answ[pos++]=(int)number%10+ASCIICERO;
+		number/=10;
 		decimal--;
 	}
 	answ[pos++]='.';
 	while((int)number!=0){
 		answ[pos++]=(int)number%10+ASCIICERO;
 		number/=10;
-	}
+		
+	}	
+	
+	/*
+	 * This is because when it get out of the whie it has been divide per 10, one more time 
+	 */
+	number*=10;
 	if(sign == TRUE)
 		answ[pos++]='-';
 	
@@ -227,9 +241,8 @@ void internalswap(char* answ,int pos){
 	
 	int correccion=0;
 	int i = 0;
-	
 	correccion += pos%2;
-	while(i<(pos-correccion)/2){
+	while(i<(pos+correccion)/2){
 		char aux = answ[i];
 		answ[i]=answ[pos-i];
 		answ[pos-i]=aux;
@@ -241,7 +254,7 @@ void myitoa(int number, char* answ){
 
 	int pos = 0;
 	
-	char sign;
+	char sign = FALSE;
 	if (number<0){
 		sign = number<0?TRUE:FALSE;
 		number*=-1;
@@ -260,3 +273,22 @@ void myitoa(int number, char* answ){
 	
 }
 
+void printstirng(char* message){
+	int i =0;
+	while(message[i]!='\0'){
+		putchar(message[i]);
+		i++;
+	}
+}
+	
+void printdouble(double number, char* format){
+
+		char chardouble[40];
+		
+		myftoa(number, chardouble);
+		int i=0;
+		while (chardouble[i]!='\0'){
+				putchar(chardouble[i]);
+				i++;
+		}
+}
