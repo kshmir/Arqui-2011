@@ -22,8 +22,7 @@ void initVideo() {
 	default_video = buildVideoMode(80, 25, 1, 10, 10, 1);
 	current_video_mode = default_video;
 	clear_screen();
-	printf("Ancho pantalla: %d\n", cx);
-	printf("Alto  pantalla: %d\n", cy);
+	printf("MAXI GAY\n");
 	getchar();
 }
 
@@ -68,18 +67,21 @@ int getCursorY() {
 	return current_video_mode->curY;
 }
 void setCursorX(int x) {
-	if (x >= 0 && x <= current_video_mode->width)
+	if (x >= 0 && x <= current_video_mode->width) {
 		current_video_mode->curX = x;
-	setVideoPos(
-			(current_video_mode->width * current_video_mode->curY
-					+ current_video_mode->curX) * 2);
+
+		setVideoPos(
+				(current_video_mode->width * current_video_mode->curY
+						+ current_video_mode->curX) * 2);
+	}
 }
 void setCursorY(int y) {
-	if (y >= 0 && y <= current_video_mode->height)
+	if (y >= 0 && y <= current_video_mode->height) {
 		current_video_mode->curY = y;
-	setVideoPos(
-			(current_video_mode->width * current_video_mode->curY
-					+ current_video_mode->curX) * 2);
+		setVideoPos(
+				(current_video_mode->width * current_video_mode->curY
+						+ current_video_mode->curX) * 2);
+	}
 }
 
 void moveCursorToStart() {
