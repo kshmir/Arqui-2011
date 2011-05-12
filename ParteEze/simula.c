@@ -14,10 +14,12 @@
 #define SU 4
 #define LOGOUT 5
 #define REBOOT 6
-#define TRUE 0
-#define FALSE 1
+#define TRUE 1
+#define FALSE 0
 
 #define BORRA_BUFFER while (getchar() != '\n')
+
+int myatoi(char* string);
 
 void printdouble(double number, char* format);
 
@@ -303,6 +305,7 @@ void printstring(char* message){
 }
 	
 void printdouble(double number, char* format){
+	
 
 		char chardouble[40];
 		
@@ -312,4 +315,20 @@ void printdouble(double number, char* format){
 				putchar(chardouble[i]);
 				i++;
 		}
+}
+
+int myatoi(char* string){
+	
+	int i=0;
+	int result=0;
+	int sign =1;
+	
+	while(string[i]!='\0'){
+		if(string[i]=='-')
+			sign=-1;
+		result+=(string[i]-ASCIICERO);
+		i++;
+	}
+	return result*sign;
+		
 }
