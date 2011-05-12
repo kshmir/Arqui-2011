@@ -134,8 +134,7 @@ void itoa(int number, char* answ) {
 		}
 		if (sign == TRUE)
 			answ[pos++] = '-';
-
-		internalswap(answ, pos - 1);
 	}
+		internalswap(answ, pos - 1);
 }
 

@@ -17,11 +17,11 @@ int main(){
 
 	char* usr;
 	int cmd = 8 , opt;
-	myprintf("-->%d\n",0);
+	double hh =2.8;
 	printf("hola gente --> %d\n",cmd);
-	scanint(&cmd);
+	scandouble(&hh);
 	BORRA_BUFFER;
-	myprintf(" numero %d \n",cmd);
+	myprintf(" numero %f \n",hh);
 	
 	//si no se sigue el formato pedido devuelve lo que hay en los punteros
 	init();

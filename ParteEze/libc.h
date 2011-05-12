@@ -25,3 +25,5 @@ int isdigit(int ch);
 int isalpha(int ch);
 
 void scanint(int *pint);
+
+void scandouble(double *pdouble);
