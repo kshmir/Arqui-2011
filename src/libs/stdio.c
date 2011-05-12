@@ -1,10 +1,17 @@
 #include "stdio.h"
-#include "video.h"
-#include "keyboard.h"
+#include "../drivers/video.h"
+#include "../drivers/keyboard.h"
+
+void writeLine()
+{
+
+}
 
 void putchar(char c)
 {
-	if (c != 0)
+	if (c == '\n')
+		writeLine();
+	else if (c != 0 )
 		putC(c);
 }
 

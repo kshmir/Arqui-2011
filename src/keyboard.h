@@ -1,1 +1,0 @@
-char scanCodeToChar(char scanCode);

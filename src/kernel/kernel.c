@@ -3,8 +3,8 @@
 #include "../../include/defs.h"
 
 #include "../startup/start.h"
-#include "../libs/keyboard.h"
-#include "../libs/video.h"
+#include "../drivers/keyboard.h"
+#include "../drivers/video.h"
 #include "../shell.h"
 
 DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
