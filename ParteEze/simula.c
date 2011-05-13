@@ -20,15 +20,7 @@ int main(){
 	int cmd = 8 , opt;
 	double hh =2.8;
 	
-	printf("testing\n");
-	myscanf("%d %f %s",&cmd, &hh, hola);
-	
-	myprintf(" numero %f <--\n",hh);
-	myprintf(" numero %d <--\n",cmd);
-	myprintf(" string %s <-- \n",hola);
-	
 	init();
-
 	usr = getusr();
 	do {
 		do {
