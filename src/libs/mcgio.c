@@ -6,3 +6,17 @@ void printString(char* c) {
 	while (c[i] != 0)
 		putchar(c[i++]);
 }
+
+
+void mcg_putchar(char c) {
+	if (c == '\r') {
+		backSpace();
+	} else if (c == '\n') {
+		newLine();
+	} else if (c == 0x0f) {
+
+	} else if (c != 0) {
+		putChar(c);
+		putC(c);
+	}
+}
