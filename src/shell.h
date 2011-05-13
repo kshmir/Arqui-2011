@@ -1,5 +1,6 @@
 #ifndef _START_H_
 #include "../src/drivers/video.h"
+#include "../src/libs/string.h"
 #include <stdarg.h>
 #define _START_H_
 
@@ -7,33 +8,11 @@
 
 void shellStart();
 
-#define MARIO 0
-#define LUIGI 1
-#define MARIOST "mario"
-#define LUIGIST "luigi"
-#define OSDEFST "@murcielago:~#"
-#define HELP 0
-#define CLEAR 1
-#define ECHO 2
-#define CPUSPEED 3
-#define SU 4
-#define LOGOUT 5
-#define REBOOT 6
-
-#define BORRA_BUFFER while (getchar() != '\n')
+#define OSDEFST "@murcielagOS:~#"
 
 void printHelp();
 
-void printdouble(double number, char* format);
-
 void internalswap(char* answ, int pos);
-
-void printstring(char* message);
-
-void printint(int number, char* format);
-
-
-
 
 void selectcmd(int value, char** usr);
 
@@ -41,11 +20,9 @@ char* su(char* usr);
 
 void init();
 
-int getcommand();
+int logout(int size, char* args);
+int login(int size, char* args);
 
-int getint(char* mensaje, ...);
-
-char* getusr();
 
 #endif
 

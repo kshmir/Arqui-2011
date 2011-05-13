@@ -6,6 +6,7 @@
 #ifndef _defs_
 #define _defs_
 
+#define BORRA_BUFFER while (getchar() != '\n')
 #define EOI 0x20
 #define NULL 0
 #define WRITE 0

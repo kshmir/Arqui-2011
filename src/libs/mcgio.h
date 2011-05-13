@@ -10,5 +10,10 @@ int cursorX();
 int cursorY();
 char* getConsoleString();
 
+void printdouble(double number, char* format);
+void printstring(char* message);
+void printint(int number, char* format);
+int getint(char* mensaje, ...);
+
 #endif /* MCGIO_H_ */
 

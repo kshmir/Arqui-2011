@@ -2,6 +2,7 @@
 #include "internal_shell.h"
 #include "../drivers/video.h"
 #include "../drivers/keyboard.h"
+#include <stdarg.h>
 
 void putchar(char c) {
 	if (c == '\r') {
@@ -15,13 +16,11 @@ void putchar(char c) {
 				putChar(c);
 				putC(' ');
 			}
-		}
-		else
-		while (getCursorX() % 4 != 0)
-		{
-			putChar(c);
-			putC(' ');
-		}
+		} else
+			while (getCursorX() % 4 != 0) {
+				putChar(c);
+				putC(' ');
+			}
 	} else if (c != 0) {
 		putChar(c);
 		putC(c);
@@ -30,10 +29,13 @@ void putchar(char c) {
 
 char getchar() {
 	char c;
+	int sx = getCursorX();
+	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
-		if (c != 0x0f)
-			putchar(c);
-		else {
+		if (c != 0x0f) {
+			if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
+				putchar(c);
+		} else {
 			putTab();
 		}
 	}
@@ -155,5 +157,51 @@ void itoa(int number, char* answ) {
 			answ[pos++] = '-';
 	}
 	internalswap(answ, pos - 1);
+}
+
+void printf(char* string, ...) {
+	va_list ap;
+
+	va_start(ap, string);
+
+	vprintf(string, ap);
+}
+
+void vprintf(char* string, va_list ap) {
+	int i = 0, va_count;
+	while (string[i] != '\0') {
+		if (string[i] == '%') {
+			i++;
+			switch (string[i]) {
+			case 'd':
+				printint(va_arg(ap,int),string);
+				break;
+			case 's':
+				printstring( va_arg( ap, char*));
+				break;
+			case 'c':
+				putchar( va_arg( ap, int));
+				break;
+			case 'f':
+				printdouble(va_arg(ap,double),string);
+				break;
+			case '%':
+				putchar('%');
+				break;
+
+			default:
+				printstring("\n invalid argument type error \n");
+			}
+			i++;
+		} else {
+			putchar(string[i]);
+			i++;
+		}
+	}
+	va_end(ap);
+}
+
+void clrscr() {
+	clear_screen();
 }
 

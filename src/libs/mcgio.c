@@ -1,10 +1,11 @@
+#include "../../include/defs.h"
 #include "mcgio.h"
 #include "stdio.h"
+#include <stdarg.h>
 
 void (*onTabCall)(char*) = NULL;
 
-void setTabCall(void (*ptr)(char*))
-{
+void setTabCall(void(*ptr)(char*)) {
 	onTabCall = ptr;
 }
 
@@ -27,21 +28,30 @@ void mcg_putchar(char c) {
 	}
 }
 
-
-
-char* getConsoleString() {
+char* getConsoleString(int sendAutocomplete) {
 	char c;
 	char* str = NULL;
-	str = (char*)malloc(str, sizeof(char) * 80); // TODO: This should increment on hit
+	str = (char*) malloc(str, sizeof(char) * 80); // TODO: This should increment on hit
 	int i = 0;
+	int sx = getCursorX();
+	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
 		if (c != 0x0f) {
-			mcg_putchar(c);
-			str[i] = c;
-			i++;
-		} else {
-			if (onTabCall != NULL)
+			if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
+				mcg_putchar(c);
+			if (c != '\r')
 			{
+				str[i] = c;
+				i++;
+			}
+			else
+			{
+				str[i] = 0;
+				i--;
+			}
+
+		} else {
+			if (onTabCall != NULL && sendAutocomplete) {
 				str[i] = 0;
 				onTabCall(str);
 			}
@@ -52,3 +62,92 @@ char* getConsoleString() {
 	str[i] = 0;
 	return str;
 }
+
+void printstring(char* message) {
+	int i = 0;
+	while (message[i] != '\0') {
+		putchar(message[i]);
+		i++;
+	}
+}
+
+int getint(char* mensaje, ...) {
+	int n, salir = 0;
+	va_list ap;
+
+	do {
+		printf(mensaje);
+		if (getchar() != '1') {
+			printf("Invalid Value, please Try again\n");
+			BORRA_BUFFER;
+		} else
+			salir = 1;
+	} while (!salir);
+	BORRA_BUFFER;
+	return n;
+}
+
+void printdouble(double number, char* format) {
+	char chardouble[40];
+	ftoa(number, chardouble);
+	int i = 0;
+	while (chardouble[i] != '\0') {
+		putchar(chardouble[i]);
+		i++;
+	}
+}
+
+void printint(int number, char* format) {
+	char charint[20];
+	itoa(number, charint);
+	int i = 0;
+	while (charint[i] != '\0')
+		putchar(charint[i++]);
+}
+
+void internalswap(char* answ, int pos) {
+	int correccion = 0;
+	int i = 0;
+	correccion += pos % 2;
+	while (i < (pos + correccion) / 2) {
+		char aux = answ[i];
+		answ[i] = answ[pos - i];
+		answ[pos - i] = aux;
+		i++;
+	}
+}
+
+int mcg_printf(char* string, ...) {
+	int i = 0, c = 0, va_count;
+	va_list ap,bp;
+	va_start(ap, string);
+	while (string[i] != '\0') {
+		if (string[i] == '\n')
+			c++;
+		else
+		if (string[i] == '%') {
+			i++;
+			switch (string[i]) {
+			case 's':
+				c += entersOnString(va_arg(ap,char*));
+				break;
+			case 'c':
+				c += (va_arg( ap, int)) ? 1 : 0;
+				break;
+			}
+		}
+		i++;
+	}
+	va_start(bp, string);
+	vprintf(string, bp);
+	va_end(ap);
+	return c;
+}
+
+int entersOnString(char* str) {
+	int i = 0, c = 0;
+	for (i = 0; str[i] != 0; ++i)
+		c += (str[i] == '\n') ? 1 : 0;
+	return c;
+}
+
