@@ -19,8 +19,14 @@ int main(){
 
 	char* usr;
 	char hola[20];
+	char hola2[20];
 	int cmd = 8 , opt;
 	double hh =2.8;
+	
+	scanf("%s %s",hola,hola2);
+	printf("hola->%s\n",hola);
+	printf("hola2->%s\n",hola2);
+	
 	init();
 	usr = getusr();
 	do {
