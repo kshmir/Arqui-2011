@@ -24,8 +24,8 @@ int isdigit(int ch);
 
 int isalpha(int ch);
 
-void scanint(int *pint);
+int scanint(int *pint, char*message);
 
-void scandouble(double *pdouble);
+int scandouble(double *pdouble, char*message);
 
-void scanstring(char* pchar);
+int scanstring(char* pchar, char*message);

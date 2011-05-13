@@ -19,13 +19,14 @@ int main(){
 	char hola[20];
 	int cmd = 8 , opt;
 	double hh =2.8;
-	scanstring(hola);
-	printf("hola gente \n");
-	printf("%s \n",hola);
-	BORRA_BUFFER;
-	myprintf(" numero %f \n",hh);
 	
-	//si no se sigue el formato pedido devuelve lo que hay en los punteros
+	printf("testing\n");
+	myscanf("%d %f %s",&cmd, &hh, hola);
+	
+	myprintf(" numero %f <--\n",hh);
+	myprintf(" numero %d <--\n",cmd);
+	myprintf(" string %s <-- \n",hola);
+	
 	init();
 
 	usr = getusr();

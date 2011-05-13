@@ -242,24 +242,36 @@ int isalpha(int ch){
 void myscanf(char* string, ...){
 	int i = 0, va_count;
 	int c;
+	int bufpos=0;
 	int percentflag = FALSE;
 	int endFlag = FALSE;
+	char buffer[200];
+	char *ch;
 	va_list ap;
 	
 	va_start(ap, string);
-	
+	while((c=getchar())!='\n' && c!='\0'){
+		buffer[i]=c;
+		i++;
+	}
+	buffer[i]='\0';
+	i=0;
 	while(string[i]!='\0'&& !endFlag){
-		if (string[i]=='%'){
+		if (string[i]=='%' && !percentflag){
 			i++;
 			switch(string[i]){
-				case 'd':scanint(va_arg(ap,int*));
+				case 'd':bufpos+=scanint(va_arg(ap,int*),buffer+bufpos);
 				break;
-				case 's':scanstring(va_arg(ap,char*));
+				case 's':bufpos+=scanstring(va_arg(ap,char*),buffer+bufpos);
+						printf("string\n");
+						printf("%c\n",string[i]);
+						printf("valor de i dentro de string %d\n",i);
 				break;
-				case 'c':char * ch = va_arg(ap,char*);
-						*(ch)=getchar();
+				case 'c':ch = va_arg(ap,char*);
+						*(ch)=buffer[bufpos];
+						bufpos++;
 				break;
-				case 'f':scandouble(va_arg(ap,double*));
+				case 'f':bufpos+=scandouble(va_arg(ap,double*),buffer+bufpos);
 				break;
 				case '%':percentflag=TRUE;
 				break;
@@ -270,64 +282,80 @@ void myscanf(char* string, ...){
 		i++;
 		}
 		else {
-			if (string[i]!=(c=getchar())
-				endFlag=TRUE;
-			//aca tengo que comparar con el code que nos pidieron
+			if (string[i]!=buffer[bufpos]){
+			endFlag=TRUE;
+			}
+			else {
+				i++;
+				bufpos++;
+				percentflag=FALSE;
+			}
+			
 		}
 	}
 	va_end(ap);
-
 }	
 
-void scanint(int *pint){
+int scanint(int *pint, char*message){
 		char result[20];
 		int final;
 		int i = 0;
-		char c;
-		while(isdigit(c=getchar())){
-				result[i]=c;
+						
+		while(isdigit(message[i])){
+				result[i]=message[i];
 				i++;
 		}
 		result[i]='\0';
 		final=myatoi(result);
 		*(pint)=final;
+	return i;	
+	
 }
 
-void scandouble(double *pdouble){
+int scandouble(double *pdouble, char*message){
 		char result[40];
 		double final;
 		int i = 0;
+		int pos=0;
 		int flag = TRUE;
-		char c;
+	
 		/* this is used to get de integer part*/
-		while(isdigit(c=getchar())){
-				result[i]=c;
+		while(isdigit(message[i])){
+				result[i]=message[pos];
 				i++;
+				pos++;
 		}
-		if (c=='.')
-			result[i++]='.';
+		if (message[pos]=='.'){
+				result[i++]='.';
+				pos++;
+			}
 		else
 			flag = FALSE;
+		
 		if (flag){
+			
 			/* this is used to get de decimal part*/
-			while(isdigit(c=getchar())){
-					result[i]=c;
+			while(isdigit(message[pos])){
+					result[i]=message[pos];
 					i++;
+					pos++;
 			}
 			result[i]='\0';
 			final=myatof(result);
 			*(pdouble)=final;
 		}
 	
+	return pos;
 }
 
-void scanstring(char* pchar){
+int scanstring(char* pchar, char*message){
 	
-	int c, i=0;
-	while((c=getchar())!='\0' && c!='\n'){
-					pchar[i]=c;
-					i++;
-			}
+	int i=0;
+	while(message[i]!='\0'){
+		pchar[i]=message[i];
+		i++;
+	}
 	pchar[i]='\0';
+	return i;
 }
 
