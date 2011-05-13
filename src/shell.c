@@ -5,18 +5,11 @@
 #include "drivers/video.h"
 #include <stdarg.h>
 
-int glb = 1;
-
-
+int glb = 0;
 void whenTabCalls(char* s){
 	int startX = getCursorX();
 	int startY = getCursorY();
 	int desp = glb, i = 0;
-	printf("\n");
-	for (i = 0; i < glb; ++i) {
-		printf("%d%d%d%d%d\t", i,i,i,i,i);
-	}
-	glb++;
 	VIDEO_MODE_INFO * mode = getVideoMode();
 	if (getCursorY() == mode->height - 1){
 		if (startY != getCursorY())
