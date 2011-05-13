@@ -1,6 +1,8 @@
 #include "libc.h"
 #include "defs.h"
 #include <stdio.h>
+#include "nInLineFront.h"
+
 void printHelp();
 
 void selectcmd(int value, char** usr);
@@ -19,7 +21,6 @@ int main(){
 	char hola[20];
 	int cmd = 8 , opt;
 	double hh =2.8;
-	
 	init();
 	usr = getusr();
 	do {
@@ -50,26 +51,26 @@ void init() {
 
 char* getusr(){
 	int usrid;
-	int flag = 0;
+	int flag = FALSE;
+	char user[20];
 	do{
 	myprintf("Please Select User:\n");
-	usrid= getint("0-> Mario (root) \n1-> Luigi\nOption:");
-	if (usrid ==MARIO){
-		flag=1;
+	myprintf("Mario (root) \nLuigi\nOption:");
+	myscanf("%s",user);
+	if (!strcmp(user,MARIOST)){
+		flag=TRUE;
 		return MARIOST;
 	}
-	else if (usrid == LUIGI){
-		flag=1;
+	else if (!strcmp(user,LUIGIST)){
+		flag=TRUE;
 		return LUIGIST;
 	}
 	else{
-		/*
-		 * this is made to turn off all warnings
-		 */
-		char* end = MARIOST;
-		return end;
+		myprintf("Invalid User please try again\n");
 	}
+	myprintf("lo que se escribio %s\n",user);
 	}while(!flag);
+	
 }	
 int getcommand() {
 	return getint("");
@@ -79,8 +80,7 @@ int getcommand() {
 void printHelp() {
 
 	myprintf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
-	myprintf(
-			"These shell commands are defined internally.  Type `help' to see this list.\n");
+	myprintf("These shell commands are defined internally.  Type `help' to see this list.\n");
 	myprintf("Type `help name' to find out more about the function `name'.\n");
 	myprintf("Use `info bash' to find out more about the shell in general.\n\n");
 	myprintf("%d->help [pattern ...]\n", HELP);
@@ -109,10 +109,12 @@ void selectcmd(int opt, char** usr) {
 	case CPUSPEED:
 		myprintf("es muy alta \n");
 		break;
+	case PLAY:
+		start();
 	}
 }
 
 char* su(char* usr) {
-	return (usr == MARIOST?LUIGIST:MARIOST);
+	return (!strcmp(usr,MARIOST)?LUIGIST:MARIOST);
 }
 

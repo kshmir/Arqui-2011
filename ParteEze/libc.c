@@ -231,11 +231,11 @@ int getint(const char mensaje[], ... ){
 	return n;
 }
 
-int isdigit(int ch){
+int myisdigit(int ch){
 	return (ch>='0' && ch<='9');
 }
 
-int isalpha(int ch){
+int myisalpha(int ch){
 	return ((ch>='A' && ch<='Z' )||(ch>='a' && ch<='z' ));
 }
 
@@ -263,9 +263,6 @@ void myscanf(char* string, ...){
 				case 'd':bufpos+=scanint(va_arg(ap,int*),buffer+bufpos);
 				break;
 				case 's':bufpos+=scanstring(va_arg(ap,char*),buffer+bufpos);
-						printf("string\n");
-						printf("%c\n",string[i]);
-						printf("valor de i dentro de string %d\n",i);
 				break;
 				case 'c':ch = va_arg(ap,char*);
 						*(ch)=buffer[bufpos];
@@ -335,7 +332,7 @@ int scandouble(double *pdouble, char*message){
 		if (flag){
 			
 			/* this is used to get de decimal part*/
-			while(isdigit(message[pos])){
+			while(myisdigit(message[pos])){
 					result[i]=message[pos];
 					i++;
 					pos++;
@@ -359,3 +356,9 @@ int scanstring(char* pchar, char*message){
 	return i;
 }
 
+int strcmp(const char* s1, const char* s2){
+    int c, i;
+    for(c=i=0; s1[i] && s2[i] && (c==0); i++)
+       c = s1[i] - s2[i];
+    return c;
+}

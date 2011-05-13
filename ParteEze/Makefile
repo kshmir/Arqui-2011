@@ -2,7 +2,7 @@
 
 
 TARGET=simula
-OBJS=libc.o simula.o
+OBJS=libc.o simula.o nInLineFront.o nInLineBack.o
 CC=gcc
 COPTS=-g -c
 LD=$(CC)
@@ -17,7 +17,13 @@ libc.o:	libc.c
 
 simula.o:	simula.c
 	$(LD) $(COPTS) simula.c
-	
+
+nInLineFront.o: nInLineFront.c
+		$(LD) $(COPTS) nInLineFront.c
+		
+nInLineBAck.o: nInLineBack.c
+		$(LD) $(COPTS) nInLineBack.c
+
 clear:
 	echo Limpiando directorio... 
 	echo Eliminando archivos objeto y $(TARGET)
