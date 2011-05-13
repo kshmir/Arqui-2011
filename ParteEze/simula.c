@@ -126,7 +126,7 @@ char* su(char* usr) {
 
 void printlogo(){
 	
-printf("\n\t***Mucielag O.S*** \n");
+printf("\n ***Mucielag O.S*** \n");
 printf("         (_    ,_,    _) \n");
 printf("         / `'--) (--'` \\ \n");
 printf("        /  _,-'\\_/'-,_  \\ \n"); 

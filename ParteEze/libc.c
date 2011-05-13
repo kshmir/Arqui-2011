@@ -248,7 +248,7 @@ void myscanf(char* string, ...){
 	char buffer[200];
 	char *ch;
 	va_list ap;
-	
+
 	va_start(ap, string);
 	while((c=getchar())!='\n' && c!='\0'){
 		buffer[i]=c;
@@ -272,9 +272,9 @@ void myscanf(char* string, ...){
 				break;
 				case '%':percentflag=TRUE;
 				break;
-				
+
 				default: printstring("\n invalid argument type error \n");
-				
+
 			}
 		i++;
 		}
@@ -287,26 +287,25 @@ void myscanf(char* string, ...){
 				bufpos++;
 				percentflag=FALSE;
 			}
-			
+
 		}
 	}
 	va_end(ap);
-}	
+}
 
 int scanint(int *pint, char*message){
-		char result[20];
-		int final;
-		int i = 0;
-						
-		while(isdigit(message[i])){
-				result[i]=message[i];
-				i++;
-		}
-		result[i]='\0';
-		final=myatoi(result);
-		*(pint)=final;
-	return i;	
-	
+	char result[20];
+	int final;
+	int i = 0;
+
+	while(isdigit(message[i])){
+			result[i]=message[i];
+			i++;
+	}
+	result[i]='\0';
+	final=myatoi(result);
+	*(pint)=final;
+	return i;
 }
 
 int scandouble(double *pdouble, char*message){

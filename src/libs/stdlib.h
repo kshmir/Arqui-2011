@@ -11,11 +11,12 @@
 
 #define _STDLIB_H_
 
-void * malloc(void* ptr, size_t size);
-void * calloc(void* ptr, size_t size);
+void * malloc(size_t size);
+void * calloc(size_t size, size_t cols);
 void * realloc(void* ptr, size_t size);
 void free(void* ptr);
-
-
+int time(void *ptr);
+int srand(int i);
+int rand();
 
 #endif /* STDLIB_H_ */

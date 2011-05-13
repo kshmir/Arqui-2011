@@ -4,10 +4,11 @@
 #include "libs/stdio.h"
 #include "libs/string.h"
 #include "drivers/video.h"
+#include "software/nInLineFront.h"
 
-char* function_names[] = { "logout", "login", NULL };
+char* function_names[] = { "logout", "login", "ninline", NULL };
 
-int ((*functions[])(int, char*)) = { logout, login, NULL };
+int ((*functions[])(int, char*)) = { logout, login, nInLineStart, NULL };
 
 void whenTabCalls(char* s) {
 	int startX = getCursorX();
@@ -38,13 +39,18 @@ void whenTabCalls(char* s) {
 void shellStart() {
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
+
+	printf("\n     ***Mucielag O.S*** \n\n\n\n");
+	printf("         (_    ,_,    _) \n");
+	printf("         / `'--) (--'` \\ \n");
+	printf("        /  _,-'\\_/'-,_  \\ \n");
+	printf("       /.-'     \"     '-.\\ \n\n\n\n");
 }
 
 char* loggedUser = NULL;
-
+char* command = NULL;
 void init() {
 	while (1) {
-		char* command;
 		if (loggedUser == NULL)
 			login(0, NULL);
 		printf(loggedUser);
@@ -52,9 +58,12 @@ void init() {
 		printf(" ");
 		command = getConsoleString(TRUE);
 		int index = 0;
-		for (index = 0; function_names[index] != NULL; ++index) {
-			if (!strcmp(command, function_names[index]))
-				functions[index](0,NULL);
+		if (command[0] != 0 && command[0] != '\n')
+		{
+			for (index = 0; function_names[index] != NULL; ++index) {
+				if (!strcmp(command, function_names[index]))
+					functions[index](0,NULL);
+			}
 		}
 	}
 	return;
@@ -62,12 +71,14 @@ void init() {
 
 int login(int size, char* args) {
 	if (loggedUser != NULL)
-		printf("You are already logged as %s\n", loggedUser);
+	{
+		printf("You are already logged in as: %s\n", loggedUser);
+	}
 	else
 	do {
 		printf("MurcielagOS login:");
 		loggedUser = getConsoleString(FALSE);
-	} while (loggedUser[0] == 0);
+	} while (loggedUser[0] == 0 || loggedUser[0] == '\n');
 }
 
 int logout(int size, char* args) {

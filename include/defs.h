@@ -19,6 +19,7 @@
 #define TRUE 1
 #define FALSE 0
 
+#define time_t long
 #define byte unsigned char
 #define word short int
 #define dword int

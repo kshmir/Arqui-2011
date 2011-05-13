@@ -31,25 +31,21 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 		int cursorY, int cursorEnabled, int textMode) {
 	VIDEO_MODE_INFO* video = NULL;
 	int i = 0;
-	video = (VIDEO_MODE_INFO*) malloc(video, sizeof(VIDEO_MODE_INFO));
+	video = (VIDEO_MODE_INFO*) malloc(sizeof(VIDEO_MODE_INFO));
 	video->height = height;
 	video->width = width;
 	video->curX = cursorX;
 	video->curY = cursorY;
 	video->cursorEnabled = cursorEnabled;
 	video->textMode = textMode;
-	video->shell = (SHELL_INFO*) malloc(video->shell, sizeof(SHELL_INFO));
-	video->shell->screen = (char**) malloc(video->shell->screen,
-			sizeof(char**) * width);
+	video->shell = (SHELL_INFO*) malloc(sizeof(SHELL_INFO));
+	video->shell->screen = (char**) malloc(sizeof(char**) * width);
 	for (i = 0; i < width; i++) {
-		video->shell->screen[i] = (char*) malloc(video->shell->screen[i],
-				sizeof(char*) * height);
+		video->shell->screen[i] = (char*) malloc(sizeof(char*) * height);
 	}
-	video->shell->style = (char**) malloc(video->shell->style,
-			sizeof(char**) * width);
+	video->shell->style = (char**) malloc(sizeof(char**) * width);
 	for (i = 0; i < width; i++) {
-		video->shell->style[i] = (char*) malloc(video->shell->style[i],
-				sizeof(char*) * height);
+		video->shell->style[i] = (char*) malloc(sizeof(char*) * height);
 	}
 	return video;
 }
@@ -125,13 +121,13 @@ void clear_screen() {
 	moveCursorToStart();
 }
 
-
 void clear_screen_topdown() {
 	int i = 0;
 	int x = getCursorX();
 	int y = getCursorY();
 	setCursor(FALSE);
-	while (i++ < (current_video_mode->width * (current_video_mode->height + 1 - y)) - x) {
+	while (i++ < (current_video_mode->width * (current_video_mode->height + 1
+			- y)) - x) {
 		putchar(' ');
 	}
 	setCursor(TRUE);

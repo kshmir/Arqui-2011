@@ -12,9 +12,14 @@ int  atoi(char* string);
 void itoa(int number, char* resp);
 void printf(char* string, ...);
 
+char toupper(char c);
 void ftoa(float number, char* answ);
 void vprintf(char* string, va_list ap);
 
+int scanf(char* msg, ...);
+
 void clrsrc();
+char getc();
+
 #endif /* STDLIO_H_ */
 

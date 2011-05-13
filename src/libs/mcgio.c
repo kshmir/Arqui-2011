@@ -31,7 +31,7 @@ void mcg_putchar(char c) {
 char* getConsoleString(int sendAutocomplete) {
 	char c;
 	char* str = NULL;
-	str = (char*) malloc(str, sizeof(char) * 80); // TODO: This should increment on hit
+	str = (char*) malloc(sizeof(char) * 80); // TODO: This should increment on hit
 	int i = 0;
 	int sx = getCursorX();
 	int sy = getCursorY();
@@ -71,18 +71,24 @@ void printstring(char* message) {
 	}
 }
 
-int getint(char* mensaje, ...) {
+int getint(char* mensaje, ... ){
 	int n, salir = 0;
 	va_list ap;
 
-	do {
-		printf(mensaje);
-		if (getchar() != '1') {
-			printf("Invalid Value, please Try again\n");
+	do
+	{
+		va_start(ap, mensaje);
+		vprintf(mensaje, ap);
+		va_end(ap);
+
+		if ( scanf("%d",&n) != 1)
+		{
+			printf("\nInvalid Value, please Try again\n");
 			BORRA_BUFFER;
-		} else
+		}
+		else
 			salir = 1;
-	} while (!salir);
+	} while (! salir);
 	BORRA_BUFFER;
 	return n;
 }
