@@ -1,4 +1,4 @@
-#include "../include/defs.h"
+
 
 /********************************** 
  *
@@ -14,11 +14,14 @@
 // TODO: Add description for this.
 int (*player)(void);
 
+
+void setCursor(int b);
+
 /** Useful typedefs */
 typedef int size_t;
 typedef short int ssize_t;
 typedef enum eINT_80 {
-	WRITE = 0, READ
+	_WRITE = 0, _READ //TODO: Fix calls to make it compile
 } tINT_80;
 typedef enum eUSER {
 	U_KERNEL = 0, U_NORMAL

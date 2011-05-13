@@ -14,13 +14,15 @@ void execute(char* c);
 void nextRow();
 void reDrawLines();
 
+void putChar(char c);
 void putTab();
 void putSpace();
 void backSpace();
 void onEscape();
 void removeTab();
 
-void shellKBInterrupt();
+/**	Removes last character and decreases cursor */
+void removeLastC();
 
 
 #endif
