@@ -10,6 +10,9 @@ unsigned int _read_msw();
 // TODO: Describe this
 void _lidt(IDTR *idtr);
 
+void _restart();
+void _setCursor(int a);
+
 /* Writes PIC1's mask */
 void _mascaraPIC1(byte mascara);
 /* Writes PIC2's mask */

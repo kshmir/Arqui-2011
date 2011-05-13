@@ -7,12 +7,16 @@
 #define _defs_
 
 #define EOI 0x20
+#define NULL 0
 #define WRITE 0
 #define READ 1
 #define KEYBOARD 0
 #define STDOUT 1
 #define PIC1 2
 #define PIC2 3
+#define ASCIICERO 0x30
+#define TRUE 1
+#define FALSE 0
 
 #define byte unsigned char
 #define word short int
@@ -46,6 +50,21 @@
 typedef struct {
 	word limit, base_l;byte base_m, access, attribs, base_h;
 } DESCR_SEG;
+
+typedef struct {
+	char** jumpmap;
+	char** screen;
+	char** style;
+} SHELL_INFO;
+
+typedef struct {
+	int height, width;
+	int curX, curY;
+	int cursorEnabled, textMode;
+	SHELL_INFO* shell;
+} VIDEO_MODE_INFO;
+
+
 
 /* Interrupt descriptor */
 typedef struct {
