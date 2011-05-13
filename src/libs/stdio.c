@@ -8,7 +8,7 @@ void putchar(char c) {
 		backSpace();
 	} else if (c == '\n') {
 		newLine();
-	} else if (c == 0x0f) {
+	} else if (c == 0x0f || c == '\t') {
 		if (getCursorX() % 4 == 0) {
 			int i = 0;
 			for (i = 0; i < 4; ++i) {

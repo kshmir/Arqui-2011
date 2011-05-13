@@ -13,11 +13,18 @@ IDTR idtr; /* IDTR */
 int must_update = 0;
 int tickpos = 640;
 int videoPos = 0;
+int cursorEnabled = 1;
 char *vidmem = (char *) 0xb8000;
+
+
+void setCursor(int b)
+{
+	cursorEnabled = b;
+}
 
 void setVideoPos(int a) {
 	videoPos = a;
-	_setCursor(a/2);
+	if (cursorEnabled) _setCursor(a/2);
 }
 
 void int_08() {

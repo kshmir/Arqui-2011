@@ -187,14 +187,20 @@ int controlKey(char scancode) {
 }
 
 char getC() {
+	while (charBufferPointer < 0);
+
+
 	if (charBufferPointer < 0)
 		return 0;
+
 	return charBuffer[charBufferPointer--];
 }
 
 int capsOn() {
 	return capsLock;
 }
+
+
 
 int isCapital() {
 	return ((lShift || rShift) && !capsLock) || capsLock && !(lShift || rShift);

@@ -25,7 +25,6 @@ void initVideo() {
 	default_video = buildVideoMode(25, 80, 1, 10, 10, 1);
 	current_video_mode = default_video;
 	clear_screen();
-	getchar();
 }
 
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
@@ -118,8 +117,24 @@ void decrementCursor() {
 void clear_screen() {
 	int i = 0;
 	moveCursorToStart();
+	setCursor(FALSE);
 	while (i++ < (current_video_mode->width * (current_video_mode->height + 1))) {
 		putC(' ');
 	}
+	setCursor(TRUE);
 	moveCursorToStart();
+}
+
+
+void clear_screen_topdown() {
+	int i = 0;
+	int x = getCursorX();
+	int y = getCursorY();
+	setCursor(FALSE);
+	while (i++ < (current_video_mode->width * (current_video_mode->height + 1 - y)) - x) {
+		putchar(' ');
+	}
+	setCursor(TRUE);
+	setCursorX(x);
+	setCursorY(y);
 }

@@ -38,8 +38,7 @@ void execute(char* c) {
  * video) y lo vuelve a imprimir*/
 void reDrawLines() {
 	int i, j;
-	clear_screen();
-
+	setCursor(FALSE);
 	setCursorY(0);
 	for (j = 0; j < getVideoMode()->height; j++) {
 		setCursorX(0);
@@ -54,6 +53,7 @@ void reDrawLines() {
 		}
 		setCursorY(getCursorY() + 1);
 	}
+	setCursor(TRUE);
 	setCursorX(0);
 }
 

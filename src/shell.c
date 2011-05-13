@@ -1,26 +1,42 @@
 #include "shell.h"
-#include "libs/stdio.h"
+#include "../include/defs.h"
 #include "libs/mcgio.h"
+#include "libs/stdio.h"
+#include "drivers/video.h"
 #include <stdarg.h>
 
+int glb = 1;
+
+
+void whenTabCalls(char* s){
+	int startX = getCursorX();
+	int startY = getCursorY();
+	int desp = glb, i = 0;
+	printf("\n");
+	for (i = 0; i < glb; ++i) {
+		printf("%d%d%d%d%d\t", i,i,i,i,i);
+	}
+	glb++;
+	VIDEO_MODE_INFO * mode = getVideoMode();
+	if (getCursorY() == mode->height - 1){
+		if (startY != getCursorY())
+			setCursorY(getCursorY() - desp);
+		else
+			setCursorY(startY - desp);
+	}
+	else
+		setCursorY(startY);
+	setCursorX(startX);
+}
+
 void shellStart() {
-	printf("Murcielag O.S. is loading...");
+	printf("Murcielag O.S. is loading...\n");
+	setTabCall(whenTabCalls);
 }
 
 void init() {
-	char* usr;
-	int cmd;
-
-	usr = getusr();
-	do {
-		do {
-			printf("%s%s ", usr, OSDEFST);
-			cmd = getcommand();
-		} while (cmd < HELP || cmd > LOGOUT);
-		selectcmd(cmd, &usr);
-	} while (cmd != LOGOUT);
-
-
+	while(1)
+		getConsoleString();
 	return;
 }
 

@@ -15,6 +15,7 @@
 int (*player)(void);
 
 
+void setCursor(int b);
 
 /** Useful typedefs */
 typedef int size_t;
