@@ -20,12 +20,14 @@ void myftoa(float number, char* answ);
 
 void myscanf(char* string, ...);
 
-int isdigit(int ch);
+int myisdigit(int ch);
 
-int isalpha(int ch);
+int myisalpha(int ch);
 
 int scanint(int *pint, char*message);
 
 int scandouble(double *pdouble, char*message);
 
 int scanstring(char* pchar, char*message);
+
+int strcmp(const char* s1, const char* s2);

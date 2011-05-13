@@ -9,8 +9,9 @@
 #define ECHO 2
 #define CPUSPEED 3
 #define SU 4
-#define LOGOUT 5
-#define REBOOT 6
+#define PLAY 5
+#define LOGOUT 6
+#define REBOOT 7
 #define TRUE 1
 #define FALSE 0
 
