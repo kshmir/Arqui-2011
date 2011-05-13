@@ -15,12 +15,18 @@ int getcommand();
 
 char* getusr();
 
+void printlogo();
+
 int main(){
 
 	char* usr;
 	char hola[20];
+	char hola2[20];
 	int cmd = 8 , opt;
 	double hh =2.8;
+	
+	printlogo();
+	
 	init();
 	usr = getusr();
 	do {
@@ -118,3 +124,13 @@ char* su(char* usr) {
 	return (!strcmp(usr,MARIOST)?LUIGIST:MARIOST);
 }
 
+void printlogo(){
+	
+printf("\n\t***Mucielag O.S*** \n");
+printf("         (_    ,_,    _) \n");
+printf("         / `'--) (--'` \\ \n");
+printf("        /  _,-'\\_/'-,_  \\ \n"); 
+printf("       /.-'     \"     '-.\\ \n\n\n\n");
+
+	
+}

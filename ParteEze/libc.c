@@ -348,7 +348,7 @@ int scandouble(double *pdouble, char*message){
 int scanstring(char* pchar, char*message){
 	
 	int i=0;
-	while(message[i]!='\0'){
+	while(message[i]!='\0' && message[i]!=' '){
 		pchar[i]=message[i];
 		i++;
 	}
