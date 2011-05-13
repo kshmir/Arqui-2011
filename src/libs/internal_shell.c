@@ -48,7 +48,7 @@ void reDrawLines() {
 			} else if (getVideoMode()->shell->screen[i][j] == 0) {
 				i = getVideoMode()->width;
 			} else {
-				putC(getVideoMode()->shell->screen[i][j]);
+				putchar(getVideoMode()->shell->screen[i][j]);
 			}
 		}
 		setCursorY(getCursorY() + 1);
