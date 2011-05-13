@@ -16,16 +16,11 @@ char* getusr();
 int main(){
 
 	char* usr;
+	char hola[20];
 	int cmd = 8 , opt;
 	double hh =2.8;
-	printf("hola gente --> %d\n",cmd);
-	scandouble(&hh);
-	BORRA_BUFFER;
-	myprintf(" numero %f \n",hh);
 	
-	//si no se sigue el formato pedido devuelve lo que hay en los punteros
 	init();
-
 	usr = getusr();
 	do {
 		do {
