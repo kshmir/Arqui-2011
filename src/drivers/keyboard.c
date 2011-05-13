@@ -124,6 +124,12 @@ char lAlt = 0;
 /** Right Alt's flag */
 char rAlt = 0;
 
+char _escPressed = 0;
+
+int escPressed()
+{
+	return _escPressed;
+}
 
 void pushC(char c) {
 	if (charBufferPointer >= BUFFER_SIZE - 1)
@@ -159,18 +165,20 @@ int controlKey(char scancode) {
 			lCtrl = 1;
 		else if (scancode == 0xFFFFFF9D)
 			lCtrl = 0;
+		else if (scancode == 0x01)
+			_escPressed = 1;
 		else if (scancode == 0xFFFFFF81) //release esc
-			capsOn();//TODO: Remap enter();
+			_escPressed = 0;
 		else if (scancode == 0x45)
 			numLock = numLock ? 0 : 1;
 		else if (scancode == 0x0E)
-			capsOn();//TODO: Remap enter();
+			pushC('\r');
 		else if (scancode == 0x3A)
 			capsLock = capsLock ? 0 : 1;
 		else if (scancode == 0x39) { //space
-			pushC(scancode);
+			pushC(' ');
 			return 1;
-		} else if (scancode == 0x0f) {
+		} else if (scancode == 0x0f) { // tab
 			pushC(scancode);
 			return 1;
 		}
@@ -195,9 +203,4 @@ int isShifted() {
 	return lShift || rShift;
 }
 
-void removeLastC() {
-	// TODO: LOW Can we improve this?
-	decrementCursor();
-	putC(' ');
-	decrementCursor();
-}
+

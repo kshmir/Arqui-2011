@@ -57,7 +57,7 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 	{
 		if (fd == STDOUT) //PANTALL
 		{
-			setBytes(vidmem + videoPos, buffer, 2);
+			setBytes(vidmem + videoPos, buffer, count);
 		}
 
 	} else if (systemCall == READ) //read
@@ -110,15 +110,14 @@ kmain() {
 	_Sti();
 
 	initVideo();
+	internalShellStart();
 	shellStart();
 
 	/* KeepAlive loop */
 	while (1) {
-		while(must_update > 0)
-		{
-			init();
-			must_update--;
-		}
+		init();
+		//internalShellStart();
+		must_update--;
 	}
 
 }

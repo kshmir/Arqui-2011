@@ -4,17 +4,7 @@
 #include <stdarg.h>
 
 void shellStart() {
-	int i = 0;
-	printf("Murcielag O.S. is loading");
-
-	for (; i < 20; i++) {
-		int j = 0;
-		for (j = 0; j < 100000; j++) {
-			putchar('\0');
-		}
-		putchar('.');
-	}
-	printf("100 %% \n");
+	printf("Murcielag O.S. is loading...");
 }
 
 void init() {
@@ -39,11 +29,9 @@ int getint(char* mensaje, ...) {
 	va_list ap;
 
 	do {
-
 		printf(mensaje);
-
 		if (getchar() != '1') {
-			printf("\nInvalid Value, please Try agian\n");
+			printf("Invalid Value, please Try again\n");
 			BORRA_BUFFER;
 		} else
 			salir = 1;
@@ -59,7 +47,9 @@ char* getusr() {
 	int flag = 0;
 	do {
 		printf("Please Select User:\n");
-		usrid = getint("0-> Mario (root) \n1-> Luigi\nOption:");
+		printf("0->Mario(root):\n");
+		printf("1->Luigi:\n");
+		usrid = getint("Option:\n");
 		if (usrid == MARIO) {
 			flag = 1;
 			return MARIOST;

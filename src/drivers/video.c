@@ -13,6 +13,9 @@ int defaultStyle = 0x07;
 
 VIDEO_MODE_INFO* current_video_mode;
 
+VIDEO_MODE_INFO* getVideoMode() {
+	return current_video_mode;
+}
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 		int cursorY, int cursorEnabled, int textMode);
 
@@ -22,7 +25,6 @@ void initVideo() {
 	default_video = buildVideoMode(25, 80, 1, 10, 10, 1);
 	current_video_mode = default_video;
 	clear_screen();
-	printf("MAXI GAY\n");
 	getchar();
 }
 
@@ -39,16 +41,16 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 	video->textMode = textMode;
 	video->shell = (SHELL_INFO*) malloc(video->shell, sizeof(SHELL_INFO));
 	video->shell->screen = (char**) malloc(video->shell->screen,
-			sizeof(SHELL_INFO) * width);
+			sizeof(char**) * width);
 	for (i = 0; i < width; i++) {
 		video->shell->screen[i] = (char*) malloc(video->shell->screen[i],
-				sizeof(SHELL_INFO) * height);
+				sizeof(char*) * height);
 	}
 	video->shell->style = (char**) malloc(video->shell->style,
-			sizeof(SHELL_INFO) * width);
+			sizeof(char**) * width);
 	for (i = 0; i < width; i++) {
 		video->shell->style[i] = (char*) malloc(video->shell->style[i],
-				sizeof(SHELL_INFO) * height);
+				sizeof(char*) * height);
 	}
 	return video;
 }

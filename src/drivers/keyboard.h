@@ -24,8 +24,7 @@ int isCapital();
 
 /** Get's the last char on the KB buffer */
 char getC();
-/**	Removes last character and decreases cursor */
-void removeLastC();
+
 
 #endif /* STDLIB_H_ */
 

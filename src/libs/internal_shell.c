@@ -1,25 +1,31 @@
 #include "internal_shell.h"
 #include "stdlib.h"
+#include "../../include/kasm.h"
 
-void newLine()
-{
-	setCursorY(getCursorY() + 1);
+void newLine() {
 	setCursorX(0);
+	if (getCursorY() < getVideoMode()->height - 1) {
+		setCursorY(getCursorY() + 1);
+	} else {
+		int i, j;
+		int last_len = 0, current_len;
+		for (j = 0; j < getVideoMode()->height; j++) {
+			for (i = 0; i < getVideoMode()->width; i++) {
+				getVideoMode()->shell->screen[i][j]
+						= getVideoMode()->shell->screen[i][j + 1];
+			}
+		}
+		for (i = 0; i < getVideoMode()->width; i++)
+			getVideoMode()->shell->screen[i][getVideoMode()->height] = ' ';
+		reDrawLines();
+		setCursorY(getVideoMode()->height - 1);
+		setCursorX(0);
+	}
 }
-
-char lines[MAX_COLS][MAX_ROWS];
-char lastLine[MAX_COLS];
-int x = 0, y = 0;
 
 /** Inicio del shell, borra la pantalla y escribe la linea de comandos*/
 void internalShellStart() {
-	int i, j;
-	for (i = 0; i < MAX_COLS; i++) {
-		for (j = 0; j < MAX_ROWS; j++)
-			lines[i][j] = 0;
-		lastLine[i] = 0;
-	}
-	x = y = 0;
+
 }
 
 /**TODO: aca se debe analizar lo que se recibe y ejecutar alguna
@@ -33,67 +39,80 @@ void execute(char* c) {
 void reDrawLines() {
 	int i, j;
 	clear_screen();
-	y = 0;
-	for (j = 0; j < MAX_ROWS; j++) {
-		x = 0;
+
+	setCursorY(0);
+	for (j = 0; j < getVideoMode()->height; j++) {
 		setCursorX(0);
-		setCursorY(y++);
-		for (i = 0; i < MAX_COLS; i++) {
-			if (lines[i][j] == 0x0f) {
+		for (i = 0; i < getVideoMode()->width; i++) {
+			if (getVideoMode()->shell->screen[i][j] == 0x0f) {
 				putTab();
-			} else if (lines[i][j] == 0) {
-				i = MAX_COLS;
+			} else if (getVideoMode()->shell->screen[i][j] == 0) {
+				i = getVideoMode()->width;
 			} else {
-				putC(lines[i][j]);
-				x++;
+				putC(getVideoMode()->shell->screen[i][j]);
 			}
 		}
-
+		setCursorY(getCursorY() + 1);
 	}
-	//x=0;
-	//setCursorX(0);
+	setCursorX(0);
 }
 
 void putSpace() {
 	putC(getC());
-	lines[x++][y] = ' ';
+	getVideoMode()->shell->screen[getCursorX() + 1][getCursorY()] = ' ';
 }
 
 void putTab() {
-	putC(' ');
-	putC(' ');
-	putC(' ');
-	putC(' ');
+	putchar(0x0f);
 }
 
 void backSpace() {
-	if (x > CLSIZE) {
-		char c = lines[--x][y];
-		lines[x][y] = 0;
-		if (c == 0x0f)
-			removeTab();
-		else {
-			removeLastC();
-			//setCursorX(getCursorX()-1);
-		}
+	if (getCursorX() % 4 == 0
+			&& getVideoMode()->shell->screen[getCursorX() - 1][getCursorY()]
+					== 0x0f) {
+		removeTab();
+	} else {
+		removeLastC();
 	}
+
 }
 
 void removeTab() {
-	removeLastC();
-	removeLastC();
-	removeLastC();
-	removeLastC();
+	int oneStep = 1;
+	int x = getCursorX();
+	while (x % 4 > 0 || oneStep) {
+		if (getVideoMode()->shell->screen[x - 1][getCursorY()] == 0x0f
+				||
+				getVideoMode()->shell->screen[x - 1][getCursorY()] == 0) {
+			removeLastC();
+		}
+		oneStep = 0;
+		x--;
+
+	}
 }
 
 void putChar(char c) {
-	lines[x++][y] = c;
+	int x = getCursorX();
+	int y = getCursorY();
+	if (x <= getVideoMode()->width) {
+		if (c != '\r')
+			getVideoMode()->shell->screen[x][y] = c;
+		x += (c != '\r') ? 1 : -1;
+	} else {
+		newLine();
+		getVideoMode()->shell->screen[x][y] = c;
+	}
 }
 
 void onEscape() {
 	shellStart();
 }
 
-
-
+void removeLastC() {
+	decrementCursor();
+	putChar('\r');
+	putC(' ');
+	decrementCursor();
+}
 

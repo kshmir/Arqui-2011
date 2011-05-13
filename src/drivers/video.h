@@ -8,14 +8,15 @@
 #ifndef VIDEO_H_
 #define VIDEO_H_
 
-#define MAX_COLS 80
-#define MAX_ROWS 25
 #define VIDEO 0xb8000
+
+#include "../../include/defs.h"
+
 
 
 void initVideo();
-void setVideoMode();
-void setVideoMode();
+void setVideoMode(VIDEO_MODE_INFO* vid);
+VIDEO_MODE_INFO* getVideoMode();
 
 
 /** Increment's the video card's cursor position */

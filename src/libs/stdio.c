@@ -3,21 +3,40 @@
 #include "../drivers/video.h"
 #include "../drivers/keyboard.h"
 
-void putchar(char c)
-{
-	if (c == '\n')
+void putchar(char c) {
+	if (c == '\r') {
+		backSpace();
+	} else if (c == '\n') {
 		newLine();
-	else if (c != 0 )
-	{
+	} else if (c == 0x0f) {
+		if (getCursorX() % 4 == 0) {
+			int i = 0;
+			for (i = 0; i < 4; ++i) {
+				putChar(c);
+				putC(' ');
+			}
+		}
+		else
+		while (getCursorX() % 4 != 0)
+		{
+			putChar(c);
+			putC(' ');
+		}
+	} else if (c != 0) {
 		putChar(c);
 		putC(c);
 	}
 }
 
-char getchar()
-{
+char getchar() {
 	char c;
-	while((c = getC()) != '\n') putchar(c);
+	while ((c = getC()) != '\n') {
+		if (c != 0x0f)
+			putchar(c);
+		else {
+			putTab();
+		}
+	}
 	putchar(c);
 	return c;
 }
@@ -135,6 +154,6 @@ void itoa(int number, char* answ) {
 		if (sign == TRUE)
 			answ[pos++] = '-';
 	}
-		internalswap(answ, pos - 1);
+	internalswap(answ, pos - 1);
 }
 
