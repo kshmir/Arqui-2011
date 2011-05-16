@@ -17,8 +17,6 @@ void whenTabCalls(char* s) {
 	VIDEO_MODE_INFO * mode = getVideoMode();
 	clear_screen_topdown();
 
-
-
 	desp += mcg_printf("\n");
 	for (i = 0; function_names[i] != NULL; ++i) {
 		if (strlen(s)  > 0 && strstr(function_names[i],s) != NULL)
