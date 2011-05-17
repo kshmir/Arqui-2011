@@ -1,6 +1,6 @@
 #include "stdlib.h"
 
-char heap_space[1024*1024*4];
+char heap_space[1024*1024*8];
 size_t offset;
 
 void * malloc(size_t size)

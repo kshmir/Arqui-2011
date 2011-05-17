@@ -6,9 +6,9 @@
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
 
-char* function_names[] = { "logout", "login", "ninline", NULL };
+char* function_names[] = { "logout", "login", "ninline", "help", NULL };
 
-int ((*functions[])(int, char*)) = { logout, login, nInLineStart, NULL };
+int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp, NULL };
 
 void whenTabCalls(char* s) {
 	int startX = getCursorX();
@@ -37,6 +37,7 @@ void whenTabCalls(char* s) {
 void shellStart() {
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
+
 
 	printf("\n     ***Mucielag O.S*** \n\n\n\n");
 	printf("         (_    ,_,    _) \n");
@@ -85,11 +86,10 @@ int logout(int size, char* args) {
 	loggedUser = NULL;
 }
 
-void printHelp() {
-	printf("Murcielago bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
+void printHelp(int size, char* args) {
+	printf("MurcielagOS bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
 	printf(
 			"These shell commands are defined internally.  Type `help' to see this list.\n");
-	printf("Type `help name' to find out more about the function `name'.\n");
-	printf("Use `info bash' to find out more about the shell in general.\n\n");
+	printf("Type `name help' to find out more about the function `name'.\n");
 }
 

@@ -189,9 +189,6 @@ int controlKey(char scancode) {
 
 
 char getC() {
-	while (charBufferPointer < 0);
-
-
 	if (charBufferPointer < 0)
 		return 0;
 

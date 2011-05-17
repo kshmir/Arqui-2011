@@ -5,6 +5,7 @@
 #include <stdarg.h>
 
 void putchar(char c) {
+
 	if (c == '\r') {
 		backSpace();
 	} else if (c == '\n') {
@@ -32,11 +33,13 @@ char getchar() {
 	int sx = getCursorX();
 	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
-		if (c != 0x0f) {
-			if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
-				putchar(c);
-		} else {
-			putTab();
+		if (c != 0) {
+			if (c != 0x0f) {
+				if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
+					putchar(c);
+			} else {
+				putTab();
+			}
 		}
 	}
 	putchar(c);
@@ -201,71 +204,11 @@ void vprintf(char* string, va_list ap) {
 	va_end(ap);
 }
 
-char toupper(char c) {
-	return c;
-}
-
 void clrscr() {
 	clear_screen();
 }
 
-int scanf(char* string, ...) {
-	int i = 0, va_count;
-	int c;
-	int bufpos = 0;
-	int percentflag = FALSE;
-	int endFlag = FALSE;
-	char buffer[200];
-	char *ch;
-	va_list ap;
-
-	va_start(ap, string);
-	while ((c = getc()) != '\n' && c != '\0') {
-		buffer[i] = c;
-		i++;
-	}
-	buffer[i] = '\0';
-	i = 0;
-	while (string[i] != '\0' && !endFlag) {
-		if (string[i] == '%' && !percentflag) {
-			i++;
-			switch (string[i]) {
-			case 'd':
-				bufpos+=scanint(va_arg(ap,int*),buffer+bufpos);
-				break;
-			case 's':
-				bufpos+=scanstring(va_arg(ap,char*),buffer+bufpos);
-				break;
-			case 'c':
-				ch = va_arg(ap,char*);
-				*(ch) = buffer[bufpos];
-				bufpos++;
-				break;
-			case 'f':
-				bufpos+=scandouble(va_arg(ap,double*),buffer+bufpos);
-				break;
-			case '%':
-				percentflag = TRUE;
-				break;
-			default:
-				printstring("\n invalid argument type error \n");
-
-			}
-			i++;
-		} else {
-			if (string[i] != buffer[bufpos]) {
-				endFlag = TRUE;
-			} else {
-				i++;
-				bufpos++;
-				percentflag = FALSE;
-			}
-
-		}
-	}
-	va_end(ap);
-	return 1; //TODO: FIX THIS
-}
+int invalidScanf = 0;
 
 int scanint(int *pint, char*message) {
 	char result[20];
@@ -276,6 +219,7 @@ int scanint(int *pint, char*message) {
 		result[i] = message[i];
 		i++;
 	}
+	invalidScanf = (isdigit(message[i])) ? 1 : 0;
 	result[i] = '\0';
 	final = atoi(result);
 	*(pint) = final;
@@ -296,6 +240,9 @@ int scandouble(double *pdouble, char*message) {
 		i++;
 		pos++;
 	}
+	invalidScanf = (isdigit(message[pos])) ? 1 : 0;
+	if (invalidScanf)
+		return pos;
 	if (message[pos] == '.') {
 		result[i++] = '.';
 		pos++;
@@ -310,6 +257,7 @@ int scandouble(double *pdouble, char*message) {
 			i++;
 			pos++;
 		}
+		invalidScanf = (isdigit(message[pos])) ? 1 : 0;
 		result[i] = '\0';
 		final = atof(result);
 		*(pdouble) = final;
@@ -331,16 +279,81 @@ int scanstring(char* pchar, char*message) {
 	pchar[i] = '\0';
 	return i;
 }
-char getc() {
-	char c = getC();
+
+int scanf(char* string, ...) {
+	int i = 0, va_count;
+	int c;
+	int bufpos = 0;
+	int percentflag = FALSE;
+	int endFlag = FALSE;
+	int oldBuf = 0;
+
+	char buffer[200];
+	char *ch;
+	va_list ap;
+
+	va_start(ap, string);
 	int sx = getCursorX();
 	int sy = getCursorY();
-	if (c != 0x0f) {
-		if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
-			putchar(c);
-	} else {
-		putTab();
+
+	while ((c = getC()) != '\n') {
+		if (c != 0) {
+			if (c != 0x0f) {
+				if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
+					putchar(c);
+				if (c != '\r') {
+					buffer[i] = c;
+					i++;
+				} else {
+					if (i > 0) {
+						buffer[i] = 0;
+						i--;
+					}
+				}
+			} else {
+				putTab();
+			}
+		}
 	}
-	return c;
+	putchar(c);
+	i = 0;
+	while (string[i] != '\0' && !endFlag) {
+		if (string[i] == '%' && !percentflag) {
+			i++;
+			oldBuf = bufpos;
+			switch (string[i]) {
+			case 'd':
+				bufpos += scanint(va_arg(ap,int*),buffer+bufpos);
+				break;
+			case 's':
+				bufpos += scanstring(va_arg(ap,char*),buffer+bufpos);
+				break;
+			case 'c':
+				ch = va_arg(ap,char*);
+				*(ch) = buffer[bufpos];
+				bufpos++;
+				break;
+			case 'f':
+				bufpos += scandouble(va_arg(ap,double*),buffer+bufpos);
+				break;
+			case '%':
+				percentflag = TRUE;
+				break;
+			default:
+				printstring("\n invalid argument type error \n");
+			}
+			i++;
+		} else {
+			if (string[i] != buffer[bufpos]) {
+				endFlag = TRUE;
+			} else {
+				i++;
+				bufpos++;
+				percentflag = FALSE;
+			}
+		}
+	}
+	va_end(ap);
+	return !invalidScanf; //TODO: FIX THIS
 }
 

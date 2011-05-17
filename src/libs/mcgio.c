@@ -36,7 +36,7 @@ char* getConsoleString(int sendAutocomplete) {
 	int sx = getCursorX();
 	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
-		if (c != 0x0f) {
+		if (c != 0x0f && c != 0) {
 			if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
 				mcg_putchar(c);
 			if (c != '\r')
@@ -46,11 +46,13 @@ char* getConsoleString(int sendAutocomplete) {
 			}
 			else
 			{
-				str[i] = 0;
-				i--;
+				if (i > 0)	{
+					str[i] = 0;
+					i--;
+				}
 			}
 
-		} else {
+		} else if (c != 0){
 			if (onTabCall != NULL && sendAutocomplete) {
 				str[i] = 0;
 				onTabCall(str);
@@ -84,12 +86,12 @@ int getint(char* mensaje, ... ){
 		if ( scanf("%d",&n) != 1)
 		{
 			printf("\nInvalid Value, please Try again\n");
-			BORRA_BUFFER;
 		}
 		else
+		{
 			salir = 1;
+		}
 	} while (! salir);
-	BORRA_BUFFER;
 	return n;
 }
 

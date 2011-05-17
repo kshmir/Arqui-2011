@@ -10,7 +10,7 @@ void shellStart();
 
 #define OSDEFST "@murcielagOS:~#"
 
-void printHelp();
+void printHelp(int size, char* args);
 
 void internalswap(char* answ, int pos);
 
