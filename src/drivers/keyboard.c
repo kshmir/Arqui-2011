@@ -97,14 +97,12 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		{ NPRTBL, NPRTBL },//087 F11
 		{ NPRTBL, NPRTBL },//088 F12
 		{ '+', '*' }, //089
-		{ '+', '*' }  //090
+		{ '+', '*' } //090
 		//Para asegurarme podria llenar con NPRTBL lo que queda
 };
 
 char charBuffer[BUFFER_SIZE];
 int charBufferPointer = -1;
-
-
 
 // TODO: Bitshift all of these.
 /** Num lock's flag */
@@ -124,10 +122,10 @@ char lAlt = 0;
 /** Right Alt's flag */
 char rAlt = 0;
 
+char del = 0;
 char _escPressed = 0;
 
-int escPressed()
-{
+int escPressed() {
 	return _escPressed;
 }
 
@@ -143,7 +141,9 @@ char scanCodeToChar(char scanCode) {
 	return keyboard[scanCode][isCapital()];
 }
 
-int controlKey(char scancode) {
+int lastkey = 0;
+
+int controlKey(int scancode) {
 	// TODO: MID Defines for all the scan codes!
 	// TODO: Test scancodes with a "test keys" program
 	if (scancode == 42) //SHIFT IZQ
@@ -151,42 +151,97 @@ int controlKey(char scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
+
+		switch (scancode) {
+		case 71:
+			pushC('7');
+			break;
+		case 72:
+			pushC('8');
+			break;
+		case 73:
+			pushC('9');
+			break;
+		case 75:
+			pushC('4');
+			break;
+		case 76:
+			pushC('5');
+			break;
+		case 77:
+			pushC('6');
+			break;
+		case 79:
+			pushC('1');
+			break;
+		case 80:
+			pushC('2');
+			break;
+		case 81:
+			pushC('3');
+			break;
+		case 82:
+			pushC('0');
+			break;
+		}
+
 		if (scancode == 0xFFFFFFAA)
 			lShift = 0;
 		else if (scancode == 0xFFFFFFB6)
 			rShift = 0;
 		else if (scancode == 0x1c)
 			pushC('\n');
-		else if (scancode == 0x38)
-			lAlt = 1;
-		else if (scancode == 0xFFFFFFB8)
-			lAlt = 0;
-		else if (scancode == 0x1D)
-			lCtrl = 1;
-		else if (scancode == 0xFFFFFF9D)
-			lCtrl = 0;
-		else if (scancode == 0x01)
+		else if (scancode == 0x38) {
+			if (lastkey != -32)
+				lAlt = 1;
+			else
+				rAlt = 1;
+		} else if (scancode == 0xFFFFFFB8) {
+			if (lastkey != -32)
+				lAlt = 0;
+			else
+				rAlt = 0;
+		} else if (scancode == 0x1D) {
+			if (lastkey != -32)
+				lCtrl = 1;
+			else
+				rCtrl = 1;
+		} else if (scancode == 0xFFFFFF9D) {
+			if (lastkey != -32)
+				lCtrl = 0;
+			else
+				rCtrl = 0;
+		} else if (scancode == 0x01)
 			_escPressed = 1;
 		else if (scancode == 0xFFFFFF81) //release esc
 			_escPressed = 0;
+		else if (scancode == 83 && lastkey == -32)
+			del = 1;
+		else if (scancode == -45 && lastkey == -32)
+			del = 0;
 		else if (scancode == 0x45)
 			numLock = numLock ? 0 : 1;
 		else if (scancode == 0x0E)
 			pushC('\r');
 		else if (scancode == 0x3A)
 			capsLock = capsLock ? 0 : 1;
-		else if (scancode == 0x39) { //space
-			pushC(' ');
-			return 1;
-		} else if (scancode == 0x0f) { // tab
-			pushC(scancode);
-			return 1;
+		else {
+			lastkey = scancode;
+			if (scancode == 0x39) { //space
+				pushC(' ');
+				return 1;
+			} else if (scancode == 0x0f) { // tab
+				pushC(scancode);
+				return 1;
+			}
 		}
 	}
+	if ((lAlt || rAlt) && (lCtrl || rCtrl) && del)
+		_restart();
+
+	lastkey = scancode;
 	return 0;
 }
-
-
 
 char getC() {
 	if (charBufferPointer < 0)
@@ -199,13 +254,10 @@ int capsOn() {
 	return capsLock;
 }
 
-
-
 int isCapital() {
 	return ((lShift || rShift) && !capsLock) || capsLock && !(lShift || rShift);
 }
 int isShifted() {
 	return lShift || rShift;
 }
-
 

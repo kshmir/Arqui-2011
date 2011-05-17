@@ -11,7 +11,7 @@ void pushC(char c);
 /** Receives the scancodes which aren't from a key.
  * And changes the shift state, control, alt, etc.
  */
-int controlKey(char scancode);
+int controlKey(int scancode);
 
 /** Gets whether caps is on or not */
 int capsOn();
