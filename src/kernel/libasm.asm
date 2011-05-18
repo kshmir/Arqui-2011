@@ -197,13 +197,13 @@ _doManyCicles:
 		push ebp							;2ciclos
 		mov ebp, esp		; Stack frame	;2ciclos
 		pusha								;24ciclos
-		mov ebx,3							;2ciclos
-x3:		dec ebx								;2ciclos					
+;		mov ebx,3							;2ciclos
+;x3:		dec ebx								;2ciclos					
 		mov eax, 0x0FFFFFFF		   	; Puerto		;2ciclos
 ciclo:	dec eax			  	; lo que se envia2ciclos
 		jnz	ciclo							;9ciclos , n 3ciclos
-		cmp	ebx,0							;2ciclos
-		jnz	x3								;12ciclos, n 3ciclos
+;		cmp	ebx,0							;2ciclos
+;		jnz	x3								;12ciclos, n 3ciclos
 		popa								;24ciclos
 		pop ebp								;4ciclos
 		ret									;10ciclos
@@ -227,6 +227,7 @@ _out:
 	out 0x20, al
 	pop ebp
 	ret
+
 
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
