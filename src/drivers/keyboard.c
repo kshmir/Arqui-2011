@@ -152,6 +152,7 @@ int controlKey(int scancode) {
 		rShift = 1;
 	else {
 
+		if (lastkey != -32)
 		switch (scancode) {
 		case 71:
 			pushC('7');
@@ -184,7 +185,6 @@ int controlKey(int scancode) {
 			pushC('0');
 			break;
 		}
-
 		if (scancode == 0xFFFFFFAA)
 			lShift = 0;
 		else if (scancode == 0xFFFFFFB6)

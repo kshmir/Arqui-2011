@@ -89,6 +89,7 @@ int getint(char* mensaje, ... ){
 		}
 		else
 		{
+			BORRA_BUFFER;
 			salir = 1;
 		}
 	} while (! salir);

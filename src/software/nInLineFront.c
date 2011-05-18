@@ -246,20 +246,15 @@ int validMove(int * plays, typeconf data) {
 	/*Returns 0 if it's a valid move or 1 if it's quit.*/
 	do {
 		printf("\n Enter move: ");
-		scanf("%d", plays);
+		*plays = getint("");
 		if (*plays < 1 || *plays > data.columns) {
 			printf("\nInvalid Move!\n");
-			CHAR_PACMAN
-				;
 		} else {
 			continues = 0;
 			ch = 0;
 		}
 
 	} while (continues);
-
-	CHAR_PACMAN
-		;
 	return (int) ch > *plays;
 }
 
@@ -268,25 +263,28 @@ void show(int end, int turn, int * quit) {
 	switch (end) {
 	case FULL_COL:
 		printf("\nThat column is Full...\n");
+		getchar();
 		break;
 
 	case WON:
 		printf("\n##### CONGRATULATIONS PLAYER %d ! YOU WON! #####\n", turn);
-
+		getchar();
 		*quit = 1;
 		break;
 
 	case DRAW:
 		printf("\nDRAW :(\n");
+		getchar();
 		*quit = 1;
 		break;
 
 	case -2:
 		printf("\nNot enough memory! System32 Error. Shutting down..\n");
+		getchar();
 		*quit = 1;
 		break;
 	}
-	getchar();
+
 	return;
 }
 
