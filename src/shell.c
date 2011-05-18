@@ -6,9 +6,9 @@
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
 
-char* function_names[] = { "logout", "login", "ninline", "help", NULL };
+char* function_names[] = { "logout", "login", "ninline", "help","cpuSpeed", NULL };
 
-int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp, NULL };
+int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp,cpuSpeed, NULL };
 
 void whenTabCalls(char* s) {
 	int startX = getCursorX();
@@ -86,10 +86,17 @@ int logout(int size, char* args) {
 	loggedUser = NULL;
 }
 
+void cpuSpeed(){
+	double* a=getFrequency();
+	int b= (*a)/1000000;
+	printf("\nspeed: %d Mhz\n",b);
+	}
+
 void printHelp(int size, char* args) {
 	printf("MurcielagOS bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
 	printf(
 			"These shell commands are defined internally.  Type `help' to see this list.\n");
 	printf("Type `name help' to find out more about the function `name'.\n");
 }
+
 

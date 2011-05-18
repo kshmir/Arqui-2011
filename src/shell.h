@@ -18,6 +18,8 @@ void selectcmd(int value, char** usr);
 
 char* su(char* usr);
 
+void cpuSpeed();
+
 void init();
 
 int logout(int size, char* args);
