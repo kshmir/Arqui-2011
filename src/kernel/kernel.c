@@ -29,11 +29,16 @@ void setVideoPos(int a) {
 
 double* getFrequency(){
 	ticks=1;
-	
-	_doManyCicles();
-	
+	int a=0;
+	//_doManyCicles();
+	a=_rdtsc();
+	int i;
+	for (i=0;i<100000000;i++);
+	a=_rdtsc()-a;
+	if(a<0)
+		a*=-1;
 	if(ticks!=1)
-	res=CICLOSFIJOS/((ticks-1)*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
+	res=a/((ticks-1)*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
 	return &res;
 	}
 

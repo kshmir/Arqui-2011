@@ -12,6 +12,7 @@ GLOBAL	_doManyCicles
 GLOBAL	_in
 GLOBAL	_out
 GLOBAL  __stack_chk_fail
+GLOBAL	_rdtsc
 
 EXTERN  int_08
 EXTERN  int_09
@@ -207,7 +208,7 @@ ciclo:	dec eax			  	; lo que se envia2ciclos
 		popa								;24ciclos
 		pop ebp								;4ciclos
 		ret									;10ciclos
-;167503724700 ciclos
+; ciclos
 
 _in:	
         push ebp	
@@ -228,7 +229,13 @@ _out:
 	pop ebp
 	ret
 
-
+_rdtsc:
+        push ebp	
+        mov ebp, esp		; Stack frame
+		rdtsc
+		mov esp,ebp
+		pop ebp
+		ret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;

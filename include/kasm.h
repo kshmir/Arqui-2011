@@ -30,6 +30,9 @@ void _int_09_hand();
 /* Handler INT 80h */
 void _int_80_hand(int systemCall, int fd, char *buffer, int count);
 
+int _rdtsc();
+
+void _doManyCicles();
 /* System call write */
 //void _write ( int fd, void *buffer, size_t count );
 
