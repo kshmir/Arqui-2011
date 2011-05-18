@@ -19,6 +19,8 @@
 #define TRUE 1
 #define FALSE 0
 
+#define CICLOSFIJOS 167503724700
+
 #define time_t long
 #define byte unsigned char
 #define word short int

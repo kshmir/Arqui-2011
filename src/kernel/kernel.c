@@ -11,11 +11,11 @@ DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
 IDTR idtr; /* IDTR */
 
 int must_update = 0;
-int tickpos = 640;
+double ticks = 0;
 int videoPos = 0;
 int cursorEnabled = 1;
 char *vidmem = (char *) 0xb8000;
-
+double res;
 
 void setCursor(int b)
 {
@@ -27,8 +27,18 @@ void setVideoPos(int a) {
 	if (cursorEnabled) _setCursor(a/2);
 }
 
-void int_08() {
+double* getFrequency(){
+	ticks=1;
+	
+	_doManyCicles();
+	
+	if(ticks!=1)
+	res=CICLOSFIJOS/((ticks-1)*48*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
+	return &res;
+	}
 
+void int_08() {
+	ticks++;
 }
 /* Handler del teclado */
 void int_09(char scancode) {
