@@ -98,6 +98,7 @@ int getint(char* mensaje, ... ){
 void printdouble(double number, char* format) {
 	char chardouble[40];
 	ftoa(number, chardouble);
+	printf("valor del numero ->%s\n",chardouble);
 	int i = 0;
 	while (chardouble[i] != '\0') {
 		putchar(chardouble[i]);
