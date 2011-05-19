@@ -46,10 +46,12 @@ char* onKey(int direction) {
 }
 
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
-		"test", "clear", NULL };
+		"test", "clear", "ssh", NULL };
+
+
 
 int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, NULL };
+		cpuSpeed, test, clear, ssh, NULL };
 
 char* whenTabCalls(char* s) {
 	int startX = getCursorX();
@@ -143,20 +145,20 @@ int logout(int size, char* args) {
 	loggedUser = NULL;
 }
 
-void cpuSpeed() {
+int cpuSpeed(int size, char* args) {
 	double* a = getFrequency();
 	int b = (*a);
 	printf("\nspeed: %d Mhz\n", b);
 }
 
-void printHelp(int size, char* args) {
+int printHelp(int size, char* args) {
 	printf("MurcielagOS bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
 	printf(
 			"These shell commands are defined internally.  Type `help' to see this list.\n");
 	printf("Type `name help' to find out more about the function `name'.\n");
 }
 
-void test() {
+int test(int size, char* args) {
 
 	printf("welcome to the test programme\n\n");
 	printf("We are gonna test the following code:\n");
@@ -195,9 +197,20 @@ void test() {
 	scanf("%s %s", name, surname);
 	printf("my name is %s and my surname is %s\n", name, surname);
 
+
 }
 
-void clear() {
+int ssh(int size, char* args)
+{
+	printf("Attempting to connect...\n");
+	printf("Oooops we forgot our internals don't have any TCP/IP backend...\n");
+	printf("You'll have to wait for MurcielagOS 2.0 or maybe 11.0 to see this working\n");
+	printf("Take a seat and wait!!!\n");
+	printf("...\n");
+	getchar();
+}
+
+int clear(int size, char* args) {
 	clear_screen();
 }
 
