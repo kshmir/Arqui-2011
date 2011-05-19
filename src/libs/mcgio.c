@@ -82,7 +82,6 @@ int getint(char* mensaje, ... ){
 		va_start(ap, mensaje);
 		vprintf(mensaje, ap);
 		va_end(ap);
-
 		if ( scanf("%d",&n) != 1)
 		{
 			printf("\nInvalid Value, please Try again\n");
@@ -107,7 +106,7 @@ void printdouble(double number, char* format) {
 }
 
 void printint(int number, char* format) {
-	char charint[20];
+	char charint[40];
 	itoa(number, charint);
 	int i = 0;
 	while (charint[i] != '\0')

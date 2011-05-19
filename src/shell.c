@@ -39,7 +39,6 @@ void shellStart() {
 	
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
-	printdouble(1211148.256877,hola);
 
 	printf("\n     ***Mucielag O.S*** \n\n\n\n");
 	printf("         (_    ,_,    _) \n");
