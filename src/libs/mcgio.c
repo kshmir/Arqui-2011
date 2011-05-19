@@ -83,7 +83,7 @@ void printstring(char* message) {
 }
 
 int getint(char* mensaje, ... ){
-	int n, salir = 0;
+	int n = 0, salir = 0;
 	va_list ap;
 
 	do
@@ -93,6 +93,7 @@ int getint(char* mensaje, ... ){
 		va_end(ap);
 		if ( scanf("%d",&n) != 1)
 		{
+			BORRA_BUFFER;
 			printf("\nInvalid Value, please Try again\n");
 		}
 		else

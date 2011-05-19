@@ -246,14 +246,14 @@ int validMove(int * plays, typeconf data) {
 	/*Returns 0 if it's a valid move or 1 if it's quit.*/
 	do {
 		printf("\n Enter move: ");
-		*plays = getint("");
-		if (*plays < 1 || *plays > data.columns) {
-			printf("\nInvalid Move!\n");
+		int p = getint("");
+		if (p < 1 || p > data.columns) {
+			printf("\nInvalid Move!(%d)\n",p);
 		} else {
 			continues = 0;
 			ch = 0;
 		}
-
+		*plays = p;
 	} while (continues);
 	return (int) ch > *plays;
 }

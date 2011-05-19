@@ -296,8 +296,10 @@ int scanf(char* string, ...) {
 	int percentflag = FALSE;
 	int endFlag = FALSE;
 	int oldBuf = 0;
-
 	char buffer[200];
+	for(i = 0; i< 200; i++)
+		buffer[i] = 0; //Clear the buffer...
+	i = 0;
 	char *ch;
 	va_list ap;
 
