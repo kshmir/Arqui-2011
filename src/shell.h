@@ -23,8 +23,11 @@ void cpuSpeed();
 void init();
 
 int logout(int size, char* args);
+
 int login(int size, char* args);
 
+void test();
 
+void clear();
 #endif
 
