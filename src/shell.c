@@ -146,8 +146,8 @@ int logout(int size, char* args) {
 }
 
 int cpuSpeed(int size, char* args) {
-	double* a = getFrequency();
-	int b = (*a);
+	double* a = (double*)getFrequency();
+	int b = (int)(*a);
 	printf("\nspeed: %d Mhz\n", b);
 }
 

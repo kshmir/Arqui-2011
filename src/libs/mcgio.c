@@ -48,7 +48,7 @@ char* getConsoleString(int sendAutocomplete) {
 		if (i >= strlen - 5)
 		{
 			strlen *= 1.5;
-			str = realloc(strlen * sizeof(char));
+			str = (char*)realloc(strlen * sizeof(char));
 		}
 
 		if (dirKey == 0) {

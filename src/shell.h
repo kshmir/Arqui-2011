@@ -10,24 +10,18 @@ void shellStart();
 
 #define OSDEFST "@murcielagOS:~#"
 
-void printHelp(int size, char* args);
 
 void internalswap(char* answ, int pos);
-
 void selectcmd(int value, char** usr);
-
 char* su(char* usr);
-
-void cpuSpeed();
-
 void init();
 
 int logout(int size, char* args);
-
 int login(int size, char* args);
-
-void test();
-
-void clear();
+int ssh(int size, char* args);
+int test(int size, char* args);
+int clear(int size, char* args);
+int cpuSpeed(int size, char* args);
+int printHelp(int size, char* args);
 #endif
 
