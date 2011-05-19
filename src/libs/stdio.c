@@ -365,6 +365,7 @@ int scanf(char* string, ...) {
 		}
 	}
 	va_end(ap);
+	
 	return !invalidScanf; //TODO: FIX THIS
 }
 
