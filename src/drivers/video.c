@@ -88,8 +88,11 @@ void moveCursorToStart() {
 void incrementCursor() {
 	if (getCursorX() >= current_video_mode->width) {
 		setCursorX(0);
-		if (getCursorY() >= current_video_mode->height)
-			setCursorY(0);
+		if (getCursorY() >= current_video_mode->height - 1)
+		{
+			newLine(); // This is not the happiest of the fixes... We can do better
+			setCursorY(current_video_mode->height - 1);
+		}
 		else
 			setCursorY(getCursorY() + 1);
 		return;
@@ -100,7 +103,7 @@ void decrementCursor() {
 	if (getCursorX() < 1) {
 		if (getCursorY() < 1) {
 			setCursorY(0);
-			setCursorX(0);
+			setCursorX(current_video_mode->width);
 		} else {
 			setCursorY(getCursorY() - 1);
 			setCursorX(current_video_mode->width);
@@ -114,7 +117,7 @@ void clear_screen() {
 	int i = 0;
 	moveCursorToStart();
 	setCursor(FALSE);
-	while (i++ < (current_video_mode->width * (current_video_mode->height + 1))) {
+	while (i++ < (current_video_mode->width * (current_video_mode->height))) {
 		putC(' ');
 	}
 	setCursor(TRUE);
@@ -126,7 +129,7 @@ void clear_screen_topdown() {
 	int x = getCursorX();
 	int y = getCursorY();
 	setCursor(FALSE);
-	while (i++ < (current_video_mode->width * (current_video_mode->height + 1
+	while (i++ < (current_video_mode->width * (current_video_mode->height
 			- y)) - x) {
 		putchar(' ');
 	}

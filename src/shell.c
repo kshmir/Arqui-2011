@@ -37,7 +37,7 @@ char* onKey(int direction) {
 		else if (direction == -1 && currentCall->next != NULL)
 			currentCall = currentCall->next;
 		else if (direction == -1 && currentCall->next == NULL)
-					return "";
+			return "";
 	}
 
 	if (currentCall != NULL)
@@ -45,16 +45,20 @@ char* onKey(int direction) {
 	return NULL;
 }
 
-char* function_names[] = { "logout", "login", "ninline", "help","cpuSpeed","test","clear", NULL };
+char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
+		"test", "clear", NULL };
 
-int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp, cpuSpeed, test, clear, NULL };
+int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp,
+		cpuSpeed, test, clear, NULL };
 
 char* whenTabCalls(char* s) {
 	int startX = getCursorX();
 	int startY = getCursorY();
 	int desp = 0, i = 0, c = 0, ind;
 	VIDEO_MODE_INFO * mode = getVideoMode();
+
 	clear_screen_topdown();
+
 	for (i = 0; function_names[i] != NULL; ++i) {
 		if (strlen(s) > 0 && strstr(function_names[i], s) == function_names[i]) {
 			c++;
@@ -85,13 +89,12 @@ char* whenTabCalls(char* s) {
 }
 
 void shellStart() {
-	char * hola;
 
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
 	setArrowHit(onKey);
 
-	printf("\n     ***Mucielag O.S*** \n\n\n\n");
+	printf("\n     ***Mucielag O.S*** \n\n");
 	printf("         (_    ,_,    _) \n");
 	printf("         / `'--) (--'` \\ \n");
 	printf("        /  _,-'\\_/'-,_  \\ \n");
@@ -113,7 +116,8 @@ void init() {
 			createCall(command);
 			currentCall = NULL;
 			for (index = 0; function_names[index] != NULL; ++index) {
-				if (!strcmp(command, function_names[index])) {
+				if (!strcmp(command, function_names[index]) && strlen(command)
+						>= strlen(function_names[index])) {
 
 					functions[index](0, NULL);
 				}
@@ -152,19 +156,16 @@ void printHelp(int size, char* args) {
 	printf("Type `name help' to find out more about the function `name'.\n");
 }
 
-void test(){
-	
-	
+void test() {
+
 	printf("welcome to the test programme\n\n");
 	printf("We are gonna test the following code:\n");
-	
-	
+
 	char name[200];
 	char surname[200];
 	int age = 0;
 	double height = 0.0;
-	
-	
+
 	printf("char name[200];\nchar surname[200];\nint age = 0;\n");
 	printf("double height = 0.0;\nprintf(\"please enter your name:\");\n");
 	printf("scanf(\"%%s\",name);\n");
@@ -172,27 +173,31 @@ void test(){
 	printf("scanf(\"%%d\",&age);\n");
 	printf("printf(\"please enter you height:\");\n");
 	printf("scanf(\"%%f\",&height);\n");
-	printf("printf(\"my name is:%%s i am %%d years old and %%f feet tall\\n\",name,age,height);\n");
-	printf("printf(\"please enter your name surname \\nfor example Bruce Wayne:\");\n");
+	printf(
+			"printf(\"my name is:%%s i am %%d years old and %%f feet tall\\n\",name,age,height);\n");
+	printf(
+			"printf(\"please enter your name surname \\nfor example Bruce Wayne:\");\n");
 	printf("scanf(\"%%s %%s\",name,surname);\n");
-	printf("printf(\"my name is %%s and my surname is %%s\\n\",name,surname);\n");
-	
+	printf(
+			"printf(\"my name is %%s and my surname is %%s\\n\",name,surname);\n");
+
 	printf("\nPress ENTER to begin the test");
 	getchar();
 	printf("\n\nplease enter your name:");
-	scanf("%s",name);
+	scanf("%s", name);
 	printf("please enter you age:");
-	scanf("%d",&age);
+	scanf("%d", &age);
 	printf("please enter you height:");
-	scanf("%f",&height);
-	printf("my name is:%s i am %d years old and %f feet tall\n",name,age,height);
+	scanf("%f", &height);
+	printf("my name is:%s i am %d years old and %f feet tall\n", name, age,
+			height);
 	printf("please enter your name surname \nfor example Bruce Wayne:");
-	scanf("%s %s",name,surname);
-	printf("my name is %s and my surname is %s\n",name,surname);
-	
+	scanf("%s %s", name, surname);
+	printf("my name is %s and my surname is %s\n", name, surname);
+
 }
 
-void clear(){
+void clear() {
 	clear_screen();
- }
+}
 

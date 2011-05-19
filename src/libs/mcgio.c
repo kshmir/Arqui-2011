@@ -38,11 +38,18 @@ char* getConsoleString(int sendAutocomplete) {
 	char c;
 	char* str = NULL;
 	str = (char*) malloc(sizeof(char) * 80); // TODO: This should increment on hit
+	int strlen = 80;
 	int i = 0;
 	int sx = getCursorX();
 	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
 		int dirKey = getA();
+
+		if (i >= strlen - 5)
+		{
+			strlen *= 1.5;
+			str = realloc(strlen * sizeof(char));
+		}
 
 		if (dirKey == 0) {
 			if (c != 0x0f && c != 0) {

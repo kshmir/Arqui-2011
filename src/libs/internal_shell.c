@@ -4,7 +4,7 @@
 
 void newLine() {
 	setCursorX(0);
-	if (getCursorY() < getVideoMode()->height - 1) {
+	if (!(getCursorY() >= getVideoMode()->height - 1)) {
 		setCursorY(getCursorY() + 1);
 	} else {
 		int i, j;
@@ -18,7 +18,7 @@ void newLine() {
 		for (i = 0; i < getVideoMode()->width; i++)
 			getVideoMode()->shell->screen[i][getVideoMode()->height] = ' ';
 		reDrawLines();
-		setCursorY(getVideoMode()->height - 1);
+		setCursorY(getCursorY() - 1);
 		setCursorX(0);
 	}
 }
@@ -43,13 +43,7 @@ void reDrawLines() {
 	for (j = 0; j < getVideoMode()->height; j++) {
 		setCursorX(0);
 		for (i = 0; i < getVideoMode()->width; i++) {
-			if (getVideoMode()->shell->screen[i][j] == 0x0f) {
-				putTab();
-			} else if (getVideoMode()->shell->screen[i][j] == 0) {
-				i = getVideoMode()->width;
-			} else {
-				putchar(getVideoMode()->shell->screen[i][j]);
-			}
+			putC(getVideoMode()->shell->screen[i][j]);
 		}
 		setCursorY(getCursorY() + 1);
 	}
@@ -82,8 +76,7 @@ void removeTab() {
 	int x = getCursorX();
 	while (x % 4 > 0 || oneStep) {
 		if (getVideoMode()->shell->screen[x - 1][getCursorY()] == 0x0f
-				||
-				getVideoMode()->shell->screen[x - 1][getCursorY()] == 0) {
+				|| getVideoMode()->shell->screen[x - 1][getCursorY()] == 0) {
 			removeLastC();
 		}
 		oneStep = 0;
@@ -111,7 +104,7 @@ void onEscape() {
 
 void removeLastC() {
 	decrementCursor();
-	putChar('\r');
+	putChar(' ');
 	putC(' ');
 	decrementCursor();
 }
