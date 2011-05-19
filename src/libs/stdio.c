@@ -94,14 +94,16 @@ int atoi(char* string) {
 }
 
 void ftoa(float number, char* answ) {
-
-	char ascii0 = ASCIICERO;
+	double a;
+	char ascii0 = '0';
 	int pos = 0;
 	int decimal = 6;
+	int resultado;
+	char dec[7];
 
 	char sign = FALSE;
 	if (number < 0) {
-		sign = number < 0 ? TRUE : FALSE;
+		sign = TRUE;
 		number *= -1;
 	}
 	answ[pos++] = '\0';
@@ -109,21 +111,21 @@ void ftoa(float number, char* answ) {
 	if ((int) number == 0) {
 		answ[pos++] = '0';
 	}
-	/*
-	 * This is used to get a integer number.
-	 *
-	 */
-	number *= 1000000;
-	number = (int) number;
-	while (decimal) {
-		answ[pos++] = (int) number % 10 + ASCIICERO;
-		number /= 10;
+	decimal--;
+	a =	number - (int)number;
+	
+	resultado = a*1000000;
+	while (decimal>=0) {
+		dec[decimal] = resultado % 10 + '0';
+		resultado /= 10;
 		decimal--;
 	}
-	answ[pos++] = '.';
+	//dec[6] = 0;
+	
 	while ((int) number != 0) {
-		answ[pos++] = (int) number % 10 + ASCIICERO;
+		answ[pos++] = (int) number % 10 + ascii0;
 		number /= 10;
+
 
 	}
 
@@ -133,9 +135,16 @@ void ftoa(float number, char* answ) {
 	number *= 10;
 	if (sign == TRUE)
 		answ[pos++] = '-';
-
+	
 	internalswap(answ, pos - 1);
-
+	
+	answ[pos-1]='.';
+	pos++;
+	for(decimal=0;decimal<=7;decimal++){
+			answ[pos-1]=dec[decimal];
+			pos++;
+	}
+	
 }
 
 void itoa(int number, char* answ) {
