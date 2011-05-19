@@ -39,6 +39,7 @@ double* getFrequency(){
 		a*=-1;
 	if(ticks!=1)
 	res=a/((ticks-1)*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
+	res/=1000;
 	return &res;
 	}
 
