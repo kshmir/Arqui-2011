@@ -6,6 +6,45 @@
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
 
+typedef struct {
+	void* parent;
+	void* next;
+	char* name;
+} ShellCall;
+
+ShellCall* lastCall;
+ShellCall* currentCall;
+
+void createCall(char* command) {
+	ShellCall* call = malloc(sizeof(ShellCall));
+	char* comm = malloc(sizeof(char) * strlen(command) + 1);
+	comm = strcpy(comm, command);
+	if (lastCall != NULL)
+		lastCall->next = call;
+	call->parent = lastCall;
+	call->name = comm;
+	lastCall = call;
+}
+
+char* onKey(int direction) {
+	if (currentCall == NULL)
+		currentCall = lastCall;
+	else {
+		if (direction == 1 && currentCall->parent != NULL)
+			currentCall = currentCall->parent;
+		else if (direction == 1 && currentCall->parent != NULL)
+			currentCall = currentCall;
+		else if (direction == -1 && currentCall->next != NULL)
+			currentCall = currentCall->next;
+		else if (direction == -1 && currentCall->next == NULL)
+					return "";
+	}
+
+	if (currentCall != NULL)
+		return currentCall->name;
+	return NULL;
+}
+
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
 		NULL };
 
@@ -19,13 +58,13 @@ char* whenTabCalls(char* s) {
 	VIDEO_MODE_INFO * mode = getVideoMode();
 	clear_screen_topdown();
 	for (i = 0; function_names[i] != NULL; ++i) {
-		if (strlen(s) > 0 && strstr(function_names[i], s) == function_names[i])
-		{
-			c++;	ind = i;
+		if (strlen(s) > 0 && strstr(function_names[i], s) == function_names[i]) {
+			c++;
+			ind = i;
 		}
 	}
 	if (c == 1) {
-		return function_names[ind] + (strlen(s) - 1) ;
+		return function_names[ind] + (strlen(s) - 1);
 	} else if (c > 1) {
 		desp += mcg_printf("\n");
 		for (i = 0; function_names[i] != NULL; ++i) {
@@ -52,6 +91,7 @@ void shellStart() {
 
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
+	setArrowHit(onKey);
 
 	printf("\n     ***Mucielag O.S*** \n\n\n\n");
 	printf("         (_    ,_,    _) \n");
@@ -72,9 +112,13 @@ void init() {
 		command = getConsoleString(TRUE);
 		int index = 0;
 		if (command[0] != 0 && command[0] != '\n') {
+			createCall(command);
+			currentCall = NULL;
 			for (index = 0; function_names[index] != NULL; ++index) {
-				if (!strcmp(command, function_names[index]))
+				if (!strcmp(command, function_names[index])) {
+
 					functions[index](0, NULL);
+				}
 			}
 		}
 	}

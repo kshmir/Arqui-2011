@@ -104,6 +104,10 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 char charBuffer[BUFFER_SIZE];
 int charBufferPointer = -1;
 
+char arrowBuffer[BUFFER_SIZE];
+int arrowBufferPointer = -1;
+
+char direction = 0;
 // TODO: Bitshift all of these.
 /** Num lock's flag */
 char numLock = 0;
@@ -129,6 +133,12 @@ int escPressed() {
 	return _escPressed;
 }
 
+void pushArr(char c) {
+	if (arrowBufferPointer >= BUFFER_SIZE - 1)
+		arrowBufferPointer = BUFFER_SIZE - 2;
+	arrowBuffer[++arrowBufferPointer] = c;
+}
+
 void pushC(char c) {
 	if (charBufferPointer >= BUFFER_SIZE - 1)
 		charBufferPointer = BUFFER_SIZE - 2;
@@ -141,6 +151,7 @@ char scanCodeToChar(char scanCode) {
 	return keyboard[scanCode][isCapital()];
 }
 
+int lastlastkey = 0;
 int lastkey = 0;
 
 int controlKey(int scancode) {
@@ -151,40 +162,57 @@ int controlKey(int scancode) {
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
-
 		if (lastkey != -32)
-		switch (scancode) {
-		case 71:
-			pushC('7');
-			break;
-		case 72:
-			pushC('8');
-			break;
-		case 73:
-			pushC('9');
-			break;
-		case 75:
-			pushC('4');
-			break;
-		case 76:
-			pushC('5');
-			break;
-		case 77:
-			pushC('6');
-			break;
-		case 79:
-			pushC('1');
-			break;
-		case 80:
-			pushC('2');
-			break;
-		case 81:
-			pushC('3');
-			break;
-		case 82:
-			pushC('0');
-			break;
+			switch (scancode) {
+			case 71:
+				pushC('7');
+				break;
+			case 72:
+				pushC('8');
+				break;
+			case 73:
+				pushC('9');
+				break;
+			case 75:
+				pushC('4');
+				break;
+			case 76:
+				pushC('5');
+				break;
+			case 77:
+				pushC('6');
+				break;
+			case 79:
+				pushC('1');
+				break;
+			case 80:
+				pushC('2');
+				break;
+			case 81:
+				pushC('3');
+				break;
+			case 82:
+				pushC('0');
+				break;
+			}
+		else {
+			switch (scancode) {
+			case 72:
+				pushArr(8);
+				break;
+			case 75:
+				pushArr(4);
+				break;
+			case 77:
+				pushArr(6);
+				break;
+			case 80:
+				pushArr(2);
+				break;
+			}
+
 		}
+
 		if (scancode == 0xFFFFFFAA)
 			lShift = 0;
 		else if (scancode == 0xFFFFFFB6)
@@ -226,6 +254,7 @@ int controlKey(int scancode) {
 		else if (scancode == 0x3A)
 			capsLock = capsLock ? 0 : 1;
 		else {
+			lastlastkey = lastkey;
 			lastkey = scancode;
 			if (scancode == 0x39) { //space
 				pushC(' ');
@@ -239,8 +268,17 @@ int controlKey(int scancode) {
 	if ((lAlt || rAlt) && (lCtrl || rCtrl) && del)
 		_restart();
 
+	lastlastkey = lastkey;
 	lastkey = scancode;
+
 	return 0;
+}
+
+char getA() {
+	if (arrowBufferPointer < 0)
+		return 0;
+
+	return arrowBuffer[arrowBufferPointer--];
 }
 
 char getC() {

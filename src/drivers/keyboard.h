@@ -25,6 +25,8 @@ int isCapital();
 /** Get's the last char on the KB buffer */
 char getC();
 
+int directionKey();
+
 
 #endif /* STDLIB_H_ */
 

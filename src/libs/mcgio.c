@@ -9,6 +9,12 @@ void setTabCall(char* (*ptr)(char*)) {
 	onTabCall = ptr;
 }
 
+char* (*onArrowHit)(int) = NULL;
+
+void setArrowHit(char* (*ptr)(int)) {
+	onArrowHit = ptr;
+}
+
 void printString(char* c) {
 	int i = 0;
 	while (c[i] != 0)
@@ -36,34 +42,53 @@ char* getConsoleString(int sendAutocomplete) {
 	int sx = getCursorX();
 	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
-		if (c != 0x0f && c != 0) {
-			if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
-				mcg_putchar(c);
-			if (c != '\r')
-			{
-				str[i] = c;
-				i++;
-			}
-			else
-			{
-				if (i > 0)	{
+		int dirKey = getA();
+
+		if (dirKey == 0) {
+			if (c != 0x0f && c != 0) {
+				if (c != '\r' || getCursorY() > sy || getCursorX() > sx)
+					mcg_putchar(c);
+				if (c != '\r') {
+					str[i] = c;
+					i++;
+				} else {
+					if (i > 0) {
+						str[i] = 0;
+						i--;
+					}
+				}
+			} else if (c != 0) {
+				if (onTabCall != NULL && sendAutocomplete) {
 					str[i] = 0;
-					i--;
+					char* moves = onTabCall(str);
+					if (moves != NULL) {
+						while (*moves != 0) {
+							str[i] = *moves;
+							mcg_putchar(*moves);
+							i++;
+							*moves++;
+						}
+					}
 				}
 			}
-
-		} else if (c != 0){
-			if (onTabCall != NULL && sendAutocomplete) {
+		} else {
+			char *new_line = NULL;
+			if (dirKey == 8)
+				new_line = onArrowHit(1);
+			else
+				new_line = onArrowHit(-1);
+			if (new_line != NULL) {
+				while (i > 0) {
+					str[i + 1] = 0;
+					i--;
+					mcg_putchar('\r');
+				}
 				str[i] = 0;
-				char* moves = onTabCall(str);
-				if (moves != NULL){
-					while(*moves != 0)
-					{
-						str[i] = *moves;
-						mcg_putchar(*moves);
-						i++;
-						*moves++;
-					}
+				while (*new_line != 0) {
+					str[i] = *new_line;
+					mcg_putchar(*new_line);
+					i++;
+					*new_line++;
 				}
 			}
 		}
@@ -82,26 +107,22 @@ void printstring(char* message) {
 	}
 }
 
-int getint(char* mensaje, ... ){
+int getint(char* mensaje, ...) {
 	int n = 0, salir = 0;
 	va_list ap;
 
-	do
-	{
+	do {
 		va_start(ap, mensaje);
 		vprintf(mensaje, ap);
 		va_end(ap);
-		if ( scanf("%d",&n) != 1)
-		{
+		if (scanf("%d", &n) != 1) {
 			BORRA_BUFFER;
 			printf("\nInvalid Value, please Try again\n");
-		}
-		else
-		{
+		} else {
 			BORRA_BUFFER;
 			salir = 1;
 		}
-	} while (! salir);
+	} while (!salir);
 	return n;
 }
 
@@ -137,13 +158,12 @@ void internalswap(char* answ, int pos) {
 
 int mcg_printf(char* string, ...) {
 	int i = 0, c = 0, va_count;
-	va_list ap,bp;
+	va_list ap, bp;
 	va_start(ap, string);
 	while (string[i] != '\0') {
 		if (string[i] == '\n')
 			c++;
-		else
-		if (string[i] == '%') {
+		else if (string[i] == '%') {
 			i++;
 			switch (string[i]) {
 			case 's':
