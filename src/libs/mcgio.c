@@ -3,9 +3,9 @@
 #include "stdio.h"
 #include <stdarg.h>
 
-void (*onTabCall)(char*) = NULL;
+char* (*onTabCall)(char*) = NULL;
 
-void setTabCall(void(*ptr)(char*)) {
+void setTabCall(char* (*ptr)(char*)) {
 	onTabCall = ptr;
 }
 
@@ -55,7 +55,16 @@ char* getConsoleString(int sendAutocomplete) {
 		} else if (c != 0){
 			if (onTabCall != NULL && sendAutocomplete) {
 				str[i] = 0;
-				onTabCall(str);
+				char* moves = onTabCall(str);
+				if (moves != NULL){
+					while(*moves != 0)
+					{
+						str[i] = *moves;
+						mcg_putchar(*moves);
+						i++;
+						*moves++;
+					}
+				}
 			}
 		}
 	}
@@ -74,7 +83,7 @@ void printstring(char* message) {
 }
 
 int getint(char* mensaje, ... ){
-	int n, salir = 0;
+	int n = 0, salir = 0;
 	va_list ap;
 
 	do
@@ -82,9 +91,9 @@ int getint(char* mensaje, ... ){
 		va_start(ap, mensaje);
 		vprintf(mensaje, ap);
 		va_end(ap);
-
 		if ( scanf("%d",&n) != 1)
 		{
+			BORRA_BUFFER;
 			printf("\nInvalid Value, please Try again\n");
 		}
 		else
@@ -107,7 +116,7 @@ void printdouble(double number, char* format) {
 }
 
 void printint(int number, char* format) {
-	char charint[20];
+	char charint[40];
 	itoa(number, charint);
 	int i = 0;
 	while (charint[i] != '\0')
