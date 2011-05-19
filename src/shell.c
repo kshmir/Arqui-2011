@@ -6,23 +6,35 @@
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
 
-char* function_names[] = { "logout", "login", "ninline", "help","cpuSpeed", NULL };
+char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
+		NULL };
 
-int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp,cpuSpeed, NULL };
+int ((*functions[])(int, char*)) = { logout, login, nInLineStart, printHelp,
+		cpuSpeed, NULL };
 
-void whenTabCalls(char* s) {
+char* whenTabCalls(char* s) {
 	int startX = getCursorX();
 	int startY = getCursorY();
-	int desp = 0, i = 0;
+	int desp = 0, i = 0, c = 0, ind;
 	VIDEO_MODE_INFO * mode = getVideoMode();
 	clear_screen_topdown();
-
-	desp += mcg_printf("\n");
 	for (i = 0; function_names[i] != NULL; ++i) {
-		if (strlen(s)  > 0 && strstr(function_names[i],s) != NULL)
-			desp += mcg_printf("%s\t", function_names[i]);
+		if (strlen(s) > 0 && strstr(function_names[i], s) == function_names[i])
+		{
+			c++;	ind = i;
+		}
 	}
+	if (c == 1) {
+		return function_names[ind] + (strlen(s) - 1) ;
+	} else if (c > 1) {
+		desp += mcg_printf("\n");
+		for (i = 0; function_names[i] != NULL; ++i) {
+			if (strlen(s) > 0 && strstr(function_names[i], s)
+					== function_names[i])
+				desp += mcg_printf("%s\t", function_names[i]);
+		}
 
+	}
 
 	if (getCursorY() == mode->height - 1) {
 		if (startY != getCursorY())
@@ -32,11 +44,12 @@ void whenTabCalls(char* s) {
 	} else
 		setCursorY(startY);
 	setCursorX(startX);
+	return NULL;
 }
 
 void shellStart() {
 	char * hola;
-	
+
 	printf("Murcielag O.S. is loading...\n");
 	setTabCall(whenTabCalls);
 
@@ -58,11 +71,10 @@ void init() {
 		printf(" ");
 		command = getConsoleString(TRUE);
 		int index = 0;
-		if (command[0] != 0 && command[0] != '\n')
-		{
+		if (command[0] != 0 && command[0] != '\n') {
 			for (index = 0; function_names[index] != NULL; ++index) {
 				if (!strcmp(command, function_names[index]))
-					functions[index](0,NULL);
+					functions[index](0, NULL);
 			}
 		}
 	}
@@ -70,15 +82,13 @@ void init() {
 }
 
 int login(int size, char* args) {
-	if (loggedUser != NULL)
-	{
+	if (loggedUser != NULL) {
 		printf("You are already logged in as: %s\n", loggedUser);
-	}
-	else
-	do {
-		printf("MurcielagOS login:");
-		loggedUser = getConsoleString(FALSE);
-	} while (loggedUser[0] == 0 || loggedUser[0] == '\n');
+	} else
+		do {
+			printf("MurcielagOS login:");
+			loggedUser = getConsoleString(FALSE);
+		} while (loggedUser[0] == 0 || loggedUser[0] == '\n');
 }
 
 int logout(int size, char* args) {
@@ -87,11 +97,11 @@ int logout(int size, char* args) {
 	loggedUser = NULL;
 }
 
-void cpuSpeed(){
-	double* a=getFrequency();
-	int b= (*a);
-	printf("\nspeed: %d Mhz\n",b);
-	}
+void cpuSpeed() {
+	double* a = getFrequency();
+	int b = (*a);
+	printf("\nspeed: %d Mhz\n", b);
+}
 
 void printHelp(int size, char* args) {
 	printf("MurcielagOS bash, version 1.0.0(1)-release (i686-pc-murcielago)\n");
@@ -99,5 +109,4 @@ void printHelp(int size, char* args) {
 			"These shell commands are defined internally.  Type `help' to see this list.\n");
 	printf("Type `name help' to find out more about the function `name'.\n");
 }
-
 

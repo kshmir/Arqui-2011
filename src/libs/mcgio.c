@@ -3,9 +3,9 @@
 #include "stdio.h"
 #include <stdarg.h>
 
-void (*onTabCall)(char*) = NULL;
+char* (*onTabCall)(char*) = NULL;
 
-void setTabCall(void(*ptr)(char*)) {
+void setTabCall(char* (*ptr)(char*)) {
 	onTabCall = ptr;
 }
 
@@ -55,7 +55,16 @@ char* getConsoleString(int sendAutocomplete) {
 		} else if (c != 0){
 			if (onTabCall != NULL && sendAutocomplete) {
 				str[i] = 0;
-				onTabCall(str);
+				char* moves = onTabCall(str);
+				if (moves != NULL){
+					while(*moves != 0)
+					{
+						str[i] = *moves;
+						mcg_putchar(*moves);
+						i++;
+						*moves++;
+					}
+				}
 			}
 		}
 	}

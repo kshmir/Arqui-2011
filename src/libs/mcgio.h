@@ -4,7 +4,7 @@
 
 #include "../../include/defs.h"
 
-void setTabCall(void (*ptr)(char*));
+void setTabCall(char* (*ptr)(char*));
 void printString(char* c);
 int cursorX();
 int cursorY();
