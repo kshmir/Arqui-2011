@@ -137,31 +137,6 @@ _int_80_hand:
     sti
     iret
 
-
-
-;_int_80_hand:
-;    cli
-;    push ds
-;    push es
-;    pusha
-;    push edx            ; cantidad de caracteres a escribir
-;    push ecx            ; direccion de la cadena a escribir
-;    push ebx           	; file descriptor
-;    push eax			; system call
-;    call int_80
-;    pop eax             ; saco parametros
-;    pop eax
-;    pop eax
-;    pop eax
-;    popa
-;    pop es
-;    pop ds
-;    sti
-;    iret
-
-;_write:
-;	int 80h
-;	ret
 _write:
 	push ebp
 	mov ebp, esp
@@ -218,17 +193,12 @@ _doManyCicles:
 		push ebp							;2ciclos
 		mov ebp, esp		; Stack frame	;2ciclos
 		pusha								;24ciclos
-;		mov ebx,3							;2ciclos
-;x3:		dec ebx								;2ciclos					
-		mov eax, 0x0FFFFFFF		   	; Puerto		;2ciclos
+		mov eax, 0x00FFFFFF		   	; Puerto		;2ciclos
 ciclo:	dec eax			  	; lo que se envia2ciclos
 		jnz	ciclo							;9ciclos , n 3ciclos
-;		cmp	ebx,0							;2ciclos
-;		jnz	x3								;12ciclos, n 3ciclos
 		popa								;24ciclos
 		pop ebp								;4ciclos
 		ret									;10ciclos
-; ciclos
 
 _in:	
         push ebp	

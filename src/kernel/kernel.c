@@ -28,6 +28,18 @@ void setVideoPos(int a) {
 }
 
 double* getFrequency(){
+	ticks=0;
+	int a=0;
+	a=_rdtsc();
+	_doManyCicles();
+	a=_rdtsc()-a;
+	if(a<0)
+		a*=-1;
+	if(ticks!=0)
+	res=a/((ticks)*0.055);
+	res/=1000000;
+	return &res;
+	/** Si anda bien el cpuSpeed borrar lo de abajo. (no lo chequeo yo xq me esta andando lenta la PC)
 	ticks=1;
 	int a=0;
 	//_doManyCicles();
@@ -41,7 +53,9 @@ double* getFrequency(){
 	res=a/((ticks-1)*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
 	res/=1000000;
 	return &res;
-	}
+	
+	* */
+}
 
 void int_08() {
 	ticks++;
