@@ -40,11 +40,11 @@ _mascaraPIC1:			; Escribe mascara del PIC 1
 
 _mascaraPIC2:			; Escribe mascara del PIC 2
 	push    ebp
-        mov     ebp, esp
-        mov     ax, [ss:ebp+8]  ; ax = mascara de 16 bits
-        out	0A1h,al
-        pop     ebp
-        retn
+    mov     ebp, esp
+    mov     ax, [ss:ebp+8]  ; ax = mascara de 16 bits
+    out		0A1h,al
+    pop     ebp
+    retn
 
 _read_msw:
         smsw    ax		; Obtiene la Machine Status Word
@@ -82,22 +82,19 @@ __stack_chk_fail:
 				ret
 
 _int_09_hand:				; Handler de INT 9 ( Teclado )
-        push    ds
-        push    es                      ; Se salvan los registros
-        pusha                           ; Carga de DS y ES con el valor del selector
-
+    push    ds
+    push    es                      ; Se salvan los registros
+    pusha                           ; Carga de DS y ES con el valor del selector
 	in al, 60h	;Leo el puerto del teclado
 	push ax		;Le envio el SCAN CODE como parametro a la funcion int_09
 	call int_09	;Llamo a la interrupcion que maneja el SCAN CODE en C
 	pop ax		;Quito el parametro del stack
-
-       mov	al,20h			; Envio de EOI generico al PIC
+    mov	al,20h			; Envio de EOI generico al PIC
 	out	20h,al
-
 	popa
-        pop     es
-        pop     ds
-        iret
+    pop     es
+    pop     ds
+    iret
 
 ;_int_09_hand:
 ;	cli
@@ -119,15 +116,16 @@ _int_09_hand:				; Handler de INT 9 ( Teclado )
 ; ebx -> file descriptor
 ; ecx -> direccion de la cadena a escribir
 ; edx -> cantidad de caracteres a escribir
+
 _int_80_hand:
     cli
     push ds
     push es
     pusha
-    push edx            ; cantidad de caracteres a escribir
-    push ecx            ; direccion de la cadena a escribir
-    push ebx           	; file descriptor
-    push eax			; system call
+    push edx             ; cantidad de caracteres a escribir
+    push ecx             ; direccion de la cadena a escribir
+    push ebx             ; file descriptor
+    push eax		; system call
     call int_80
     pop eax             ; saco parametros
     pop eax
@@ -139,22 +137,44 @@ _int_80_hand:
     sti
     iret
 
-_write:
-	int 80h
-	ret
+
+
+;_int_80_hand:
+;    cli
+;    push ds
+;    push es
+;    pusha
+;    push edx            ; cantidad de caracteres a escribir
+;    push ecx            ; direccion de la cadena a escribir
+;    push ebx           	; file descriptor
+;    push eax			; system call
+;    call int_80
+;    pop eax             ; saco parametros
+;    pop eax
+;    pop eax
+;    pop eax
+;    popa
+;    pop es
+;    pop ds
+;    sti
+;    iret
+
 ;_write:
-;	push ebp
-;	mov ebp, esp
-;	pusha
-;	mov eax, 0		; eax en 0 para write
-;	mov ebx, [ebp+8]	; file descriptor
-;	mov ecx, [ebp+12]	; buffer a escribir
-;	mov edx, [ebp+16]	; cantidad
 ;	int 80h
-;	popa
-;	mov esp, ebp
-;	pop ebp
 ;	ret
+_write:
+	push ebp
+	mov ebp, esp
+	pusha
+	mov eax, 0		; eax en 0 para write
+	mov ebx, [ebp+8]	; file descriptor
+	mov ecx, [ebp+12]	; buffer a escribiar
+	mov edx, [ebp+16]	; cantidad
+	int 80h
+	popa
+	mov esp,ebp
+	pop ebp
+	ret
 
 _read:
 	push ebp

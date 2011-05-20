@@ -17,7 +17,9 @@ int style = 0x07;
 void putC(char c) {
 	char a[] = { c, style };
 	// TODO: Fix int_80 call!!!
-	int_80(WRITE, STDOUT, a, 2);
+	//int_80(WRITE, STDOUT, a, 2);
+	_write(STDOUT,a,2);
+	
 	incrementCursor();
 }
 

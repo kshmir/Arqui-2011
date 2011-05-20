@@ -7,7 +7,7 @@
 #include "../drivers/video.h"
 #include "../shell.h"
 
-DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
+DESCR_INT idt[0x81]; /* IDT de 80h entradas*/
 IDTR idtr; /* IDTR */
 
 int must_update = 0;
@@ -85,13 +85,33 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 
 	} else if (systemCall == READ) //read
 	{
-		//#TODO: no andan los in y out.
+		//#TODO: no andan los in y out. Puedo hacer que anden pero ya no tienen sentido.
 		if (fd == STDOUT) {
 
 		}
 	}
 }
 
+/*
+void int_80(int systemCall, int fd, char *buffer, int count) {
+	int i, j;
+
+	if (systemCall == WRITE) //write
+	{
+		if (fd == STDOUT) //PANTALL
+		{
+			setBytes(vidmem + videoPos, buffer, count);
+		}
+
+	} else if (systemCall == READ) //read
+	{
+		//#TODO: no andan los in y out.
+		if (fd == STDOUT) {
+
+		}
+	}
+}
+*/
 /**********************************************
  kmain()
  Punto de entrada de c—digo C.
@@ -111,11 +131,11 @@ kmain() {
 
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ1    */
 
-	setup_IDT_entry(&idt[0x09], 0x09, (dword) &_int_09_hand, ACS_INT, 0);
+	setup_IDT_entry(&idt[0x09], 0x08, (dword) &_int_09_hand, ACS_INT, 0);
 
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE int80h    */
 
-	setup_IDT_entry(&idt[0x80], 0x80, (dword) &_int_80_hand, ACS_INT, 0);
+	setup_IDT_entry(&idt[0x80], 0x08, (dword) &_int_80_hand, ACS_INT, 0);
 
 	/* Carga de IDTR */
 

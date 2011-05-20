@@ -7,6 +7,7 @@
 
 #include "video.h"
 #include "../../include/defs.h"
+#include "../../include/kasm.h"
 #include "../libs/stdlib.h"
 
 int defaultStyle = 0x07;
@@ -52,8 +53,7 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 
 void putC(char c) {
 	char a[] = { c, defaultStyle };
-	// TODO: Fix int_80 call!!!
-	int_80(WRITE, STDOUT, a, 2);
+	_write(STDOUT,a,2);
 	incrementCursor();
 }
 

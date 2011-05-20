@@ -34,7 +34,7 @@ int _rdtsc();
 
 void _doManyCicles();
 /* System call write */
-//void _write ( int fd, void *buffer, size_t count );
+void _write ( int fd, char *buffer, int count );
 
 /* System call read */
 //void _read ( int fd, void *buffer, size_t count );
