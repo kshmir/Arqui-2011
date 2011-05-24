@@ -28,16 +28,37 @@ void setVideoPos(int a) {
 }
 
 double* getFrequency(){
+	int a,b,c;
+	double res1,res2,res3;
 	ticks=0;
-	int a=0;
 	a=_rdtsc();
 	_doManyCicles();
 	a=_rdtsc()-a;
 	if(a<0)
 		a*=-1;
 	if(ticks!=0)
-	res=a/((ticks)*0.055);
-	res/=1000000;
+	res1=a/((ticks)*0.055);
+	res1/=1000000;
+	ticks=0;
+	b=_rdtsc();
+	_doManyCicles();
+	b=_rdtsc()-b;
+	if(b<0)
+		b*=-1;
+	if(ticks!=0)
+	res2=b/((ticks)*0.055);
+	res2/=1000000;
+	ticks=0;
+	c=_rdtsc();
+	int i;
+	for (i=0;i<100000000;i++);
+	c=_rdtsc()-c;
+	if(c<0)
+		c*=-1;
+	if(ticks!=0)
+	res3=c/((ticks)*0.055);
+	res3/=1000000;
+	res=(res1+res2+res3)/3;
 	return &res;
 	/** Si anda bien el cpuSpeed borrar lo de abajo. (no lo chequeo yo xq me esta andando lenta la PC)
 	ticks=1;

@@ -9,6 +9,7 @@ GLOBAL	_write
 GLOBAL	_setCursor
 GLOBAL	_restart
 GLOBAL	_doManyCicles
+GLOBAL	_doManyCicles2
 GLOBAL	_in
 GLOBAL	_out
 GLOBAL  __stack_chk_fail
@@ -199,6 +200,17 @@ ciclo:	dec eax			  	; lo que se envia2ciclos
 		popa								;24ciclos
 		pop ebp								;4ciclos
 		ret									;10ciclos
+
+_doManyCicles2:
+		push ebp							;2ciclos
+		mov ebp, esp		; Stack frame	;2ciclos
+		pusha								;24ciclos
+		mov eax, 0x00CFFFFF		   	; Puerto		;2ciclos
+ciclo2:	dec eax			  	; lo que se envia2ciclos
+		jnz	ciclo2							;9ciclos , n 3ciclos
+		popa								;24ciclos
+		pop ebp								;4ciclos
+		ret	
 
 _in:	
         push ebp	
