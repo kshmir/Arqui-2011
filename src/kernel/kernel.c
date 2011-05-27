@@ -60,28 +60,30 @@ double* getFrequency(){
 	res3/=1000000;
 	res=(res1+res2+res3)/3;
 	return &res;
-	/** Si anda bien el cpuSpeed borrar lo de abajo. (no lo chequeo yo xq me esta andando lenta la PC)
-	ticks=1;
-	int a=0;
-	//_doManyCicles();
-	a=_rdtsc();
-	int i;
-	for (i=0;i<100000000;i++);
-	a=_rdtsc()-a;
-	if(a<0)
-		a*=-1;
-	if(ticks!=1)
-	res=a/((ticks-1)*0.055); //multiplico por 48 xq reduje en 48 la cantidad de ciclos en _doManyCicles
-	res/=1000000;
-	return &res;
-	
-	* */
 }
 
 void int_08() {
 	ticks++;
 }
 /* Handler del teclado */
+void int_09() {
+	char scancode;
+	char eoi = EOI;
+	_read(KEYBOARD, &scancode, 1);
+	// TODO: DEFINES HERE!
+	int flag = scancode >= 0x02 && scancode <= 0x0d;
+	flag = flag || (scancode >= 0x10 && scancode <= 0x1b);
+	flag = flag || (scancode >= 0x1E && scancode <= 0x29);
+	flag = flag || (scancode >= 0x2b && scancode <= 0x35);
+	if (flag) {
+		pushC(scanCodeToChar(scancode)); //guarda un char en el stack
+		must_update++;
+	} else
+		must_update += controlKey(scancode);
+	
+	_write(PIC1, &eoi, 1);
+
+}/* Testear q la int_09 de arriba funcione bien, en ese caso borrar la comentada.
 void int_09(char scancode) {
 	// TODO: DEFINES HERE!
 	int flag = scancode >= 0x02 && scancode <= 0x0d;
@@ -96,7 +98,7 @@ void int_09(char scancode) {
 
 
 }
-
+*/
 /* Escribe en la posicion de memoria s el
  * caracter c, n veces */
 void setBytes(void *s, char* c, int n) {
@@ -116,14 +118,15 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 		if (fd == STDOUT) //PANTALL
 		{
 			setBytes(vidmem + videoPos, buffer, count);
-		}
+		}else if ( fd == PIC1 )
+			_out(0x20, buffer[0]);
 
 	} else if (systemCall == READ) //read
 	{
-		//#TODO: no andan los in y out. Puedo hacer que anden pero ya no tienen sentido.
-		if (fd == STDOUT) {
-
-		}
+		//#TODO: testearlo un poco mas, en mi PC parece andar perfecto.
+		if ( fd == KEYBOARD )
+		    	buffer[0] = _in(0x60);
+	    
 	}
 }
 

@@ -82,35 +82,32 @@ _int_08_hand:				; Handler de INT 8 ( Timer tick)
 __stack_chk_fail:
 				ret
 
-_int_09_hand:				; Handler de INT 9 ( Teclado )
-    push    ds
-    push    es                      ; Se salvan los registros
-    pusha                           ; Carga de DS y ES con el valor del selector
-	in al, 60h	;Leo el puerto del teclado
-	push ax		;Le envio el SCAN CODE como parametro a la funcion int_09
-	call int_09	;Llamo a la interrupcion que maneja el SCAN CODE en C
-	pop ax		;Quito el parametro del stack
-    mov	al,20h			; Envio de EOI generico al PIC
-	out	20h,al
-	popa
-    pop     es
-    pop     ds
-    iret
+;_int_09_hand:				; Handler de INT 9 ( Teclado )
+;    push    ds
+;    push    es                      ; Se salvan los registros
+;    pusha                           ; Carga de DS y ES con el valor del selector;
+;	in al, 60h	;Leo el puerto del teclado
+;	push ax		;Le envio el SCAN CODE como parametro a la funcion int_09
+;	call int_09	;Llamo a la interrupcion que maneja el SCAN CODE en C
+;	pop ax		;Quito el parametro del stack
+;    mov	al,20h			; Envio de EOI generico al PIC
+;	out	20h,al
+;	popa
+;   pop     es
+;    pop     ds
+;    iret
 
-;_int_09_hand:
-;	cli
- ;       push    ds
- ;       push    es      	; Se salvan los registros
- ;       pusha           	; Carga de DS y ES con el valor del selector
- ;       call int_09		; Se llama a la funcion en C
-;		mov	al,20h			; Envio de EOI generico al PIC
-;		out	20h,al       
-;        popa
-;        pop     es
-;        pop     ds
-;	sti
- ;       iret
-
+_int_09_hand:
+	cli
+        push    ds
+        push    es      	; Se salvan los registros
+        pusha           	; Carga de DS y ES con el valor del selector
+        call int_09		; Se llama a la funcion en C
+        popa
+        pop     es
+        pop     ds
+	sti
+        iret
 
 ; recibe parametros a traves de los registros
 ; aex -> 0 para write, 1 para read
@@ -213,21 +210,20 @@ ciclo2:	dec eax			  	; lo que se envia2ciclos
 		ret	
 
 _in:	
-        push ebp	
-        mov ebp, esp		; Stack frame
-        mov edx, [ebp+8]        ; Puerto
-        mov eax, 0              ; Limpio eax
-        in al, 0x60
-        push ax
+    push ebp	
+    mov ebp, esp		; Stack frame
+    mov edx, [ebp+8]    ; Puerto
+    mov eax, 0          ; Limpio eax
+    in al, dx
 	pop ebp
 	ret
 
 _out:
-        push ebp
+    push ebp
 	mov ebp, esp		; Stack frame
 	mov edx, [ebp+8]   	; Puerto
-	mov eax, [ebp+12]  	; lo que se envia
-	out 0x20, al
+	mov eax, [ebp+12]  	; Lo que se va a mandar
+	out dx, al
 	pop ebp
 	ret
 
