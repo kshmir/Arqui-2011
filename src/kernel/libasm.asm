@@ -8,8 +8,6 @@ GLOBAL	_read
 GLOBAL	_write
 GLOBAL	_setCursor
 GLOBAL	_restart
-GLOBAL	_doManyCicles
-GLOBAL	_doManyCicles2
 GLOBAL	_in
 GLOBAL	_out
 GLOBAL  __stack_chk_fail
@@ -82,20 +80,6 @@ _int_08_hand:				; Handler de INT 8 ( Timer tick)
 __stack_chk_fail:
 				ret
 
-;_int_09_hand:				; Handler de INT 9 ( Teclado )
-;    push    ds
-;    push    es                      ; Se salvan los registros
-;    pusha                           ; Carga de DS y ES con el valor del selector;
-;	in al, 60h	;Leo el puerto del teclado
-;	push ax		;Le envio el SCAN CODE como parametro a la funcion int_09
-;	call int_09	;Llamo a la interrupcion que maneja el SCAN CODE en C
-;	pop ax		;Quito el parametro del stack
-;    mov	al,20h			; Envio de EOI generico al PIC
-;	out	20h,al
-;	popa
-;   pop     es
-;    pop     ds
-;    iret
 
 _int_09_hand:
 	cli
@@ -186,28 +170,6 @@ _restart:
 	mov al,0xfe
 	out 0x64,al
 	ret
-	
-_doManyCicles:
-		push ebp							;2ciclos
-		mov ebp, esp		; Stack frame	;2ciclos
-		pusha								;24ciclos
-		mov eax, 0x00FFFFFF		   	; Puerto		;2ciclos
-ciclo:	dec eax			  	; lo que se envia2ciclos
-		jnz	ciclo							;9ciclos , n 3ciclos
-		popa								;24ciclos
-		pop ebp								;4ciclos
-		ret									;10ciclos
-
-_doManyCicles2:
-		push ebp							;2ciclos
-		mov ebp, esp		; Stack frame	;2ciclos
-		pusha								;24ciclos
-		mov eax, 0x00CFFFFF		   	; Puerto		;2ciclos
-ciclo2:	dec eax			  	; lo que se envia2ciclos
-		jnz	ciclo2							;9ciclos , n 3ciclos
-		popa								;24ciclos
-		pop ebp								;4ciclos
-		ret	
 
 _in:	
     push ebp	

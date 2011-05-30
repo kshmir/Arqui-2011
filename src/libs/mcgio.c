@@ -3,24 +3,28 @@
 #include "stdio.h"
 #include <stdarg.h>
 
+// Callback for tabs
 char* (*onTabCall)(char*) = NULL;
 
 void setTabCall(char* (*ptr)(char*)) {
 	onTabCall = ptr;
 }
 
+// Callback for arrows
 char* (*onArrowHit)(int) = NULL;
 
 void setArrowHit(char* (*ptr)(int)) {
 	onArrowHit = ptr;
 }
 
+// Prints a string
 void printString(char* c) {
 	int i = 0;
 	while (c[i] != 0)
 		putchar(c[i++]);
 }
 
+// Internal, non standard putchar
 void mcg_putchar(char c) {
 	if (c == '\r') {
 		backSpace();
@@ -34,6 +38,7 @@ void mcg_putchar(char c) {
 	}
 }
 
+// Console scanf
 char* getConsoleString(int sendAutocomplete) {
 	char c;
 	char* str = NULL;
@@ -106,6 +111,7 @@ char* getConsoleString(int sendAutocomplete) {
 	return str;
 }
 
+// Another printstring
 void printstring(char* message) {
 	int i = 0;
 	while (message[i] != '\0') {
@@ -114,6 +120,7 @@ void printstring(char* message) {
 	}
 }
 
+// Builds an int
 int getint(char* mensaje, ...) {
 	int n = 0, salir = 0;
 	va_list ap;
@@ -133,6 +140,7 @@ int getint(char* mensaje, ...) {
 	return n;
 }
 
+// Prints a double
 void printdouble(double number, char* format) {
 	char chardouble[40];
 	ftoa(number, chardouble);
@@ -143,6 +151,7 @@ void printdouble(double number, char* format) {
 	}
 }
 
+// Prints an int
 void printint(int number, char* format) {
 	char charint[40];
 	itoa(number, charint);
@@ -151,6 +160,7 @@ void printint(int number, char* format) {
 		putchar(charint[i++]);
 }
 
+// For internal use on some prints
 void internalswap(char* answ, int pos) {
 	int correccion = 0;
 	int i = 0;
@@ -163,6 +173,7 @@ void internalswap(char* answ, int pos) {
 	}
 }
 
+// Printf with stdargs
 int mcg_printf(char* string, ...) {
 	int i = 0, c = 0, va_count;
 	va_list ap, bp;
@@ -189,6 +200,7 @@ int mcg_printf(char* string, ...) {
 	return c;
 }
 
+// Detects enters on string
 int entersOnString(char* str) {
 	int i = 0, c = 0;
 	for (i = 0; str[i] != 0; ++i)

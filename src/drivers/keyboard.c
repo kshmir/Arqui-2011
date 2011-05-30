@@ -7,6 +7,7 @@
 
 #define NPRTBL 0
 
+// Map for normal characters.
 unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		{ NPRTBL, NPRTBL },//001 ESCAPE
 		{ '1', '!' }, //002
@@ -101,9 +102,11 @@ unsigned char keyboard[][2] = { { NPRTBL, NPRTBL },//000
 		//Para asegurarme podria llenar con NPRTBL lo que queda
 };
 
+// Char buffer
 char charBuffer[BUFFER_SIZE];
 int charBufferPointer = -1;
 
+// Arrow buffer
 char arrowBuffer[BUFFER_SIZE];
 int arrowBufferPointer = -1;
 
@@ -133,6 +136,7 @@ int escPressed() {
 	return _escPressed;
 }
 
+// Buffer for arrows
 void pushArr(char c) {
 	if (arrowBufferPointer >= BUFFER_SIZE - 1)
 		arrowBufferPointer = BUFFER_SIZE - 2;
@@ -155,13 +159,12 @@ int lastlastkey = 0;
 int lastkey = 0;
 
 int controlKey(int scancode) {
-	// TODO: MID Defines for all the scan codes!
-	// TODO: Test scancodes with a "test keys" program
 	if (scancode == 42) //SHIFT IZQ
 		lShift = 1;
 	else if (scancode == 54) //054 SHIFT DER
 		rShift = 1;
 	else {
+		// Numpad
 		if (lastkey != -32)
 			switch (scancode) {
 			case 71:
@@ -196,6 +199,7 @@ int controlKey(int scancode) {
 				break;
 			}
 		else {
+			// Arrows
 			switch (scancode) {
 			case 72:
 				pushArr(8);
@@ -242,8 +246,9 @@ int controlKey(int scancode) {
 		} else if (scancode == 0x01)
 			_escPressed = 1;
 		else if (scancode == 0xFFFFFF81) //release esc
+		{
 			_escPressed = 0;
-		else if (scancode == 83 && lastkey == -32)
+		} else if (scancode == 83 && lastkey == -32)
 			del = 1;
 		else if (scancode == -45 && lastkey == -32)
 			del = 0;
@@ -266,7 +271,7 @@ int controlKey(int scancode) {
 		}
 	}
 	if ((lAlt || rAlt) && (lCtrl || rCtrl) && del)
-		_restart();
+		_restart(); // Handles direct restart
 
 	lastlastkey = lastkey;
 	lastkey = scancode;

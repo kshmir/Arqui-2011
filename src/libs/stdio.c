@@ -4,6 +4,7 @@
 #include "../drivers/keyboard.h"
 #include <stdarg.h>
 
+// Standard putchar
 void putchar(char c) {
 
 	if (c == '\r') {
@@ -27,7 +28,7 @@ void putchar(char c) {
 		putC(c);
 	}
 }
-
+// Standard getchar
 char getchar() {
 	char c;
 	int sx = getCursorX();
@@ -46,6 +47,7 @@ char getchar() {
 	return c;
 }
 
+// Standard atof
 double atof(char*string) {
 	int sign = 1;
 	int decount = 0;
@@ -75,6 +77,7 @@ double atof(char*string) {
 	}
 	return result * sign;
 }
+// Standard atoi
 int atoi(char* string) {
 
 	int i = 0;
@@ -86,6 +89,8 @@ int atoi(char* string) {
 			sign = -1;
 			i++;
 		}
+		if (string[i] - ASCIICERO < 0 || string[i] - ASCIICERO > 9)
+			return 0;
 		result = result * 10 + (string[i] - ASCIICERO);
 		i++;
 	}
@@ -93,6 +98,7 @@ int atoi(char* string) {
 
 }
 
+// Standard ftoa
 void ftoa(float number, char* answ) {
 	double a;
 	char ascii0 = '0';
@@ -112,20 +118,19 @@ void ftoa(float number, char* answ) {
 		answ[pos++] = '0';
 	}
 	decimal--;
-	a =	number - (int)number;
-	
-	resultado = a*1000000;
-	while (decimal>=0) {
+	a = number - (int) number;
+
+	resultado = a * 1000000;
+	while (decimal >= 0) {
 		dec[decimal] = resultado % 10 + '0';
 		resultado /= 10;
 		decimal--;
 	}
 	//dec[6] = 0;
-	
+
 	while ((int) number != 0) {
 		answ[pos++] = (int) number % 10 + ascii0;
 		number /= 10;
-
 
 	}
 
@@ -135,18 +140,19 @@ void ftoa(float number, char* answ) {
 	number *= 10;
 	if (sign == TRUE)
 		answ[pos++] = '-';
-	
+
 	internalswap(answ, pos - 1);
-	
-	answ[pos-1]='.';
+
+	answ[pos - 1] = '.';
 	pos++;
-	for(decimal=0;decimal<=7;decimal++){
-			answ[pos-1]=dec[decimal];
-			pos++;
+	for (decimal = 0; decimal <= 7; decimal++) {
+		answ[pos - 1] = dec[decimal];
+		pos++;
 	}
-	
+
 }
 
+// Standard itoa
 void itoa(int number, char* answ) {
 
 	int pos = 0;
@@ -171,6 +177,7 @@ void itoa(int number, char* answ) {
 	internalswap(answ, pos - 1);
 }
 
+// Standard printf, not complete
 void printf(char* string, ...) {
 	va_list ap;
 
@@ -179,6 +186,7 @@ void printf(char* string, ...) {
 	vprintf(string, ap);
 }
 
+// Standard vprintf, not complete
 void vprintf(char* string, va_list ap) {
 	int i = 0, va_count;
 	while (string[i] != '\0') {
@@ -213,12 +221,14 @@ void vprintf(char* string, va_list ap) {
 	va_end(ap);
 }
 
+// Standard clrscr
 void clrscr() {
 	clear_screen();
 }
 
 int invalidScanf = 0;
 
+// Scans an int, used by scanf
 int scanint(int *pint, char*message) {
 	char result[20];
 	int final;
@@ -236,6 +246,7 @@ int scanint(int *pint, char*message) {
 
 }
 
+// Scans a double, used by scanf
 int scandouble(double *pdouble, char*message) {
 	char result[40];
 	double final;
@@ -274,10 +285,12 @@ int scandouble(double *pdouble, char*message) {
 
 	return pos;
 }
+// Tells us if the value is a digit or not.
 int isdigit(int ch) {
 	return (ch >= '0' && ch <= '9');
 }
 
+// Scans a string. Used by scanf
 int scanstring(char* pchar, char*message) {
 
 	int i = 0;
@@ -289,6 +302,7 @@ int scanstring(char* pchar, char*message) {
 	return i;
 }
 
+// Standard scanf, not complete!
 int scanf(char* string, ...) {
 	int i = 0, va_count;
 	int c;
@@ -297,7 +311,7 @@ int scanf(char* string, ...) {
 	int endFlag = FALSE;
 	int oldBuf = 0;
 	char buffer[200];
-	for(i = 0; i< 200; i++)
+	for (i = 0; i < 200; i++)
 		buffer[i] = 0; //Clear the buffer...
 	i = 0;
 	char *ch;
@@ -365,7 +379,7 @@ int scanf(char* string, ...) {
 		}
 	}
 	va_end(ap);
-	
-	return !invalidScanf; //TODO: FIX THIS
+
+	return !invalidScanf; // This never worked, but wasn't that important.
 }
 

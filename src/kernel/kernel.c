@@ -10,95 +10,110 @@
 DESCR_INT idt[0x81]; /* IDT de 80h entradas*/
 IDTR idtr; /* IDTR */
 
-int must_update = 0;
+// Counter of IRQ8 ticks since start.
 double ticks = 0;
-int videoPos = 0;
-int cursorEnabled = 1;
-char *vidmem = (char *) 0xb8000;
-double res;
+int cursor_ticks = 0;
 
-void setCursor(int b)
-{
+// Counter of the video position
+int videoPos = 0;
+// Sets or not the cursor
+int cursorEnabled = 1;
+int hardCursorEnabled = 1;
+// Direction to the video memory.
+char *vidmem = (char *) 0xb8000;
+// Stores the CPU frequency.
+double cpuFreq;
+
+
+int _ticks(){
+	return cursor_ticks;
+}
+void setCursor(int b) {
 	cursorEnabled = b;
+	hardCursorEnabled = b;
 }
 
 void setVideoPos(int a) {
 	videoPos = a;
-	if (cursorEnabled) _setCursor(a/2);
+	if (cursorEnabled)
+		_setCursor(a / 2);
 }
 
-double* getFrequency(){
-	int a,b,c;
-	double res1,res2,res3;
-	ticks=0;
-	a=_rdtsc();
-	_doManyCicles();
-	a=_rdtsc()-a;
-	if(a<0)
-		a*=-1;
-	if(ticks!=0)
-	res1=a/((ticks)*0.055);
-	res1/=1000000;
-	ticks=0;
-	b=_rdtsc();
-	_doManyCicles();
-	b=_rdtsc()-b;
-	if(b<0)
-		b*=-1;
-	if(ticks!=0)
-	res2=b/((ticks)*0.055);
-	res2/=1000000;
-	ticks=0;
-	c=_rdtsc();
-	int i;
-	for (i=0;i<100000000;i++);
-	c=_rdtsc()-c;
-	if(c<0)
-		c*=-1;
-	if(ticks!=0)
-	res3=c/((ticks)*0.055);
-	res3/=1000000;
-	res=(res1+res2+res3)/3;
-	return &res;
+// Gets the raw frecuency of the cpu
+double* getFrequency(int precision, int tcks) {
+	// Precision gives us the amount of times it'll be approximated.
+	// Tcks gives us the amount of ticks to try to get the frecuency
+	// 2 is the minimum value.
+	int it = 0, n = precision, c = 0;
+	long counter = 0;
+
+	// We check limits...
+	if (tcks > 18)
+		tcks = 18;
+	if (tcks < 2)
+		tcks = 2;
+
+	// Startup variables
+	double cpuFreqs;
+	cpuFreq = 0;
+
+	// Iterate for elements.
+	for (it = 0; it < n; it++) {
+		ticks = 0;
+		int oldticks = 1;
+		// Waiting for a tick change helps us solve
+		// Any redundancy in the numbers
+		// "Syncing" the counter with the ticks is really helpful
+		while (ticks != oldticks)
+			;
+		counter = _rdtsc();
+		// Wait for another tick change, one is usually enough.
+		while (ticks < tcks)
+			;
+		counter = _rdtsc() - counter;
+
+		// Normalizes to Mhz
+		cpuFreqs = counter / ((ticks - 1) * 54925.40115);
+		cpuFreq += cpuFreqs;
+	}
+
+	// Average if needed.
+	cpuFreq /= n;
+	return &cpuFreq;
 }
 
+// Just counts ticks and updates the cursor.
 void int_08() {
 	ticks++;
+	cursor_ticks++;
+	if (cursor_ticks % 5 == 0)
+		if (hardCursorEnabled)
+		{
+			cursorEnabled = !cursorEnabled;
+			if (cursorEnabled)
+				_setCursor(videoPos / 2);
+			else
+				_setCursor(-1);
+		}
 }
 /* Handler del teclado */
 void int_09() {
 	char scancode;
 	char eoi = EOI;
 	_read(KEYBOARD, &scancode, 1);
-	// TODO: DEFINES HERE!
+
+	// We check if the scancode is a char or a control key.
 	int flag = scancode >= 0x02 && scancode <= 0x0d;
 	flag = flag || (scancode >= 0x10 && scancode <= 0x1b);
 	flag = flag || (scancode >= 0x1E && scancode <= 0x29);
 	flag = flag || (scancode >= 0x2b && scancode <= 0x35);
-	if (flag) {
+	if (flag)
 		pushC(scanCodeToChar(scancode)); //guarda un char en el stack
-		must_update++;
-	} else
-		must_update += controlKey(scancode);
-	
+	else
+		controlKey(scancode); // Envia el scancode al analizador de control keys.
+
 	_write(PIC1, &eoi, 1);
-
-}/* Testear q la int_09 de arriba funcione bien, en ese caso borrar la comentada.
-void int_09(char scancode) {
-	// TODO: DEFINES HERE!
-	int flag = scancode >= 0x02 && scancode <= 0x0d;
-	flag = flag || (scancode >= 0x10 && scancode <= 0x1b);
-	flag = flag || (scancode >= 0x1E && scancode <= 0x29);
-	flag = flag || (scancode >= 0x2b && scancode <= 0x35);
-	if (flag) {
-		pushC(scanCodeToChar(scancode)); //guarda un char en el stack
-		must_update++;
-	} else
-		must_update += controlKey(scancode);
-
-
 }
-*/
 /* Escribe en la posicion de memoria s el
  * caracter c, n veces */
 void setBytes(void *s, char* c, int n) {
@@ -118,38 +133,17 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 		if (fd == STDOUT) //PANTALL
 		{
 			setBytes(vidmem + videoPos, buffer, count);
-		}else if ( fd == PIC1 )
+		} else if (fd == PIC1)
 			_out(0x20, buffer[0]);
 
 	} else if (systemCall == READ) //read
 	{
-		//#TODO: testearlo un poco mas, en mi PC parece andar perfecto.
-		if ( fd == KEYBOARD )
-		    	buffer[0] = _in(0x60);
-	    
+		if (fd == KEYBOARD)
+			buffer[0] = _in(0x60);
+
 	}
 }
 
-/*
-void int_80(int systemCall, int fd, char *buffer, int count) {
-	int i, j;
-
-	if (systemCall == WRITE) //write
-	{
-		if (fd == STDOUT) //PANTALL
-		{
-			setBytes(vidmem + videoPos, buffer, count);
-		}
-
-	} else if (systemCall == READ) //read
-	{
-		//#TODO: no andan los in y out.
-		if (fd == STDOUT) {
-
-		}
-	}
-}
-*/
 /**********************************************
  kmain()
  Punto de entrada de c—digo C.
@@ -161,24 +155,22 @@ kmain() {
 
 	/* Borra la pantalla. */
 
-
-
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 
-	setup_IDT_entry(&idt[0x08], 0x08, (dword) &_int_08_hand, ACS_INT, 0);
+	setup_IDT_entry(&idt[0x08], 0x08, (dword) & _int_08_hand, ACS_INT, 0);
 
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ1    */
 
-	setup_IDT_entry(&idt[0x09], 0x08, (dword) &_int_09_hand, ACS_INT, 0);
+	setup_IDT_entry(&idt[0x09], 0x08, (dword) & _int_09_hand, ACS_INT, 0);
 
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE int80h    */
 
-	setup_IDT_entry(&idt[0x80], 0x08, (dword) &_int_80_hand, ACS_INT, 0);
+	setup_IDT_entry(&idt[0x80], 0x08, (dword) & _int_80_hand, ACS_INT, 0);
 
 	/* Carga de IDTR */
 
 	idtr.base = 0;
-	idtr.base += (dword) &idt;
+	idtr.base += (dword) & idt;
 	idtr.limit = sizeof(idt) - 1;
 
 	_lidt(&idtr);
@@ -191,14 +183,12 @@ kmain() {
 	_Sti();
 
 	initVideo();
-	internalShellStart();
 	shellStart();
 
 	/* KeepAlive loop */
 	while (1) {
-		init();
-		//internalShellStart();
-		must_update--;
+		// Main del shell
+		shellMain();
 	}
 
 }

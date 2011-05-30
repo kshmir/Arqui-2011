@@ -13,7 +13,7 @@
 
 // TODO: Add description for this.
 int (*player)(void);
-
+int _ticks();
 
 void setCursor(int b);
 

@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include "../../include/kasm.h"
 
+// Makes a new line
 void newLine() {
 	setCursorX(0);
 	if (!(getCursorY() >= getVideoMode()->height - 1)) {
@@ -23,17 +24,6 @@ void newLine() {
 	}
 }
 
-/** Inicio del shell, borra la pantalla y escribe la linea de comandos*/
-void internalShellStart() {
-
-}
-
-/**TODO: aca se debe analizar lo que se recibe y ejecutar alguna
- * funcion*/
-void execute(char* c) {
-
-}
-
 /**	Copia todo lo que hay en el BUFFER DE PANTALLA (no en la placa de
  * video) y lo vuelve a imprimir*/
 void reDrawLines() {
@@ -51,15 +41,18 @@ void reDrawLines() {
 	setCursorX(0);
 }
 
+// Puts a space
 void putSpace() {
 	putC(getC());
 	getVideoMode()->shell->screen[getCursorX() + 1][getCursorY()] = ' ';
 }
 
+// Inserts a tab
 void putTab() {
 	putchar(0x0f);
 }
 
+// Makes a backspace
 void backSpace() {
 	if (getCursorX() % 4 == 0
 			&& getVideoMode()->shell->screen[getCursorX() - 1][getCursorY()]
@@ -71,6 +64,7 @@ void backSpace() {
 
 }
 
+// Removes a tab
 void removeTab() {
 	int oneStep = 1;
 	int x = getCursorX();
@@ -85,6 +79,7 @@ void removeTab() {
 	}
 }
 
+// Puts a char
 void putChar(char c) {
 	int x = getCursorX();
 	int y = getCursorY();
@@ -98,10 +93,12 @@ void putChar(char c) {
 	}
 }
 
+// Escape trigger, deprecated
 void onEscape() {
-	shellStart();
+	clear_screen();
 }
 
+// Backspace trigger
 void removeLastC() {
 	decrementCursor();
 	putChar(' ');

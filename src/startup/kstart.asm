@@ -13,13 +13,14 @@
 [global start]
 [extern kmain] ; en kernel.c
 
+; Carga el kernel
 start:
   call kmain
  
   jmp $ ; si retorna de kmain se detiene
 
 ;**************************************************************
-; header para el GRUB. El orden de los datos estan especificados
+; Header para el GRUB. El orden de los datos estan especificados
 ; en la Multiboot Specification.
 ;**************************************************************
 

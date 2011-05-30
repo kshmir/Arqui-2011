@@ -6,6 +6,7 @@
 #ifndef _defs_
 #define _defs_
 
+/** Usado para borrar el buffer **/
 #define BORRA_BUFFER while (getC() != 0)
 #define EOI 0x20
 #define NULL 0
@@ -19,8 +20,11 @@
 #define TRUE 1
 #define FALSE 0
 
-#define CICLOSFIJOS 2952790087
+/** Usado para el CPUSpeed */
+#define CLOCKSIZE 100000000
+#define CLOCKDIVIDER 1000000
 
+/** Defines para mejorar compatibilidad con asm */
 #define time_t long
 #define byte unsigned char
 #define word short int
@@ -55,20 +59,20 @@ typedef struct {
 	word limit, base_l;byte base_m, access, attribs, base_h;
 } DESCR_SEG;
 
+/** Might be used for the video driver in a future. */
 typedef struct {
 	char** jumpmap;
 	char** screen;
 	char** style;
 } SHELL_INFO;
 
+/** Creado para poder extender los modos de video en un uso futuro */
 typedef struct {
 	int height, width;
 	int curX, curY;
 	int cursorEnabled, textMode;
 	SHELL_INFO* shell;
 } VIDEO_MODE_INFO;
-
-
 
 /* Interrupt descriptor */
 typedef struct {

@@ -1,6 +1,9 @@
 #include "string.h"
 #include "../../include/defs.h"
 
+// First seen at: http://codepad.org/9DWPYMWe (Codepad site is not working well... might not work)
+// We did this for PI, fixed some bugs on it though.
+
 char* strcpy(char* s1, char* s2) {
 	int i;
 	for (i = 0; (s1[i] = s2[i]); i++)
