@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "../include/defs.h"
+#include "../include/kasm.h"
 #include "libs/mcgio.h"
 #include "libs/mcglib.h"
 #include "libs/stdio.h"
@@ -104,6 +105,14 @@ void shellStart() {
 	setTabCall(whenTabCalls);
 	setArrowHit(onKey);
 
+	double f = 2.0;
+	f / 5.0;
+	f / 10.0;
+	f * 10;
+	f - 2.0;
+
+	_rdtsc();
+
 	printf("\n     ***Mucielag O.S*** \n\n");
 	printf("         (_    ,_,    _) \n");
 	printf("         / `'--) (--'` \\ \n");
@@ -166,10 +175,10 @@ int logout(int size, char** args) {
 
 // Secret sauce
 int cpuSpeed(int size, char** args) {
-	int precision = 0, ticks = 0, approx = 0;
+	int precision = 0, ticks = 0, approx = 1;
 	if (size > 1) {
-		if (strcmp(args[1], "r") == 0)
-			approx = 1;
+		if (strcmp(args[1], "e") == 0)
+			approx = 0;
 	}
 	if (size > 2) {
 		precision = atoi(args[2]);
@@ -182,16 +191,22 @@ int cpuSpeed(int size, char** args) {
 	if (ticks <= 2)
 		ticks = 2;
 
-	double* a = (double*) getFrequency(precision, ticks);
-	int b = (int) (*a);
+
+	double* a = (double*)getFrequency(precision, ticks);
+
 
 	if (approx) {
+		int b = (int) *a;
 		if (b % 5 >= 3)
 			b = b - b % 5 + 5;
 		else
 			b = b - b % 5;
+		printf("\nSpeed: %d Mhz\n", b);
 	}
-	printf("\nSpeed: %d Mhz\n", b);
+	else
+	{
+		printf("\nSpeed: %f Mhz\n", *a);
+	}
 }
 
 // Helps teachers to understand a bit our mess, well, no
@@ -223,7 +238,7 @@ int printHelp(int size, char** args) {
 			printf("numberofiterations is 1 by default\n");
 			printf("numbeofticks is 2 by default (wastes 1 for synchrony)\n");
 			printf(
-					"\"r\" will make the result approximate to the closest hundred value\n");
+					"\"e\" will make the result more exact, by not approximating\n");
 			printf(
 					"Only use the extra params if you don't get good precision\n");
 		} else
@@ -240,7 +255,7 @@ int test(int size, char** args) {
 	char name[200];
 	char surname[200];
 	int age = 0;
-	double height = 0.0;
+	double height = 2.0;
 
 	printf("char name[200];\nchar surname[200];\nint age = 0;\n");
 	printf("double height = 0.0;\nprintf(\"please enter your name:\");\n");
@@ -248,9 +263,9 @@ int test(int size, char** args) {
 	printf("printf(\"please enter you age:\");\n");
 	printf("scanf(\"%%d\",&age);\n");
 	printf("printf(\"please enter you height:\");\n");
-	printf("scanf(\"%%f\",&height);\n");
+	printf("scanf(\"%%d\",&height);\n");
 	printf(
-			"printf(\"my name is:%%s i am %%d years old and %%f feet tall\\n\",name,age,height);\n");
+			"printf(\"my name is:%%s i am %%d years old and %%d feet tall\\n\",name,age,height);\n");
 	printf(
 			"printf(\"please enter your name surname \\nfor example Bruce Wayne:\");\n");
 	printf("scanf(\"%%s %%s\",name,surname);\n");

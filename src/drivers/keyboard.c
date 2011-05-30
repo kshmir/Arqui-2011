@@ -136,6 +136,16 @@ int escPressed() {
 	return _escPressed;
 }
 
+void startKeyboard()
+{
+	int i = 0;
+	for (i = 0; i < BUFFER_SIZE; ++i) {
+		arrowBuffer[i] = 0;
+		charBuffer[i] = 0;
+	}
+}
+
+
 // Buffer for arrows
 void pushArr(char c) {
 	if (arrowBufferPointer >= BUFFER_SIZE - 1)

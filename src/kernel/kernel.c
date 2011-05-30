@@ -11,7 +11,7 @@ DESCR_INT idt[0x81]; /* IDT de 80h entradas*/
 IDTR idtr; /* IDTR */
 
 // Counter of IRQ8 ticks since start.
-double ticks = 0;
+int ticks = 0;
 int cursor_ticks = 0;
 
 // Counter of the video position
@@ -22,10 +22,9 @@ int hardCursorEnabled = 1;
 // Direction to the video memory.
 char *vidmem = (char *) 0xb8000;
 // Stores the CPU frequency.
-double cpuFreq;
+double cpuFreq = 0;
 
-
-int _ticks(){
+int _ticks() {
 	return cursor_ticks;
 }
 void setCursor(int b) {
@@ -39,13 +38,15 @@ void setVideoPos(int a) {
 		_setCursor(a / 2);
 }
 
+int fix_flag = 0;
+
 // Gets the raw frecuency of the cpu
 double* getFrequency(int precision, int tcks) {
 	// Precision gives us the amount of times it'll be approximated.
 	// Tcks gives us the amount of ticks to try to get the frecuency
 	// 2 is the minimum value.
 	int it = 0, n = precision, c = 0;
-	long counter = 0;
+	unsigned long counter = 0;
 
 	// We check limits...
 	if (tcks > 18)
@@ -71,10 +72,15 @@ double* getFrequency(int precision, int tcks) {
 		while (ticks < tcks)
 			;
 		counter = _rdtsc() - counter;
-
 		// Normalizes to Mhz
 		cpuFreqs = counter / ((ticks - 1) * 54925.40115);
 		cpuFreq += cpuFreqs;
+		if (!fix_flag)
+		{
+			fix_flag++;
+			cpuFreq = 0;
+			it--;
+		}
 	}
 
 	// Average if needed.
@@ -87,8 +93,7 @@ void int_08() {
 	ticks++;
 	cursor_ticks++;
 	if (cursor_ticks % 5 == 0)
-		if (hardCursorEnabled)
-		{
+		if (hardCursorEnabled) {
 			cursorEnabled = !cursorEnabled;
 			if (cursorEnabled)
 				_setCursor(videoPos / 2);
@@ -182,6 +187,7 @@ kmain() {
 	_mascaraPIC2(0xFF);
 	_Sti();
 
+	startKeyboard();
 	initVideo();
 	shellStart();
 

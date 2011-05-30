@@ -100,12 +100,16 @@ int atoi(char* string) {
 
 // Standard ftoa
 void ftoa(float number, char* answ) {
-	double a;
+	double a = 0.0;
 	char ascii0 = '0';
 	int pos = 0;
 	int decimal = 6;
-	int resultado;
+	int resultado = 0;
 	char dec[7];
+
+	int i= 0;
+	for(; i < 7; i++)
+		dec[i] = 0;
 
 	char sign = FALSE;
 	if (number < 0) {
@@ -188,7 +192,7 @@ void printf(char* string, ...) {
 
 // Standard vprintf, not complete
 void vprintf(char* string, va_list ap) {
-	int i = 0, va_count;
+	int i = 0, va_count = 0;
 	while (string[i] != '\0') {
 		if (string[i] == '%') {
 			i++;
@@ -267,7 +271,10 @@ int scandouble(double *pdouble, char*message) {
 		result[i++] = '.';
 		pos++;
 	} else
+	{
+		*pdouble = 0.0;
 		flag = FALSE;
+	}
 
 	if (flag) {
 
