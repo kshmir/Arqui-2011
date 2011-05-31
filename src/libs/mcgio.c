@@ -42,18 +42,16 @@ void mcg_putchar(char c) {
 char* getConsoleString(int sendAutocomplete) {
 	char c;
 	char* str = NULL;
-	str = (char*) malloc(sizeof(char) * 80); // TODO: This should increment on hit
-	int strlen = 80;
+	str = (char*) malloc(sizeof(char) * 255 + 1); // TODO: This should increment on hit
+	int strlen = 255;
 	int i = 0;
 	int sx = getCursorX();
 	int sy = getCursorY();
 	while ((c = getC()) != '\n') {
 		int dirKey = getA();
 
-		if (i >= strlen - 5)
-		{
-			strlen *= 1.5;
-			str = (char*)realloc(strlen * sizeof(char));
+		if (i == strlen && c != '\r') {
+			continue;
 		}
 
 		if (dirKey == 0) {

@@ -30,8 +30,6 @@ void * realloc(void * ptr, size_t size)
 {
      char* ret = (char*)malloc(size);
      int i = 0;
-     for(; i < size; i++)
-        ret[i] = ((char*)ptr)[i];
      return ret;
 }
 
