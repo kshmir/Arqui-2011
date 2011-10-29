@@ -1,8 +1,8 @@
-#include "../include/kasm.h"
-#include "../include/defs.h"
-#include "../src/keyboard.h"
-#include "../src/IO.h"
-#include "../src/shell.h"
+#include "../../include/kasm.h"
+#include "../../include/defs.h"
+#include "../drivers/keyboard.h"
+#include "../drivers/video.h"
+#include "../shell.h"
 
 DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
 IDTR idtr; /* IDTR */

@@ -34,7 +34,7 @@
 #define WON 1
 #define DRAW 2
 
-int nInLineStart(int size, char* args) {
+int nInLineStart(int size, char** args) {
 	int quit;
 
 	quit = startNInLine(); /*Start N In Line.*/

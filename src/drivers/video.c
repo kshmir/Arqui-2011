@@ -17,17 +17,21 @@ VIDEO_MODE_INFO* current_video_mode;
 VIDEO_MODE_INFO* getVideoMode() {
 	return current_video_mode;
 }
+// For future use.
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 		int cursorY, int cursorEnabled, int textMode);
 
+// Starts default video.
 void initVideo() {
 	int i = 0;
 	VIDEO_MODE_INFO* default_video = NULL;
 	default_video = buildVideoMode(25, 80, 1, 10, 10, 1);
 	current_video_mode = default_video;
+
 	clear_screen();
 }
 
+// For future use, builds a given video mode.
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 		int cursorY, int cursorEnabled, int textMode) {
 	VIDEO_MODE_INFO* video = NULL;
@@ -51,6 +55,7 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 	return video;
 }
 
+// Puts a character to stdout
 void putC(char c) {
 	char a[] = { c, defaultStyle };
 	_write(STDOUT,a,2);
@@ -124,6 +129,8 @@ void clear_screen() {
 	moveCursorToStart();
 }
 
+// Clears the screen from the given cursor to the end of the page.
+// And rolls the cursor back.
 void clear_screen_topdown() {
 	int i = 0;
 	int x = getCursorX();
