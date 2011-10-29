@@ -11,6 +11,9 @@ GLOBAL	_restart
 GLOBAL	_in
 GLOBAL	_out
 GLOBAL  __stack_chk_fail
+GLOBAL _getSeconds
+GLOBAL _getMinutes
+GLOBAL _getHour
 
 EXTERN  int_08
 EXTERN  int_09
@@ -215,6 +218,51 @@ _out:
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
 
+;Lee la hora del sistema 
+
+_getHour:
+	cli
+	push ebp
+	mov ebp,esp
+
+	mov al, 04
+	out 0x70h,al
+	in al, 0x71h
+	mov eax,al
+	
+	mov esp,ebp
+	pop ebp
+	sti
+	ret
+
+_getMinutes:
+	cli
+	push ebp
+	mov ebp,esp
+
+	mov al,02
+	out 0x70h,al
+	in al, 0x71h
+	mov eax,al
+	mov esp,ebp
+	pop ebp
+	sti
+	ret
+
+_getSeconds:
+	cli
+	push ebp
+	mov ebp,esp
+
+	mov al, 00
+	out 0x70h,al
+	in al, 0x71h
+	mov eax,al
+	mov esp,ebp
+	pop ebp
+	sti
+	ret
+
 
 _debug:
         push    bp
@@ -227,5 +275,3 @@ vuelve:	mov     ax, 1
 	pop     bp
         retn
 
-
-	

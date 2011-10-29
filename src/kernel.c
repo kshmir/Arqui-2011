@@ -8,7 +8,7 @@ DESCR_INT idt[0x81]; /* IDT de 10 entradas*/
 IDTR idtr; /* IDTR */
 
 int tickpos = 640;
-int videoPos = 0;
+int videoPos = 320;
 char *vidmem = (char *) 0xb8000;
 
 void setVideoPos(int a) {

@@ -172,6 +172,7 @@ void itoa(int number, char* answ) {
 }
 
 void printf(char* string, ...) {
+	
 	va_list ap;
 
 	va_start(ap, string);

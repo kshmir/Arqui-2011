@@ -1,10 +1,12 @@
 #include "shell.h"
 #include "../include/defs.h"
+#include "../include/kasm.h"
 #include "libs/mcgio.h"
 #include "libs/stdio.h"
 #include "libs/string.h"
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
+
 
 typedef struct {
 	void* parent;
@@ -109,9 +111,15 @@ void init() {
 	while (1) {
 		if (loggedUser == NULL)
 			login(0, NULL);
+		
+			
 		printf(loggedUser);
 		printf(OSDEFST);
 		printf(" ");
+		
+		int hora= _getHour();
+		printf("hora:  %d ",hora);	
+		
 		command = getConsoleString(TRUE);
 		int index = 0;
 		if (command[0] != 0 && command[0] != '\n') {
