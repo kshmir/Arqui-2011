@@ -49,3 +49,15 @@ int _in(unsigned int port);
 /* Call for debug */
 void _debug(void);
 
+
+
+/* Get Hour from system */
+int _getHour();
+
+/* Get Minutes from system */
+int _getMinutes(void);
+
+/* Get Seconds from system */
+int _getSeconds(void);
+
+
