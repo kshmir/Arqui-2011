@@ -23,5 +23,7 @@ int test(int size, char** args);
 int clear(int size, char** args);
 int cpuSpeed(int size, char** args);
 int printHelp(int size, char** args);
+void showHour();
+int changeHour(int size, char** args);
 #endif
 
