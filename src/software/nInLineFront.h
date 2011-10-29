@@ -38,6 +38,6 @@ void show(int end, int turn, int * quit);
 /* Prints the 'about' screen.*/
 void printCredits(void);
 
-int nInLineStart(int size, char* args);
+int nInLineStart(int size, char** args);
 
 

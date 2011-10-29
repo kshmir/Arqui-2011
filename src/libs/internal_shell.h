@@ -7,10 +7,9 @@
 
 
 void newLine();
-void internalShellStart();
+
 
 void drawComandLine();
-void execute(char* c);
 void nextRow();
 void reDrawLines();
 
