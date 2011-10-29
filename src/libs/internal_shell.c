@@ -10,7 +10,7 @@ void newLine() {
 	} else {
 		int i, j;
 		int last_len = 0, current_len;
-		for (j = 2; j < getVideoMode()->height; j++) {
+		for (j = 0; j < getVideoMode()->height; j++) {
 			for (i = 0; i < getVideoMode()->width; i++) {
 				getVideoMode()->shell->screen[i][j]
 						= getVideoMode()->shell->screen[i][j + 1];
@@ -29,8 +29,8 @@ void newLine() {
 void reDrawLines() {
 	int i, j;
 	setCursor(FALSE);
-	setCursorY(2);
-	for (j = 2; j < getVideoMode()->height; j++) {
+	setCursorY(0);
+	for (j = 0; j < getVideoMode()->height; j++) {
 		setCursorX(0);
 		for (i = 0; i < getVideoMode()->width; i++) {
 			putC(getVideoMode()->shell->screen[i][j]);

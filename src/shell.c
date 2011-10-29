@@ -9,7 +9,6 @@
 #include "software/nInLineFront.h"
 
 
-
 // Used for autocomplete.
 typedef struct {
 	void* parent;
@@ -128,16 +127,10 @@ void shellMain() {
 	while (1) {
 		if (loggedUser == NULL)
 			login(0, NULL);
-		
-			
 		printf(loggedUser);
 		int var = 0;
 		printf(OSDEFST);
 		printf(" ");
-		
-		int hora= _getHour();
-		printf("hora:  %d ",hora);	
-		
 		command = getConsoleString(TRUE);
 		int index = 0;
 		if (command[0] != 0 && command[0] != '\n') {

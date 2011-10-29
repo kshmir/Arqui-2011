@@ -183,7 +183,6 @@ void itoa(int number, char* answ) {
 
 // Standard printf, not complete
 void printf(char* string, ...) {
-	
 	va_list ap;
 
 	va_start(ap, string);

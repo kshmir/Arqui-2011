@@ -14,6 +14,7 @@ GLOBAL  __stack_chk_fail
 GLOBAL _getSeconds
 GLOBAL _getMinutes
 GLOBAL _getHour
+GLOBAL	_rdtsc
 
 EXTERN  int_08
 EXTERN  int_09
@@ -226,9 +227,9 @@ _getHour:
 	mov ebp,esp
 
 	mov al, 04
-	out 0x70h,al
-	in al, 0x71h
-	mov eax,al
+	out 70h,al
+	in al, 71h
+	movzx eax,al
 	
 	mov esp,ebp
 	pop ebp
@@ -241,9 +242,9 @@ _getMinutes:
 	mov ebp,esp
 
 	mov al,02
-	out 0x70h,al
-	in al, 0x71h
-	mov eax,al
+	out 70h,al
+	in al, 71h
+	movzx eax,al
 	mov esp,ebp
 	pop ebp
 	sti
@@ -255,9 +256,9 @@ _getSeconds:
 	mov ebp,esp
 
 	mov al, 00
-	out 0x70h,al
-	in al, 0x71h
-	mov eax,al
+	out 70h,al
+	in al, 71h
+	movzx eax,al
 	mov esp,ebp
 	pop ebp
 	sti
@@ -275,3 +276,10 @@ vuelve:	mov     ax, 1
 	pop     bp
         retn
 
+_rdtsc:
+        push ebp	
+        mov ebp, esp		; Stack frame
+		rdtsc
+		mov esp,ebp
+		pop ebp
+		ret
