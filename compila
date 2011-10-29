@@ -1,9 +1,8 @@
 cd bin
 
-nasm -f aout ../src/libasm.asm -o libasm.o
+nasm -f aout ../src/kernel/libasm.asm -o libasm.o
 nasm -f aout ../src/startup/kstart.asm -o kstart.o
 nasm -f aout ../src/startup/loader.asm -o loader.o
-
 
 gcc -c ../src/kernel/kernel.c  -o kernel.o   -fno-builtin
 
@@ -13,12 +12,12 @@ gcc -c ../src/software/nInLineFront.c      -o nInLineFront.o   -fno-builtin
 gcc -c ../src/software/nInLineBack.c       -o nInLineBack.o    -fno-builtin
 gcc -c ../src/libs/internal_shell.c     -o internal_shell.o   -fno-builtin
 gcc -c ../src/libs/mcgio.c     -o mcgio.o   -fno-builtin
-gcc -c ../src/libs/mcglib.c    -o mcglib.o   -fno-builtin
+gcc -c ../src/libs/mcglib.c    -o mcglib.o  -fno-builtin
 gcc -c ../src/libs/stdio.c     -o stdio.o   -fno-builtin
 gcc -c ../src/libs/stdlib.c    -o stdlib.o   -fno-builtin
 gcc -c ../src/libs/string.c    -o string.o   -fno-builtin
 gcc -c ../src/startup/start.c  -o start.o 	 -fno-builtin
 gcc -c ../src/shell.c          -o shell.o 	 -fno-builtin
-ld -T ../include/link.ld -o kernel.bin string.o libasm.o loader.o kernel.o keyboard.o mcglib.o mcgio.o stdlib.o video.o start.o shell.o stdio.o internal_shell.o nInLineFront.o nInLineBack.o 
+ld -T ../include/link.ld -o kernel.bin string.o libasm.o loader.o kernel.o keyboard.o mcgio.o stdlib.o video.o start.o shell.o stdio.o internal_shell.o nInLineFront.o nInLineBack.o mcglib.o
 
 echo "Compila end"
