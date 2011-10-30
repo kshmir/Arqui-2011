@@ -426,6 +426,8 @@ void printKeyboard(){
 		
 		char* lang;
 		
+		setCursor(FALSE);
+		
 		setCursorX(53);
 		setCursorY(0);
 		
@@ -441,6 +443,7 @@ void printKeyboard(){
 		setCursorX(x);
 		setCursorY(y);
 
+		setCursor(TRUE);
 	
 }
 

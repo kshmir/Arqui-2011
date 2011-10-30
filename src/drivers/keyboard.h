@@ -4,6 +4,8 @@
 #define BUFFER_SIZE 200
 #define EN 0
 #define ES 1
+#define TRUE 1
+#define FALSE 0
 char scanCodeToChar(char scanCode);
 
 void startKeyboard();
