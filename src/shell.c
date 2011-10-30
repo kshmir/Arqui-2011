@@ -352,7 +352,7 @@ int confColor(int size, char** args)
 		} 
 		setColor(back*16 + font);
 		
-	
+}	
 	
 int changeHour(int size, char** args){
 	
