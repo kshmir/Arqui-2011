@@ -207,10 +207,7 @@ _debug:
         push	ax
 vuelve:	mov     ax, 1
         cmp	ax, 0
-	jne	vuelve
-	pop	ax
-	pop     bp
-        retn
-
-
-	
+		jne	vuelve
+		pop	ax
+		pop bp
+        ret
