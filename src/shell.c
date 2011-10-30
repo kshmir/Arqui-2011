@@ -338,7 +338,7 @@ int confColor(int size, char** args)
 			
 		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
 		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
-		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOY\n"); 
+		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
 		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");
 		font=getint("Please enter a font color:");
 		} 
@@ -346,11 +346,12 @@ int confColor(int size, char** args)
 			
 		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
 		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
-		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOY\n"); 
+		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
 		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");		
 		back=getint("Please enter a back color:");
 		} 
 		setColor(back*16 + font);
+		clear(0,NULL);
 		
 }	
 	
