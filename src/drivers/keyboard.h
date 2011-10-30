@@ -28,6 +28,11 @@ char getC();
 
 int directionKey();
 
+void printkeym();
+
+void setKeyboard();
+
+
 
 #endif /* STDLIB_H_ */
 

@@ -148,3 +148,11 @@ void clear_screen_topdown() {
 	setCursorX(x);
 	setCursorY(y);
 }
+void clearFirstLine(){
+	int i=0;
+
+	while(i++ < (current_video_mode->width )){
+		putchar(' ');
+	}
+	
+}

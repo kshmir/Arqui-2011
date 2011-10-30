@@ -123,6 +123,9 @@ void shellStart() {
 	printf("        /  _,-'\\_/'-,_  \\ \n");
 	printf("       /.-'     \"     '-.\\ \n\n\n\n");
 
+	setKeyboard(0);
+	setKeyboard(1);
+	
 }
 
 char* loggedUser = NULL;
@@ -299,6 +302,8 @@ int test(int size, char** args) {
 		printf("%s\n", strs[var]);
 	}
 
+	
+
 }
 
 // Just to have more functions in the autocomplete
@@ -324,10 +329,11 @@ int changeHour(int size, char** args){
 	
 	int userHour,userMinutes;
 	
-	printf("Please enter the new hour or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	printf("Please enter the new hour \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
 	scanf("%d" , &userHour);
-	printf("Please enter the new minutes or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	printf("Please enter the new minutes \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
 	scanf("%d" , &userMinutes);
+	
 	
 
 	if(userMinutes<0 || userMinutes>60){
@@ -339,15 +345,13 @@ int changeHour(int size, char** args){
 		DIFF_TIME_MINUTES=0;
 		return;
 	}
-	if(userMinutes!=-1){
-	}
-	else{
+	
+	else if(userMinutes!=-1){
 		DIFF_TIME_MINUTES=userMinutes-currentMinutes;
 	}
 	
 	
-
-		if( userHour<0 || userHour>24){
+	if( userHour<0 || userHour>24){
 		printf("Please enter a valid hour! \n");
 		changeHour(size, args);
 		return;
@@ -355,10 +359,9 @@ int changeHour(int size, char** args){
 	if(userHour==-2){
 		DIFF_TIME_HOURS=0;
 	}
-	if(userHour!=-1){
-	}
-	else{
-		DIFF_TIME_MINUTES=currentHour-userHour;
+	else if(userHour!=-1){
+	
+		DIFF_TIME_HOURS=userHour-currentHour;
 	}
 	
 	return;
@@ -376,13 +379,17 @@ void showHour(){
 		unsigned int minutes= _getMinutes();
 		unsigned int seconds=_getSeconds();
 		
-		currentHour=hour;
-		currentMinutes=minutes;
 		
-		hour = ((hour / 16) * 10) + (hour & 0xf) + DIFF_TIME_HOURS;
-		minutes = ((minutes / 16) * 10) + (minutes & 0xf) + DIFF_TIME_MINUTES;
-		seconds = ((seconds / 16) * 10) + (seconds & 0xf); 
+		currentHour=toDecimal(hour);
+		currentMinutes=toDecimal(minutes);
+		seconds=toDecimal(seconds);
 		
+		
+		hour = currentHour + DIFF_TIME_HOURS;
+		minutes = currentMinutes + DIFF_TIME_MINUTES;
+		
+		
+				
 		if(minutes>60){
 			hour++;
 			minutes-=60;
@@ -402,9 +409,25 @@ void showHour(){
 		int x=getCursorX();
 		int y=getCursorY();
 		
-		setCursorX(60);
+		setCursorX(64);
 		setCursorY(0);
-		printf("hora: %d : %d : %d",hour,minutes,seconds);
+		clearFirstLine();
+		if(hour<10)
+		printf("hora 0%d:",hour);
+		else{
+		printf("hora %d:",hour);
+		}
+		if(minutes<10){
+		printf("0%d:",minutes);
+		}
+		else{
+		printf("%d:",minutes);
+		}
+		printf("%d ",seconds);
 		setCursorX(x);
 		setCursorY(y);
+}
+
+int toDecimal(int value){
+			value = ((value / 16) * 10) + (value & 0xf); 
 }

@@ -41,4 +41,6 @@ void putC(char c);
 
 void clear_screen();
 
+void clearFirstLine();
+
 #endif /* VIDEO_H_ */
