@@ -277,9 +277,9 @@ int printHelp(int size, char** args) {
 			printf("If no parametters are given a menu will be shown. \n");
 		}
 		if( strcmp(command, "confColor")==0){
-			printf("Usage: changeHour n1°? n2°? \n");
-			printf("n1° will change the font color to the selected one\n");
-			printf("n2° will change the background color to the selected one \n If a wrong value is typed it will show the menu for that parameter\n");
+			printf("Usage: changeHour n1? n2? \n");
+			printf("n1 will change the font color to the selected one\n");
+			printf("n2 will change the background color to the selected one \n If a wrong value is typed it will show the menu for that parameter\n");
 			printf("If no parametters are given a menu will be shown. \n");
 		}
 			if( strcmp(command, "clear")==0){
