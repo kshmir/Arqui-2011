@@ -9,9 +9,9 @@
 #define VIDEO_H_
 
 #define VIDEO 0xb8000
-
+//AGREGADO POR MI
+#define DEFAULTSTYLE 0x07
 #include "../../include/defs.h"
-
 
 
 void initVideo();
@@ -40,5 +40,7 @@ void moveCursorToStart();
 void putC(char c);
 
 void clear_screen();
+
+void setColor(char colour);
 
 #endif /* VIDEO_H_ */

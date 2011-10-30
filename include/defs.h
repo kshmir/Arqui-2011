@@ -71,6 +71,7 @@ typedef struct {
 	int height, width;
 	int curX, curY;
 	int cursorEnabled, textMode;
+	char color;
 	SHELL_INFO* shell;
 } VIDEO_MODE_INFO;
 
