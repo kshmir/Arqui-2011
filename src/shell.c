@@ -8,6 +8,10 @@
 #include "drivers/video.h"
 #include "software/nInLineFront.h"
 
+int DIFF_TIME_HOURS=0;
+int DIFF_TIME_MINUTES=0;
+int currentHour=0;
+int currentMinutes=0;
 
 // Used for autocomplete.
 typedef struct {
@@ -131,6 +135,7 @@ void shellMain() {
 		int var = 0;
 		printf(OSDEFST);
 		printf(" ");
+		
 		command = getConsoleString(TRUE);
 		int index = 0;
 		if (command[0] != 0 && command[0] != '\n') {
@@ -316,6 +321,7 @@ int clear(int size, char** args) {
 	clear_screen();
 }
 
+
 int confColor(int size, char** args)
 {
 		int i=1;
@@ -348,4 +354,92 @@ int confColor(int size, char** args)
 		
 	
 	
+int changeHour(int size, char** args){
+	
+	int userHour,userMinutes;
+	
+	printf("Please enter the new hour or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	scanf("%d" , &userHour);
+	printf("Please enter the new minutes or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	scanf("%d" , &userMinutes);
+	
+
+	if(userMinutes<0 || userMinutes>60){
+		printf("Please enter a valid minutes: \n");
+		changeHour(size, args);
+		return;
+	}
+	if(userMinutes==-2){
+		DIFF_TIME_MINUTES=0;
+		return;
+	}
+	if(userMinutes!=-1){
+	}
+	else{
+		DIFF_TIME_MINUTES=userMinutes-currentMinutes;
+	}
+	
+	
+
+		if( userHour<0 || userHour>24){
+		printf("Please enter a valid hour! \n");
+		changeHour(size, args);
+		return;
+	}
+	if(userHour==-2){
+		DIFF_TIME_HOURS=0;
+	}
+	if(userHour!=-1){
+	}
+	else{
+		DIFF_TIME_MINUTES=currentHour-userHour;
+	}
+	
+	return;
+}
+		
+
+	
+
+	
+
+	
+void showHour(){
+	
+		unsigned int hour= _getHour();
+		unsigned int minutes= _getMinutes();
+		unsigned int seconds=_getSeconds();
+		
+		currentHour=hour;
+		currentMinutes=minutes;
+		
+		hour = ((hour / 16) * 10) + (hour & 0xf) + DIFF_TIME_HOURS;
+		minutes = ((minutes / 16) * 10) + (minutes & 0xf) + DIFF_TIME_MINUTES;
+		seconds = ((seconds / 16) * 10) + (seconds & 0xf); 
+		
+		if(minutes>60){
+			hour++;
+			minutes-=60;
+		}
+		else if(minutes<0){
+			hour--;
+			minutes=60-minutes;
+		}
+		if(hour>24){
+			hour-=24;
+		}
+		else if(hour<0){
+			hour=24-hour;
+		}
+		
+	
+		int x=getCursorX();
+		int y=getCursorY();
+		
+		setCursorX(60);
+		setCursorY(0);
+		printf("hora: %d : %d : %d",hour,minutes,seconds);
+		setCursorX(x);
+		setCursorY(y);
+
 }

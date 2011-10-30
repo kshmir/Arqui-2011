@@ -90,6 +90,11 @@ double* getFrequency(int precision, int tcks) {
 
 // Just counts ticks and updates the cursor.
 void int_08() {
+	
+	
+	showHour();
+	
+	
 	ticks++;
 	cursor_ticks++;
 	if (cursor_ticks % 5 == 0)

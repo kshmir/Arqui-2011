@@ -49,3 +49,8 @@ int _in(unsigned int port);
 /* Call for debug */
 void _debug(void);
 
+/* Get Hour from system */
+
+unsigned int _getHour();
+unsigned int _getMinutes();
+unsigned int _getSeconds();
