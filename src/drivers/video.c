@@ -10,7 +10,7 @@
 #include "../../include/kasm.h"
 #include "../libs/stdlib.h"
 
-int defaultStyle = 0x07;
+int defaultStyle = DEFAULTSTYLE;
 
 VIDEO_MODE_INFO* current_video_mode;
 
@@ -19,13 +19,13 @@ VIDEO_MODE_INFO* getVideoMode() {
 }
 // For future use.
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
-		int cursorY, int cursorEnabled, int textMode);
+		int cursorY, int cursorEnabled, int textMode, char color);
 
 // Starts default video.
 void initVideo() {
 	int i = 0;
 	VIDEO_MODE_INFO* default_video = NULL;
-	default_video = buildVideoMode(23, 80, 1, 10, 10, 1);
+	default_video = buildVideoMode(25, 80, 1, 10, 10, 1, DEFAULTSTYLE);
 	current_video_mode = default_video;
 
 	clear_screen();
@@ -33,7 +33,7 @@ void initVideo() {
 
 // For future use, builds a given video mode.
 static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
-		int cursorY, int cursorEnabled, int textMode) {
+		int cursorY, int cursorEnabled, int textMode, char color) {
 	VIDEO_MODE_INFO* video = NULL;
 	int i = 0;
 	video = (VIDEO_MODE_INFO*) malloc(sizeof(VIDEO_MODE_INFO));
@@ -43,6 +43,7 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 	video->curY = cursorY;
 	video->cursorEnabled = cursorEnabled;
 	video->textMode = textMode;
+	video->color=color;
 	video->shell = (SHELL_INFO*) malloc(sizeof(SHELL_INFO));
 	video->shell->screen = (char**) malloc(sizeof(char**) * width);
 	for (i = 0; i < width; i++) {
@@ -57,7 +58,7 @@ static VIDEO_MODE_INFO* buildVideoMode(int height, int width, int cursorX,
 
 // Puts a character to stdout
 void putC(char c) {
-	char a[] = { c, defaultStyle };
+	char a[] = { c, current_video_mode->color };
 	_write(STDOUT,a,2);
 	incrementCursor();
 }
@@ -155,4 +156,8 @@ void clearFirstLine(){
 		putchar(' ');
 	}
 	
+void setColor(char colour){
+		
+	current_video_mode->color = colour;
+
 }

@@ -58,11 +58,11 @@ char* onKey(int direction) {
 
 // Function names
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
-		"test", "clear", "ssh","changeHour", NULL };
+		"test", "clear", "ssh", "confColor", NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, ssh,changeHour, NULL };
+		cpuSpeed, test, clear, ssh, confColor, NULL };
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -124,7 +124,7 @@ void shellStart() {
 	printf("       /.-'     \"     '-.\\ \n\n\n\n");
 
 	setKeyboard(0);
-	setKeyboard(1);
+
 	
 }
 
@@ -325,6 +325,41 @@ int ssh(int size, char** args) {
 int clear(int size, char** args) {
 	clear_screen();
 }
+
+
+int confColor(int size, char** args)
+{
+		int i=1;
+		int font= -1;
+		int back= -1;
+		int flag = 0;
+		if(size == 3){
+			font=atoi(args[1]);
+			back=atoi(args[2]);
+		}else if(size == 2){
+			font=atoi(args[1]);
+		}	
+		while(font<0 || font>=16){
+			
+		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
+		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
+		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
+		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");
+		font=getint("Please enter a font color:");
+		} 
+		while(back<0 || back>=16){
+			
+		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
+		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
+		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
+		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");		
+		back=getint("Please enter a back color:");
+		} 
+		setColor(back*16 + font);
+		clear(0,NULL);
+		
+}	
+	
 int changeHour(int size, char** args){
 	
 	int userHour,userMinutes;
@@ -426,6 +461,7 @@ void showHour(){
 		printf("%d ",seconds);
 		setCursorX(x);
 		setCursorY(y);
+
 }
 
 int toDecimal(int value){
