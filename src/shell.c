@@ -243,6 +243,16 @@ int printHelp(int size, char** args) {
 				"These shell commands are defined internally.  Type `help' to see this list.\n");
 		printf(
 				"Type `help cpuSpeed' to find out more about the function `cpuSpeed'.\n");
+			
+		printf("Type `help changeKeyboard' to find out more about the function `changeKeyboard'.\n");
+		printf("Type `help changeHour' to find out more about the function `changeHour'.\n");
+		printf("Type `help confColor' to find out more about the function `confColor'.\n");
+		printf("Type `help clear' to find out more about the function `clear'.\n");
+
+		
+
+		
+		
 	} else {
 		if (strcmp(command, "cpuSpeed") == 0) {
 			printf(
