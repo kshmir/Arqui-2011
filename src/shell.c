@@ -404,7 +404,29 @@ int changeHour(int size, char** args){
 		
 
 	
-
+int changeKeyboard(int size ,char** args){
+	
+	int ret = -1;
+	
+	if(size > 1){
+		if( args[1] == "EN"){
+			 setCurrentKeyboard(0);
+			 return;
+			
+		}else{
+			if( args[1] == "ES"){
+				setCurrentKeyboard(1);
+			 return;
+			}	
+		}
+	}
+	while(ret != 0 && ret!= 1){
+		
+		ret = getint("Select the keyboard lalsnguage :\n1_ English\n2_Español\n");
+		
+	}
+	return ret;
+}
 	
 
 	

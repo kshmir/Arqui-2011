@@ -8,7 +8,7 @@
 #define NPRTBL 0
 #define KEY_LONG 91
 
-int currentKeyboard
+int currentKeyboard=0;
 
 
 unsigned int keyboardEnglish[][2] = { { NPRTBL, NPRTBL },//000
@@ -421,10 +421,10 @@ int isShifted() {
 void setKeyboard()
 {
 	int i,j;
-	if(currentKeyboard!=1){
+	if(currentKeyboard==ES){
 			for(i=0; i< KEY_LONG; i++){
 				for(j=0; j<2; j++){
-					keyboard[i][j]=keyboardEnglish[i][j];
+					keyboard[i][j]=keyboardSpanish[i][j];
 			}
 		}	
 	
@@ -432,9 +432,11 @@ void setKeyboard()
 	else{
 		for(i=0; i< KEY_LONG; i++){
 				for(j=0; j<2; j++){
-					keyboard[i][j]=keyboardSpanish[i][j];
+					keyboard[i][j]=keyboardEnglish[i][j];
 				}
 		}
 	}
 }
-
+void setCurrentKeyboard(int ck){
+	currentKeyboard=ck;
+}

@@ -155,6 +155,7 @@ void clearFirstLine(){
 	while(i++ < (current_video_mode->width )){
 		putchar(' ');
 	}
+}
 	
 void setColor(char colour){
 		
