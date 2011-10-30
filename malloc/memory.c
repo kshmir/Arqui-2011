@@ -6,6 +6,15 @@
 page_array pages_struct;
 
 int main(void){
+	int i;
+	char** paginas;
+	for (i=0; i<MAX_PAGES;i++){
+		
+		if ((paginas=malloc(MAX_PAGE_SIZE))==NULL){
+			printf("no hay espacio suficiente\n");
+			return 1;
+		}
+	}
 	
 	return 0;
 }
