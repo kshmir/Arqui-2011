@@ -35,5 +35,7 @@ void setKeyboard();
 
 void setCurrentKeyboard(int ck);
 
+void printKeyboard();
+
 #endif /* STDLIB_H_ */
 

@@ -93,7 +93,8 @@ void int_08() {
 	
 	
 	showHour();
-	
+	printKeyboard();
+
 	
 	ticks++;
 	cursor_ticks++;

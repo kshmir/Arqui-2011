@@ -58,11 +58,11 @@ char* onKey(int direction) {
 
 // Function names
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
-		"test", "clear", "ssh", "confColor", NULL };
+		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, ssh, confColor, NULL };
+		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, NULL };
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -124,7 +124,7 @@ void shellStart() {
 	printf("       /.-'     \"     '-.\\ \n\n\n\n");
 
 	setKeyboard(0);
-
+	
 	
 }
 
@@ -347,7 +347,7 @@ int confColor(int size, char** args)
 		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");
 		font=getint("Please enter a font color:");
 		} 
-		while(back<0 || back>=16){
+		while(back<0 || back>=16 || font==back){
 			
 		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
 		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
@@ -357,7 +357,6 @@ int confColor(int size, char** args)
 		} 
 		setColor(back*16 + font);
 		clear(0,NULL);
-		
 }	
 	
 int changeHour(int size, char** args){
@@ -403,32 +402,33 @@ int changeHour(int size, char** args){
 }
 		
 
-	
 int changeKeyboard(int size ,char** args){
 	
 	int ret = -1;
 	
 	if(size > 1){
-		if( args[1] == "EN"){
-			 setCurrentKeyboard(0);
-			 return;
+		
+		if( strcmp( args[1] , "EN")== 0){
+			 printf("->ingles %s\n",args[1]);
+			 ret = EN;
 			
-		}else{
-			if( args[1] == "ES"){
-				setCurrentKeyboard(1);
-			 return;
-			}	
 		}
+		if( strcmp(args[1],"ES")== 0){
+			printf("->espanol %s\n",args[1]);
+			ret = ES;
+		}	
 	}
-	while(ret != 0 && ret!= 1){
+	/* EN is the first language code and ES is the last language code*/
+	while(ret < EN || ret > ES ){
 		
-		ret = getint("Select the keyboard lalsnguage :\n1_ English\n2_Español\n");
+		ret = getint("Select the keyboard language :\n1_ English\n2_ Spanish\n")-1;
 		
 	}
-	return ret;
+	setCurrentKeyboard(ret);
+	
+	return;
 }
 	
-
 	
 void showHour(){
 	
@@ -466,7 +466,7 @@ void showHour(){
 		int x=getCursorX();
 		int y=getCursorY();
 		
-		setCursorX(64);
+		setCursorX(60);
 		setCursorY(0);
 		clearFirstLine();
 		if(hour<10)

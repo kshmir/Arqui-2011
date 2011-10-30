@@ -418,6 +418,32 @@ int isShifted() {
 	return lShift || rShift;
 }
 
+
+void printKeyboard(){
+		
+		int x=getCursorX();
+		int y=getCursorY();
+		
+		char* lang;
+		
+		setCursorX(53);
+		setCursorY(0);
+		
+				
+		if(currentKeyboard==ES){
+			lang="Spanish";
+		}
+		if(currentKeyboard==EN){
+			lang="English";
+		}
+		printf("Current lenguage: %s",lang);
+		
+		setCursorX(x);
+		setCursorY(y);
+
+	
+}
+
 void setKeyboard()
 {
 	int i,j;
@@ -439,4 +465,5 @@ void setKeyboard()
 }
 void setCurrentKeyboard(int ck){
 	currentKeyboard=ck;
+	setKeyboard();
 }

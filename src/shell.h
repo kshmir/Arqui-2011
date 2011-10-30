@@ -5,6 +5,8 @@
 #define _START_H_
 
 #define CLSIZE 4
+#define EN 0
+#define ES 1
 
 void shellStart();
 
@@ -28,8 +30,9 @@ int cpuSpeed(int size, char** args);
 int printHelp(int size, char** args);
 
 int confColor(int size, char** args);
-void showHour();
+//void showHour();
 int changeHour(int size, char** args);
+int changeKeyboard(int size ,char** args);
 
 #endif
 
