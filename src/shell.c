@@ -6,6 +6,7 @@
 #include "libs/stdio.h"
 #include "libs/string.h"
 #include "drivers/video.h"
+#include "drivers/sound.h"
 #include "software/nInLineFront.h"
 
 int DIFF_TIME_HOURS=0;
@@ -58,11 +59,11 @@ char* onKey(int direction) {
 
 // Function names
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
-		"test", "clear", "ssh", "confColor", NULL };
+		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", "morse" , NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, ssh, confColor, NULL };
+		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, morse, NULL };
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -122,6 +123,9 @@ void shellStart() {
 	printf("         / `'--) (--'` \\ \n");
 	printf("        /  _,-'\\_/'-,_  \\ \n");
 	printf("       /.-'     \"     '-.\\ \n\n\n\n");
+
+	setKeyboard(0);
+	
 	
 }
 
@@ -176,6 +180,7 @@ int logout(int size, char** args) {
 	printf("\nBye bye %s\n", loggedUser);
 	free(loggedUser);
 	loggedUser = NULL;
+	soundOn();
 }
 
 // Secret sauce
@@ -299,6 +304,8 @@ int test(int size, char** args) {
 		printf("%s\n", strs[var]);
 	}
 
+	
+
 }
 
 // Just to have more functions in the autocomplete
@@ -342,7 +349,7 @@ int confColor(int size, char** args)
 		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");
 		font=getint("Please enter a font color:");
 		} 
-		while(back<0 || back>=16){
+		while(back<0 || back>=16 || font==back){
 			
 		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
 		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
@@ -352,17 +359,17 @@ int confColor(int size, char** args)
 		} 
 		setColor(back*16 + font);
 		clear(0,NULL);
-		
 }	
 	
 int changeHour(int size, char** args){
 	
 	int userHour,userMinutes;
 	
-	printf("Please enter the new hour or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	printf("Please enter the new hour \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
 	scanf("%d" , &userHour);
-	printf("Please enter the new minutes or -1 if you don't want to change it or -2 if you want to restore the original value: \n");
+	printf("Please enter the new minutes \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
 	scanf("%d" , &userMinutes);
+	
 	
 
 	if(userMinutes<0 || userMinutes>60){
@@ -374,15 +381,13 @@ int changeHour(int size, char** args){
 		DIFF_TIME_MINUTES=0;
 		return;
 	}
-	if(userMinutes!=-1){
-	}
-	else{
+	
+	else if(userMinutes!=-1){
 		DIFF_TIME_MINUTES=userMinutes-currentMinutes;
 	}
 	
 	
-
-		if( userHour<0 || userHour>24){
+	if( userHour<0 || userHour>24){
 		printf("Please enter a valid hour! \n");
 		changeHour(size, args);
 		return;
@@ -390,20 +395,42 @@ int changeHour(int size, char** args){
 	if(userHour==-2){
 		DIFF_TIME_HOURS=0;
 	}
-	if(userHour!=-1){
-	}
-	else{
-		DIFF_TIME_MINUTES=currentHour-userHour;
+	else if(userHour!=-1){
+	
+		DIFF_TIME_HOURS=userHour-currentHour;
 	}
 	
 	return;
 }
 		
 
+int changeKeyboard(int size ,char** args){
 	
-
+	int ret = -1;
 	
-
+	if(size > 1){
+		
+		if( strcmp( args[1] , "EN")== 0){
+			 printf("->ingles %s\n",args[1]);
+			 ret = EN;
+			
+		}
+		if( strcmp(args[1],"ES")== 0){
+			printf("->espanol %s\n",args[1]);
+			ret = ES;
+		}	
+	}
+	/* EN is the first language code and ES is the last language code*/
+	while(ret < EN || ret > ES ){
+		
+		ret = getint("Select the keyboard language :\n1_ English\n2_ Spanish\n")-1;
+		
+	}
+	setCurrentKeyboard(ret);
+	
+	return;
+}
+	
 	
 void showHour(){
 	
@@ -411,13 +438,17 @@ void showHour(){
 		unsigned int minutes= _getMinutes();
 		unsigned int seconds=_getSeconds();
 		
-		currentHour=hour;
-		currentMinutes=minutes;
 		
-		hour = ((hour / 16) * 10) + (hour & 0xf) + DIFF_TIME_HOURS;
-		minutes = ((minutes / 16) * 10) + (minutes & 0xf) + DIFF_TIME_MINUTES;
-		seconds = ((seconds / 16) * 10) + (seconds & 0xf); 
+		currentHour=toDecimal(hour);
+		currentMinutes=toDecimal(minutes);
+		seconds=toDecimal(seconds);
 		
+		
+		hour = currentHour + DIFF_TIME_HOURS;
+		minutes = currentMinutes + DIFF_TIME_MINUTES;
+		
+		
+				
 		if(minutes>60){
 			hour++;
 			minutes-=60;
@@ -439,8 +470,30 @@ void showHour(){
 		
 		setCursorX(60);
 		setCursorY(0);
-		printf("hora: %d : %d : %d",hour,minutes,seconds);
+		clearFirstLine();
+		if(hour<10)
+		printf("hora 0%d:",hour);
+		else{
+		printf("hora %d:",hour);
+		}
+		if(minutes<10){
+		printf("0%d:",minutes);
+		}
+		else{
+		printf("%d:",minutes);
+		}
+		printf("%d ",seconds);
 		setCursorX(x);
 		setCursorY(y);
 
+}
+
+int toDecimal(int value){
+			value = ((value / 16) * 10) + (value & 0xf); 
+}
+
+int morse(int size, char** args){
+	
+		toMorse(size, args);
+	
 }
