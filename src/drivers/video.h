@@ -41,6 +41,7 @@ void putC(char c);
 
 void clear_screen();
 
+void clearFirstLine();
 void setColor(char colour);
 
 #endif /* VIDEO_H_ */

@@ -121,17 +121,19 @@ void decrementCursor() {
 
 void clear_screen() {
 	int i = 0;
-	
 	setCursorX(0);
 	setCursorY(0);
-	
-	//moveCursorToStart();
 	setCursor(FALSE);
-	while (i++ < (current_video_mode->width * (current_video_mode->height))) {
+	
+	//24 because we have 81 columns not 80
+	
+	while (i++ < (current_video_mode->width * (current_video_mode->height))+24) {
 		putC(' ');
 	}
 	setCursor(TRUE);
 	moveCursorToStart();
+	
+
 }
 
 // Clears the screen from the given cursor to the end of the page.
@@ -149,8 +151,16 @@ void clear_screen_topdown() {
 	setCursorX(x);
 	setCursorY(y);
 }
+void clearFirstLine(){
+	int i=0;
 
+	while(i++ < (current_video_mode->width )){
+		putchar(' ');
+	}
+}
+	
 void setColor(char colour){
 		
 	current_video_mode->color = colour;
+
 }

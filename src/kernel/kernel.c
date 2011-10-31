@@ -95,7 +95,6 @@ void int_08() {
 	showHour();
 	printKeyboard();
 	printSound();
-	
 	ticks++;
 	cursor_ticks++;
 	if (cursor_ticks % 5 == 0)

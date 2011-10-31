@@ -2,7 +2,10 @@
 
 #define _KEYBOARD_H_
 #define BUFFER_SIZE 200
-
+#define EN 0
+#define ES 1
+#define TRUE 1
+#define FALSE 0
 char scanCodeToChar(char scanCode);
 
 void startKeyboard();
@@ -28,6 +31,13 @@ char getC();
 
 int directionKey();
 
+void printkeym();
+
+void setKeyboard();
+
+void setCurrentKeyboard(int ck);
+
+void printKeyboard();
 
 #endif /* STDLIB_H_ */
 
