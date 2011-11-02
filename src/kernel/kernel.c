@@ -94,8 +94,7 @@ void int_08() {
 	
 	showHour();
 	printKeyboard();
-
-	
+	printSound();
 	ticks++;
 	cursor_ticks++;
 	if (cursor_ticks % 5 == 0)
@@ -106,6 +105,7 @@ void int_08() {
 			else
 				_setCursor(-1);
 		}
+		
 }
 /* Handler del teclado */
 void int_09() {

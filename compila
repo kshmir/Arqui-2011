@@ -17,7 +17,8 @@ gcc -c ../src/libs/stdio.c     -o stdio.o   -fno-builtin
 gcc -c ../src/libs/stdlib.c    -o stdlib.o   -fno-builtin
 gcc -c ../src/libs/string.c    -o string.o   -fno-builtin
 gcc -c ../src/startup/start.c  -o start.o 	 -fno-builtin
+gcc -c ../src/drivers/sound.c  -o sound.o 	 -fno-builtin
 gcc -c ../src/shell.c          -o shell.o 	 -fno-builtin
-ld -T ../include/link.ld -o kernel.bin string.o libasm.o loader.o kernel.o keyboard.o mcgio.o stdlib.o video.o start.o shell.o stdio.o internal_shell.o nInLineFront.o nInLineBack.o mcglib.o
+ld -T ../include/link.ld -o kernel.bin sound.o string.o libasm.o loader.o kernel.o keyboard.o mcgio.o stdlib.o video.o start.o shell.o stdio.o internal_shell.o nInLineFront.o nInLineBack.o mcglib.o
 
 echo "Compila end"

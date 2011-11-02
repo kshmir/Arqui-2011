@@ -6,12 +6,16 @@
 #include "libs/stdio.h"
 #include "libs/string.h"
 #include "drivers/video.h"
+#include "drivers/sound.h"
 #include "software/nInLineFront.h"
 
 int DIFF_TIME_HOURS=0;
 int DIFF_TIME_MINUTES=0;
 int currentHour=0;
 int currentMinutes=0;
+
+
+
 
 // Used for autocomplete.
 typedef struct {
@@ -58,11 +62,12 @@ char* onKey(int direction) {
 
 // Function names
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
-		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", NULL };
+
+		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", "morse" , NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, NULL };
+		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, morse, NULL};
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -174,11 +179,13 @@ int login(int size, char** args) {
 		printf("   Videla, Maximo\n");
 	}
 }
+
 // "Logs out" a user just for fun and test
 int logout(int size, char** args) {
 	printf("\nBye bye %s\n", loggedUser);
 	free(loggedUser);
 	loggedUser = NULL;
+	soundOn();
 }
 
 // Secret sauce
@@ -239,6 +246,16 @@ int printHelp(int size, char** args) {
 				"These shell commands are defined internally.  Type `help' to see this list.\n");
 		printf(
 				"Type `help cpuSpeed' to find out more about the function `cpuSpeed'.\n");
+			
+		printf("Type `help changeKeyboard' to find out more about the function `changeKeyboard'.\n");
+		printf("Type `help changeHour' to find out more about the function `changeHour'.\n");
+		printf("Type `help confColor' to find out more about the function `confColor'.\n");
+		printf("Type `help clear' to find out more about the function `clear'.\n");
+
+		
+
+		
+		
 	} else {
 		if (strcmp(command, "cpuSpeed") == 0) {
 			printf(
@@ -249,10 +266,35 @@ int printHelp(int size, char** args) {
 					"\"e\" will make the result more exact, by not approximating\n");
 			printf(
 					"Only use the extra params if you don't get good precision\n");
-		} else
-			printf("Takes no parameters \n");
+		}
+		if( strcmp(command, "changeKeyboard")==0){
+			printf("Usage: changeKeyboard ES? EN? \n");
+			printf("ES will change the keyboard configuration to a Spanish one.\n");
+			printf("EN will change the keyboard configuration to a English one. \n");
+			printf("If no parametters are given a menu will be shown. \n");
+		}
+		if( strcmp(command, "changeHour")==0){
+			printf("Usage: changeHour r? s? \n");
+			printf("r will restore the clock to it's original values\n");
+			printf("s will ask you to enter the new values for the clock. \nIf a wrong value is typed it will be 0 as default \n");
+			printf("If no parametters are given a menu will be shown. \n");
+		}
+		if( strcmp(command, "confColor")==0){
+			printf("Usage: changeHour n1? n2? \n");
+			printf("n1 will change the font color to the selected one\n");
+			printf("n2 will change the background color to the selected one \n If a wrong value is typed it will show the menu for that parameter\n");
+			printf("If no parametters are given a menu will be shown. \n");
+		}
+			if( strcmp(command, "clear")==0){
+			printf("Usage: clear it clears the screen \n");
+			
+		}
+			
+		}	
+	//	 else
+	//		printf("Takes no parameters \n");
 	}
-}
+
 
 // Test the breakable code
 int test(int size, char** args) {
@@ -326,9 +368,7 @@ int clear(int size, char** args) {
 	clear_screen();
 }
 
-
-int confColor(int size, char** args)
-{
+int confColor(int size, char** args){
 		int i=1;
 		int font= -1;
 		int back= -1;
@@ -361,47 +401,75 @@ int confColor(int size, char** args)
 	
 int changeHour(int size, char** args){
 	
+	int ret = -1;
+	
+	if(size > 1){
+		
+		if( strcmp( args[1] , "r")== 0){
+			 printf("->restored \n");
+			 ret = 1;
+			
+		}
+		if( strcmp(args[1],"s")== 0){
+			printf("->setting \n",args[1]);
+			ret = 0;
+		}	
+	}
+	while(ret < 0 || ret > 1){
+		
+		ret = getint("Please select \n1-if you whant to set the clock \n2-if you want to restore the original values \n")-1;
+		
+	}
+	if(ret==1){
+		restoreHour();
+		return;
+	}
+	if(ret==0){
+	setHour();	
+	return;
+	}
+}
+	
+void setHour(){
+	
 	int userHour,userMinutes;
 	
-	printf("Please enter the new hour \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
+
+
+	printf("Please enter the new hour \n");
 	scanf("%d" , &userHour);
-	printf("Please enter the new minutes \n -1 if you don't want to change it \n -2 if you want to restore the original value: \n");
+	printf("Please enter the new minutes \n");
 	scanf("%d" , &userMinutes);
 	
 	
 
 	if(userMinutes<0 || userMinutes>60){
-		printf("Please enter a valid minutes: \n");
-		changeHour(size, args);
+		printf("Please enter a valid minutes between 0 and 60! \n");
+		setHour();
 		return;
 	}
-	if(userMinutes==-2){
-		DIFF_TIME_MINUTES=0;
-		return;
+
+	else{
+	DIFF_TIME_MINUTES=userMinutes-currentMinutes;
 	}
-	
-	else if(userMinutes!=-1){
-		DIFF_TIME_MINUTES=userMinutes-currentMinutes;
-	}
-	
 	
 	if( userHour<0 || userHour>24){
-		printf("Please enter a valid hour! \n");
-		changeHour(size, args);
+		printf("Please enter a valid hour betwen 0 and 24! \n");
+		setHour();
 		return;
 	}
-	if(userHour==-2){
-		DIFF_TIME_HOURS=0;
-	}
-	else if(userHour!=-1){
-	
+	else{
 		DIFF_TIME_HOURS=userHour-currentHour;
 	}
 	
 	return;
 }
-		
 
+void restoreHour(){
+		DIFF_TIME_HOURS=0;
+		DIFF_TIME_MINUTES=0;
+}
+		
 int changeKeyboard(int size ,char** args){
 	
 	int ret = -1;
@@ -428,7 +496,7 @@ int changeKeyboard(int size ,char** args){
 	
 	return;
 }
-	
+
 	
 void showHour(){
 	
@@ -444,8 +512,6 @@ void showHour(){
 		
 		hour = currentHour + DIFF_TIME_HOURS;
 		minutes = currentMinutes + DIFF_TIME_MINUTES;
-		
-		
 				
 		if(minutes>60){
 			hour++;
@@ -466,6 +532,8 @@ void showHour(){
 		int x=getCursorX();
 		int y=getCursorY();
 		
+		
+		setCursor(FALSE);
 		setCursorX(60);
 		setCursorY(0);
 		clearFirstLine();
@@ -483,9 +551,19 @@ void showHour(){
 		printf("%d ",seconds);
 		setCursorX(x);
 		setCursorY(y);
+		
+		setCursor(TRUE);
+
 
 }
 
 int toDecimal(int value){
 			value = ((value / 16) * 10) + (value & 0xf); 
+}
+
+
+int morse(int size, char** args){
+	
+		toMorse(size, args);
+	
 }
