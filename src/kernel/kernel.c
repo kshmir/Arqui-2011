@@ -9,6 +9,7 @@
 
 DESCR_INT idt[0x81]; /* IDT de 80h entradas*/
 IDTR idtr; /* IDTR */
+DESCR_PAGE gdt[1024];
 
 // Counter of IRQ8 ticks since start.
 int ticks = 0;
@@ -177,6 +178,9 @@ kmain() {
 	/* CARGA DE IDT CON LA RUTINA DE ATENCION DE int80h    */
 
 	setup_IDT_entry(&idt[0x80], 0x08, (dword) & _int_80_hand, ACS_INT, 0);
+	
+	
+//TODO: CARGAR LA PAG DE TABLAS
 
 	/* Carga de IDTR */
 

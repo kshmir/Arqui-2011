@@ -28,7 +28,7 @@ MultiBootHeader:
 	call  kmain								; call kernel proper
 	hlt						; halt machine should kernel return
 
-eokl	dd STACKSIZE + stack
+eokl	equ STACKSIZE + stack
 	section .bss
 	align 32
 	stack:

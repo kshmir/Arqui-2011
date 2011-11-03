@@ -71,6 +71,7 @@ int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
+	
 	int startX = getCursorX();
 	int startY = getCursorY();
 	int desp = 0, i = 0, c = 0, ind;
@@ -91,7 +92,7 @@ char* whenTabCalls(char* s) {
 		for (i = 0; function_names[i] != NULL; ++i) {
 			if (strlen(s) > 0 && strstr(function_names[i], s)
 					== function_names[i])
-				desp += mcg_printf("%s\t", function_names[i]);
+				desp += mcg_printf("%s\n", function_names[i]);
 		}
 
 	}
@@ -175,8 +176,8 @@ int login(int size, char** args) {
 		printf(
 				"Type `help cpuSpeed' to find out more about the function `cpuSpeed'.\n");
 		printf("   Ortiz, Ezequiel\n");
-		printf("   Pereyra, Cristian\n");
-		printf("   Videla, Maximo\n");
+		printf("   Reznik, Luciana\n");
+		printf("   Mesa Alcorta, Victoria\n");
 	}
 }
 
@@ -185,7 +186,6 @@ int logout(int size, char** args) {
 	printf("\nBye bye %s\n", loggedUser);
 	free(loggedUser);
 	loggedUser = NULL;
-	soundOn();
 }
 
 // Secret sauce
@@ -251,6 +251,8 @@ int printHelp(int size, char** args) {
 		printf("Type `help changeHour' to find out more about the function `changeHour'.\n");
 		printf("Type `help confColor' to find out more about the function `confColor'.\n");
 		printf("Type `help clear' to find out more about the function `clear'.\n");
+		printf("Type `help morse' to find out more about the function `morse'.\n");
+
 
 		
 
@@ -283,11 +285,18 @@ int printHelp(int size, char** args) {
 			printf("Usage: changeHour n1? n2? \n");
 			printf("n1 will change the font color to the selected one\n");
 			printf("n2 will change the background color to the selected one \n If a wrong value is typed it will show the menu for that parameter\n");
+			printf("The quantity of supported  colors depends on the computer");
 			printf("If no parametters are given a menu will be shown. \n");
 		}
 			if( strcmp(command, "clear")==0){
 			printf("Usage: clear it clears the screen \n");
 			
+		}
+		if(strcmp(command,"morse")==0){
+			
+			printf("Usage: morse wordToTranslate \n");
+			printf("morse will traslate wordToTranslate to morse code through the speaker");
+			printf("If no parameters are given nothing will happen");
 		}
 			
 		}	
@@ -379,20 +388,22 @@ int confColor(int size, char** args){
 		}else if(size == 2){
 			font=atoi(args[1]);
 		}	
-		while(font<0 || font>=16){
+		while(font<0 || font>8){
 			
-		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
-		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
-		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
-		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");
+		printf("0 -> BLACK   4->RED          				\n");
+		printf("1 -> BLUE    5->MAGENTA      			    \n");
+		printf("2 -> GREEN   6->BROWN         				\n"); 
+		printf("3 -> CYAN    7->LIGHTGRAY      				\n");
+		printf("8->DARKGRAY									\n");
 		font=getint("Please enter a font color:");
 		} 
-		while(back<0 || back>=16 || font==back){
+		while(back<0 || back>8 || font==back){
 			
-		printf("0 -> BLACK   4->RED          8->DARKGRAY     12->LIGHTRED\n");
-		printf("1 -> BLUE    5->MAGENTA      9->LIGHTBLUE    13->LIGHTMAGENTA\n");
-		printf("2 -> GREEN   6->BROWN       10->LIGHTGREEN   14->YELLOW\n"); 
-		printf("3 -> CYAN    7->LIGHTGRAY   11->LIGHTCYAN    15->WHITE\n");		
+		printf("0 -> BLACK   4->RED          				\n");
+		printf("1 -> BLUE    5->MAGENTA      			    \n");
+		printf("2 -> GREEN   6->BROWN         				\n"); 
+		printf("3 -> CYAN    7->LIGHTGRAY      				\n");
+		printf("8->DARKGRAY									\n");	
 		back=getint("Please enter a back color:");
 		} 
 		setColor(back*16 + font);
@@ -548,7 +559,13 @@ void showHour(){
 		else{
 		printf("%d:",minutes);
 		}
-		printf("%d ",seconds);
+		if(seconds<10){
+		printf("0%d ",seconds);
+		}
+		else{
+		printf("%d",seconds);
+		}
+	
 		setCursorX(x);
 		setCursorY(y);
 		

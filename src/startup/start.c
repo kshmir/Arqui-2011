@@ -19,3 +19,10 @@ void setup_IDT_entry(DESCR_INT *item, byte selector, dword offset, byte access, 
 	item->access = access;
 	item->cero = cero;
 }
+
+void setup_DESCR_PAGE(DESCR_PAGE * item,dword address) {
+	item->direction_h = direction_h ;
+	item->direction_low = direction_low &0xF0;
+	item->atts = 0x03;
+} 
+

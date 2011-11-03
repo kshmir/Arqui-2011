@@ -80,6 +80,12 @@ typedef struct {
 	word offset_l, selector;byte cero, access;word offset_h;
 } DESCR_INT;
 
+/*GDT */
+typedef struct{
+	dword address;
+} DESCR_PAGE;
+
+
 /* IDTR declaration  */
 typedef struct {
 	word limit;dword base;
