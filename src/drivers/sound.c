@@ -87,8 +87,8 @@ void soundOn(){
 		char value;
 	
 	_out(0x43,0xB6);
-	_out(0x42,54);
-	_out(0x42,124);
+	_out(0x42,142);
+	_out(0x42,1);
 	
 	value = _in(0x61);
 	value = value | 3;	/*(Turn on bits 1 and 2)*/
@@ -99,8 +99,8 @@ void soundOf(){
 		char value;
 	
 	_out(0x43,0xB6);
-	_out(0x42,54);
-	_out(0x42,124);
+	_out(0x42,142);
+	_out(0x42,1);
 	
 	value = _in(0x61);
 	value = value & 252;	/*(Turn on bits 1 and 2)*/
@@ -140,11 +140,9 @@ void printSound(){
 	if(toSound[buff] != 0){
 		if(toSound[buff] > 0){
 			soundOn();
-			printf("on%d",toSound[buff]);
 			toSound[buff] = toSound[buff] - 1;
 		}else{
 			soundOf();
-			printf("off%d",toSound[buff]);
 			toSound[buff] = toSound[buff] + 1;
 		}	
 	}else{

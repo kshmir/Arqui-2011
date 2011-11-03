@@ -313,9 +313,9 @@ int test(int size, char** args) {
 	printf("printf(\"please enter you age:\");\n");
 	printf("scanf(\"%%d\",&age);\n");
 	printf("printf(\"please enter you height:\");\n");
-	printf("scanf(\"%%d\",&height);\n");
+	printf("scanf(\"%%f\",&height);\n");
 	printf(
-			"printf(\"my name is:%%s i am %%d years old and %%d feet tall\\n\",name,age,height);\n");
+			"printf(\"my name is:%%s i am %%d years old and %%f feet tall\\n\",name,age,height);\n");
 	printf(
 			"printf(\"please enter your name surname \\nfor example Bruce Wayne:\");\n");
 	printf("scanf(\"%%s %%s\",name,surname);\n");
@@ -443,8 +443,8 @@ void setHour(){
 	
 	
 
-	if(userMinutes<0 || userMinutes>60){
-		printf("Please enter a valid minutes between 0 and 60! \n");
+	if(userMinutes<0 || userMinutes>59){
+		printf("Please enter a valid minutes between 0 and 59! \n");
 		setHour();
 		return;
 	}
@@ -519,13 +519,13 @@ void showHour(){
 		}
 		else if(minutes<0){
 			hour--;
-			minutes=60-minutes;
+			minutes=60+minutes;
 		}
 		if(hour>24){
 			hour-=24;
 		}
 		else if(hour<0){
-			hour=24-hour;
+			hour=24+hour;
 		}
 		
 	
