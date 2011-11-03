@@ -8,7 +8,7 @@ char* paginas[MAX_PAGES]; //vector de segmentos
 int main(void){
 	int i;
 	char * p;
-	
+	float prueba;
 	page_array headers; //struct de vectores de headers
 	
 	initHeader(&pages_struct.pages[0])	;
@@ -87,12 +87,41 @@ int main(void){
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
+	printf("myMalloc(20)\n");
 	p = myMalloc(20);
 	printf("El puntero p: %p \n",p);
 	printf("pagina 0: %p \n",paginas[0]);
 	printf("Espacio usado: %d \n", getUsed(&pages_struct.pages[0]));
 	printf("desplazo %d\n",(p-paginas[0])/32);
+	
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	
+	printf("myFree(p)\n");
+	myFree(p);
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	
+	//ahora voy a realizar un free de una posicion de memoria ya liberada
+	printf("myFree(p)\n");
+	myFree(p);
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	
+	//ahora voy a realizar un free de una posicion de memoria inexistente
+	printf("myFree(p+320)\n");
+	myFree(p+320);
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	
 	printf("funciono \n");
 	
 	return 0;
@@ -151,7 +180,8 @@ void* myMalloc(size_t size){
 					/* ans = EL SECTOR DE MEMORIA ES [i][j] */
 					flag = FOUND;
 					//corregirlo contando cuantos bloques recorrio
-					ans = paginas[i]+j*PADDING;
+					for(k=0, ans=paginas[i];k<j;k++)
+						ans += abs(actual->header[k])*PADDING;
 				}
 			}
 			
@@ -207,47 +237,52 @@ void myFree(void* p){
 	int dif;
 	int value;
 	int aux;
-	mem_header actual;
-	i = (int)p / MAX_PAGE_SIZE;
-	actual = pages_struct.pages[i]; 
-	aux = (int)p - (i * MAX_PAGE_SIZE);
+	mem_header* actual;
+	/* Calculo a que pagina debo momverme*/
+	i = (int)(p - (void*)paginas[0])/ MAX_PAGE_SIZE;
+	actual = &pages_struct.pages[i];
+	//original vicky
+	//aux = (int)p - (i * MAX_PAGE_SIZE);
+	
+	// modificacion de eze
+	aux = p - (void*)paginas[i];
 	
 	if( aux % PADDING == 0){
 	aux /= PADDING;
 	for(j = 0, k = 0; j < MAX_HEADER_SIZE && aux > 0; j++){
 		
-		aux = aux - abs(actual.header[j]);
-		if(aux > 0){
+		aux = aux - abs(actual->header[j]);
+		//te olvidabas de incrementar k cuando aux era 0
+		if(aux >=0){
 			k++;
 		}
-	
 	}
-	if(aux == 0 && actual.header[k] < 0){
+	if(aux == 0 && actual->header[k] < 0){
 	
-		actual.header[k] = actual.header[k] * -1;
-		if (k>0 && actual.header[k-1]>0)
+		actual->header[k] = actual->header[k] * -1;
+		if (k>0 && actual->header[k-1]>0)
 			k--;
 		
 		dif=k;
-		while(k< MAX_HEADER_SIZE && actual.header[k]!=0  && dif<MAX_HEADER_SIZE)
+		while(k< MAX_HEADER_SIZE && actual->header[k]!=0  && dif<MAX_HEADER_SIZE)
 		{
 			
-			if(actual.header[k]>0 && (dif+1<MAX_HEADER_SIZE) && actual.header[dif+1]>0)
+			if(actual->header[k]>0 && (dif+1<MAX_HEADER_SIZE) && actual->header[dif+1]>0)
 			{
 				dif++;
-				actual.header[k]+=actual.header[dif];
-				if (dif+1<MAX_HEADER_SIZE && actual.header[dif+1]>0)
-						actual.header[k]+=actual.header[dif++];
+				actual->header[k]+=actual->header[dif];
+				if (dif+1<MAX_HEADER_SIZE && actual->header[dif+1]>0)
+						actual->header[k]+=actual->header[dif++];
 				
 			}
 			k++;
 			dif++;
 			if (dif<MAX_HEADER_SIZE)
-				actual.header[k]= actual.header[dif];
+				actual->header[k]= actual->header[dif];
 		}
 	}
-		for (j=MAX_HEADER_SIZE-1; j>=0 && actual.header[j]>0; j--)
-				actual.header[j]=0;
+		for (j=MAX_HEADER_SIZE-1; j>=0 && actual->header[j]>0; j--)
+				actual->header[j]=0;
 	}
 	
 	return;
