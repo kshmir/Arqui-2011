@@ -3,7 +3,7 @@
 
 #define MAX_HEADER_SIZE 128 /* Tamaño del header */
 #define MAX_PAGE_SIZE 4096 /* 4K */
-#define MAX_PAGES 1 /* Cantidad de paginas */
+#define MAX_PAGES 256 /* Cantidad de paginas */
 #define PADDING 32 /* Tamaño minimo que se puede allocar */
 #define NOT_FOUND 0
 #define FOUND 1
@@ -32,4 +32,5 @@ size_t getFreeSpace(mem_header* header); //TESTED
 void myFree(void* p);
 int abs(int num); //TESTED
 void initHeader(mem_header* h1);
-
+void gen_pages_index();
+void printPages();

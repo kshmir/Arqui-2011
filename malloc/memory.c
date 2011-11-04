@@ -1,6 +1,7 @@
 #include "memory.h"
 #define NOT_FOUND 0
 #define FOUND 1
+#define FIRST_PAGE 0x00200000
 
 page_array pages_struct;
 char* paginas[MAX_PAGES]; //vector de segmentos
@@ -19,13 +20,8 @@ int main(void){
 	printf("\n");
 	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
 	
-	for (i=0; i<MAX_PAGES;i++){
-		//creo las paginas de 4K
-		if ((paginas[i]=malloc(MAX_PAGE_SIZE))==NULL){
-			printf("no hay espacio suficiente\n");
-			return 1;
-		}
-	}
+	gen_pages_index();
+	
 	// imprimo el espacio libre y en uso
 	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
@@ -122,7 +118,12 @@ int main(void){
 	printf("\n");
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
+
+	printPages();
+
 	printf("funciono \n");
+
+
 	
 	return 0;
 }
@@ -300,4 +301,36 @@ void initHeader(mem_header* h1){
 	h1->blocks_cont = MAX_HEADER_SIZE;
 	}
 	
+}
+ void gen_pages_index(){
+	 
+		int i;
+		void* p=(void*)FIRST_PAGE;
+		for (i=0;i<MAX_PAGES;i++){
+				paginas[i]=p+(i*MAX_PAGE_SIZE);
+			
+			}
+	 
+}
+
+void printPages()
+{
+	int i, count;
+	
+	printf("BASE ADDRESS   |  USED\n");
+	printf("----------------------\n");
+	for(i = 0, count=0; i < MAX_PAGES;){
+		while(count<20 && i<MAX_PAGES){
+			printf("%p       |  %d\n",paginas[i],getUsed(&pages_struct.pages[i]));
+			i++;
+			count++;
+			}
+		if (i!=MAX_PAGES){
+			printf("Please enter any key for more results\n");
+			getchar();
+			count = 0;
+			printf("BASE ADDRESS   |  USED\n");
+			printf("----------------------\n");
+			}
+		}
 }

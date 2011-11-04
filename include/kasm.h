@@ -54,3 +54,4 @@ void _debug(void);
 unsigned int _getHour();
 unsigned int _getMinutes();
 unsigned int _getSeconds();
+void _set_CR();

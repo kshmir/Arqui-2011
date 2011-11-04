@@ -15,7 +15,7 @@ GLOBAL	_rdtsc
 GLOBAL _getSeconds
 GLOBAL _getMinutes
 GLOBAL _getHour
-
+GLOBAL _set_CR
 
 EXTERN  int_08
 EXTERN  int_09
@@ -52,6 +52,19 @@ _mascaraPIC2:			; Escribe mascara del PIC 2
 _read_msw:
         smsw    ax		; Obtiene la Machine Status Word
         retn
+
+_set_cr:
+        push   ebp
+		mov    ebp, esp
+        mov    eax, 00300h 
+        mov    cr3, eax		; setea CR3 con la direccion de el directorio de paginas
+        
+        mov    ebx, cr0      ;guardo el valor del CR0
+        or     ebx, 80000000h ;seteo el ultimo bit en 1 que es el de PG
+        mov    cr0,ebx        ;guardo CR0 modificado
+        mov    esp,ebp
+        pop    ebp
+        ret
 
 
 _lidt:				; Carga el IDTR
@@ -260,4 +273,4 @@ vuelve:	mov     ax, 1
 		jne	vuelve
 		pop	ax
 		pop bp
-		ret
+		retn

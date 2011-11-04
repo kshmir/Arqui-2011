@@ -9,7 +9,10 @@
 
 DESCR_INT idt[0x81]; /* IDT de 80h entradas*/
 IDTR idtr; /* IDTR */
-DESCR_PAGE gdt[1024];
+
+//El registro CR3 apunta al 4 mega de memortia es decir la direccion
+//CR3 -> 0x00300000 pero como CR3 es de 20bit apunta a 0x00300
+DESCR_PAGE* gdt= (void*)0x00300000;
 
 // Counter of IRQ8 ticks since start.
 int ticks = 0;
@@ -154,6 +157,30 @@ void int_80(int systemCall, int fd, char *buffer, int count) {
 			buffer[0] = _in(0x60);
 
 	}
+}
+
+void initpages(){
+	
+	dword descriptor;
+	int cant_pages, i;
+	//agrego en el directorio de paginas, la primera y unica tabla de paginas.
+	descriptor = 0x00301000;
+	setup_DESCR_PAGE(gdt,descriptor);
+	//la cantidad de selectores que vamos a necesitar son 256*256*256*256
+	cant_pages = 1024;
+	//vamos a apuntar el puntero de gdt a el ppio de la tabla de paginas es decir 
+	//gdt -> 0x00301000 
+	gdt=(DESCR_PAGE*)0x00301000;
+	//hacemos que el descriptor apuente a la primer pagina
+	descriptor=0x000000000;
+	
+	//este ciclo se encarga de bindear 1 a 1 las direcciones de memoria de los primeros 4 megas
+	for (i=0; i<cant_pages;i++){
+			//cargar la libreria de memory
+			descriptor = descriptor+ i*MAX_PAGE_SIZE;
+			setup_DESCR_PAGE(&gdt[i],descriptor);
+		}
+	
 }
 
 /**********************************************
