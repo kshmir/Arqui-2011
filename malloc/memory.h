@@ -34,3 +34,6 @@ int abs(int num); //TESTED
 void initHeader(mem_header* h1);
 void gen_pages_index();
 void printPages();
+void printPage(void* p);
+int getPageIndex (void* p);
+char* indent(char* pchar, int size);

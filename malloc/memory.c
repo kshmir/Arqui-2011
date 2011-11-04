@@ -19,8 +19,9 @@ int main(void){
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
-	
 	gen_pages_index();
+	printf("Mi nueva funcion para imprimir bloques\n");
+	printPage(paginas[0]);
 	
 	// imprimo el espacio libre y en uso
 	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
@@ -34,12 +35,23 @@ int main(void){
 	pages_struct.pages[0].header[3]=-3;
 	pages_struct.pages[0].blocks_cont-=3; // xq arriba reserve 3 bloques
 	pages_struct.pages[0].header[4]=5;
+	
+	pages_struct.pages[0].header[5]=5;
+	pages_struct.pages[0].header[6]=5;
+	pages_struct.pages[0].header[7]=5;
+	pages_struct.pages[0].header[8]=5;
+	pages_struct.pages[0].header[9]=5;
+	pages_struct.pages[0].header[10]=5;
+	pages_struct.pages[0].header[11]=5;
+	pages_struct.pages[0].header[12]=5;
+	pages_struct.pages[0].header[13]=5;
 	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	for(i=0;i<MAX_HEADER_SIZE;i++)
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
-	
+	printf("Mi nueva funcion para imprimir bloques\n");
+	printPage(paginas[0]);
 	//testeo de la funcion abs
 	printf("abs(%d)=%d\nabs(%d)=%d\nabs(%d)=%d\n",-1,abs(-1),0,abs(0),2,abs(2));
 	
@@ -119,7 +131,9 @@ int main(void){
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
 
-	printPages();
+//	printPages();
+	
+	
 
 	printf("funciono \n");
 
@@ -333,4 +347,74 @@ void printPages()
 			printf("----------------------\n");
 			}
 		}
+}
+
+void printPage(void* p){
+	char end = 0;
+	int i;
+	int count;
+	char indentation[4];
+	int free = MAX_PAGE_SIZE;
+	char* puntero_ppio_header;
+	int page_index = getPageIndex(p);
+	puntero_ppio_header = pages_struct.pages[page_index].header;
+	
+	if( page_index != -1){
+		printf("U: Used - F: Free\n|");
+		for(i = 0, count = 0; i < MAX_HEADER_SIZE && !end; ){
+		if(count < 10){
+			free = free - abs(puntero_ppio_header[i] * PADDING);
+			count++;
+			if(puntero_ppio_header[i] < 0){
+				printf(" Used: %s%d |", indent(indentation,puntero_ppio_header[i]*(-PADDING)),puntero_ppio_header[i]*(-PADDING));
+			}
+			else{
+				if(puntero_ppio_header[i] > 0){
+					printf(" Free: %s%d |", indent(indentation,puntero_ppio_header[i]*(PADDING)), puntero_ppio_header[i]*(PADDING));
+				}else{
+					printf(" Free: %s%d |\n", indent(indentation,free), free);
+					end = 1;
+				}	
+			}
+			i++;
+		}else{
+			printf("\n|");
+			count = 0;
+		}	
+	}}
+	else{
+		printf("Invalid Pointer \n");
+	}
+}
+int getPageIndex (void* p){
+	int i;
+	int found = 0;
+	
+	for (i = 0; i < MAX_PAGES && !found; i++){
+		found = ((p >= (void*)paginas[i]) && (p < (void*)paginas[i] + MAX_PAGE_SIZE) ? 1 : 0);
+	}
+	return (found ? (i - 1) : -1);
+}
+
+char* indent(char* pchar, int size)
+{
+   int count = 0;
+   int i;
+    if (pchar !=NULL){ 
+
+		if(size<1000 && size>99){
+            count = 1;
+		}
+		else if(size<100 && size>9){
+            count = 2;
+		}
+		else if(size<10 && size>=0){
+            count = 3;
+		}
+		for(i=0;i<count;i++){
+			pchar[i]=' ';
+		}
+		pchar[i]='\0';
+	}
+	return pchar;
 }
