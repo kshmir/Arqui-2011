@@ -1,7 +1,7 @@
 #include "../../include/kernel.h"
 #include "../../include/kasm.h"
 #include "../../include/defs.h"
-
+#include "../../malloc/memory.h"
 #include "../startup/start.h"
 #include "../drivers/keyboard.h"
 #include "../drivers/video.h"
