@@ -36,6 +36,3 @@ void printPages();
 void printPage(void* p);
 int getPageIndex (void* p);
 char* indent(char* pchar, int size);
-void printMap(void* p);
-char* toHexa(char* hexa, char* p);
-int cantMaxBlocks(char* header);
