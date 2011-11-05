@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 
 #define MAX_HEADER_SIZE 128 /* Tamaño del header */
 #define MAX_PAGE_SIZE 4096 /* 4K */
@@ -33,22 +32,7 @@ void myFree(void* p);
 int abs(int num); //TESTED
 void initHeader(mem_header* h1);
 void gen_pages_index();
-void gen_pages_index2();
 void printPages();
 void printPage(void* p);
 int getPageIndex (void* p);
-
 char* indent(char* pchar, int size);
-
-void printMap(void* p);
-char* toHexa(char* hexa, char* p);
-int cantMaxBlocks(char* header);
-
-int getHeaderIndex (void* p);
-void* myRealloc(void* p, size_t new_size);
-void mymemcpy(void* origen, size_t size, void* destino);
-void printBlock(void* p);
-int toInt(int size, char** p);
-int myStrlen(char* s);
-int myPow(int base, int exp);
-void toUpperString(char* s);
