@@ -9,22 +9,14 @@ char* paginas[MAX_PAGES]; //vector de segmentos
 int main(void){
 	int i;
 	char * p;
+	char * p2;
 	float prueba;
 	page_array headers; //struct de vectores de headers
 	
 	initHeader(&pages_struct.pages[0])	;
 	
 	//muestro lo que hay en el header
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
-	gen_pages_index();
-	printf("Mi nueva funcion para imprimir bloques\n");
-	printPage(paginas[0]);
-	
-	// imprimo el espacio libre y en uso
-	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	gen_pages_index2();
 	
 	// ahora voy a reserbar algunos sectores y liberar otros
 	pages_struct.pages[0].header[0]=-2;
@@ -34,6 +26,7 @@ int main(void){
 	pages_struct.pages[0].blocks_cont-=8; // xq arriba reserve 8 bloques
 	pages_struct.pages[0].header[3]=-3;
 	pages_struct.pages[0].blocks_cont-=3; // xq arriba reserve 3 bloques
+
 	pages_struct.pages[0].header[4]=5;
 	
 
@@ -54,79 +47,51 @@ int main(void){
 	printf("getBlocks(%d)=%d\n",0,getBlocks(0));
 	
 	//testeo de la funcion malloc
+
+	pages_struct.pages[0].header[4]=-5;
+
 	
+	
+	//	printPages();
+	
+	//ahora voy a testear la funcion de realloc
 	for(i=0;i<MAX_HEADER_SIZE;i++)
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(32);
-	printf("myMalloc(32)\n");
+	printf("hago un malloc conservo la posicion de memoria\n");
+	p=myMalloc(4*32);
 	for(i=0;i<MAX_HEADER_SIZE;i++)
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(3*32);
-	printf("myMalloc(96)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(31);
-	printf("myMalloc(31)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(33);
-	printf("myMalloc(33)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	printf("myMalloc(20)\n");
-	p = myMalloc(20);
-	printf("El puntero p: %p \n",p);
-	printf("pagina 0: %p \n",paginas[0]);
-	printf("Espacio usado: %d \n", getUsed(&pages_struct.pages[0]));
-	printf("desplazo %d\n",(p-paginas[0])/32);
-	
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	printf("myFree(p)\n");
-	myFree(p);
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	//ahora voy a realizar un free de una posicion de memoria ya liberada
-	printf("myFree(p)\n");
-	myFree(p);
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	//ahora voy a realizar un free de una posicion de memoria inexistente
-	printf("myFree(p+320)\n");
-	myFree(p+320);
+	printf("myRealloc(p,6*32)\n");
+	//myRealloc(p,6*32);
 	for(i=0;i<MAX_HEADER_SIZE;i++)
 			printf("%d ",pages_struct.pages[0].header[i]);
 	printf("\n");
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
 
+
+
 	//printPages();
 	printMap(paginas[0]);
 	printf("%d\n",cantMaxBlocks(pages_struct.pages[0].header));
 	printPage(paginas[0]);
+	int h;
+	
+	for(h = 0; h < 64; h++){
+		
+		paginas[0][h] = 'v';
+		
+	}
+	printBlock(paginas[0]);
+	
+	printf("direccion: FFFFFF\n");
+	char *direccion[] = {"FFFFFF"};
+	
+	printf("%p ppp\n",(void*)toInt(1,direccion));
 	printf("funciono \n");
 
 
@@ -294,8 +259,7 @@ void myFree(void* p){
 	
 	return;
 }
-int abs(int num)
-{
+int abs(int num){
 	return (num>=0?num:num*-1);
 }
 
@@ -319,8 +283,18 @@ void initHeader(mem_header* h1){
 	 
 }
 
-void printPages()
-{
+ void gen_pages_index2(){
+	 
+		int i;
+		void* p=(void*)FIRST_PAGE;
+		for (i=0;i<MAX_PAGES;i++){
+				paginas[i]=malloc(4096);
+			
+			}
+	 
+}
+
+void printPages(){
 	int i, count;
 	char pointer[9];
 	
@@ -389,8 +363,7 @@ int getPageIndex (void* p){
 	return (found ? (i - 1) : -1);
 }
 
-char* indent(char* pchar, int size)
-{
+char* indent(char* pchar, int size){
    int count = 0;
    int i;
     if (pchar !=NULL){ 
@@ -411,6 +384,7 @@ char* indent(char* pchar, int size)
 	}
 	return pchar;
 }
+
 
 void printMap(void* p){
 	
@@ -491,10 +465,202 @@ int cantMaxBlocks(char* header){
 	return ret;
 }
 
+void* myRealloc(void* p, size_t new_size){
+	int index;
+	void* aux;
+	//pruebo si se hay espacio disponible en la misma pagina u otra para mover todo el paquete
+	if((aux=myMalloc(new_size))!=NULL)
+	{
+	//pages_struct
+		//copio todos los valores antes de liberar la memoria
+		printf("entra aca\n");
+		mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[getHeaderIndex(p)], aux); //me falta decr cuanto copiar
+		myFree(p);
+		p=aux;
+	}
+	else{
+		//me fijo si me puedo expander (aca se trabaja sobre header)
+		if((index=getHeaderIndex(p))!=-1){
+			//me fijo si tengo ANTECESOR, si esta libre y entre el y yo sumamos espacio suficiente
+			if(index>0 && pages_struct.pages[getPageIndex (p)].header[index-1]>0 && 
+				(pages_struct.pages[getPageIndex (p)].header[index-1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+				//en caso de que se cumplan las condiciones pedidas copio y luego hago el malloc y free
+				//el vector origen va a ser p y el vector destino va a ser p- (lo que ocupa mi antecesor)
+				mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[index],p-(pages_struct.pages[getPageIndex (p)].header[index-1]*PADDING));
+				myFree(p);
+				p=myMalloc(new_size);
+			}
+			//me fijo si tengo SUCESOR, si esta libre y si el y yo sumados sumamos espacio suficiente
+			else if(index<MAX_HEADER_SIZE-1 && pages_struct.pages[getPageIndex (p)].header[index+1]>0 && 
+					(pages_struct.pages[getPageIndex (p)].header[index+1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+					//en caso de que se cumplan las condiciones pedidas hago el malloc y free y deberia autoexpandirse solo
+					//debido a que primero trata de ubicarlo siempre en un segmetno ya existente por lo que si ingrresa por aca
+					//significa que no hay espacios mayores.
+					myFree(p);
+					p=myMalloc(new_size);
+			}
+			//me fijo si tengo sucesor y antecesor y juntos logramos ocupar el espacio pedido.
+			else if(index<MAX_HEADER_SIZE-1 && index>0 && pages_struct.pages[getPageIndex (p)].header[index+1]>0 && 
+					pages_struct.pages[getPageIndex (p)].header[index-1]>0 && 
+					(pages_struct.pages[getPageIndex (p)].header[index-1] + pages_struct.pages[getPageIndex (p)].header[index+1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+					//en caso de que se cumplan las condiciones pedidas copio y luego hago el malloc y free
+					//el vector origen va a ser p y el vector destino va a ser p- (lo que ocupa mi antecesor)
+					mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[index],p-(pages_struct.pages[getPageIndex (p)].header[index-1]*PADDING));
+					myFree(p);
+					p=myMalloc(new_size);
+					}
+			else
+				p = NULL;
+		}
+		else //si no hay indice de header retorna null y no migra nada
+			p = NULL;
+	}	
+	return p;
+}
+
+int getHeaderIndex (void* p){
+	int page_index, index = -1, bloques, aux;
+	
+	//obtengo el indice de pagina y calculo los bloques que se desplazo p
+	if((page_index=getPageIndex(p))!=-1){
+		bloques = ((int)((char*)p - (char*)paginas[page_index]))/PADDING;
+		aux= bloques;
+		//itero buscando el indice sobre el header
+		for (index = 0; index<MAX_HEADER_SIZE && aux>0;index++){
+				aux -= abs(pages_struct.pages[page_index].header[index]); 
+		}
+		index=(aux==0? index:-1);
+	}
+	return index;
+}
+
+void mymemcpy(void* origen, size_t size, void* destino){
+	int i;
+	char* o;
+	char* d;
+	
+	o = (char*)origen;
+	d = (char*)destino;
+	for(i=0; i<size;i++){
+		d[i]=o[i];
+	}
+
+}
+
 void printBlock(void* p){
 	
-	int bytes;
-	int header ;
-
+	int header = getHeaderIndex(p);
+	int page = getPageIndex(p);
+	int i;
+	int counter = 0;
+	int aux = 0;
+	char* pointer;
+	printf("header: %d   page: %d \n",header,page);
 	
+	if(header != -1 && page != -1){
+		int bytes = abs(pages_struct.pages[page].header[header] * PADDING);
+		for( i = 0; i < header; i++){
+			aux += pages_struct.pages[page].header[header];
+		}
+		aux *= PADDING;
+		pointer = (char*)(paginas[page]) + aux;
+		printf("| ");
+		for(i = 0; i < bytes; i++){
+			if(counter < 15){
+				printf("%c | ",pointer[i]);
+				counter++;
+				i++;
+			}else{
+				printf("\n| ");
+				counter = 0;
+			}
+		}
+		printf("\n");
+	}
+	else{
+		printf("Invalid pointer\n");
+	}
+}	
+
+/* Tiene que ingresar la dirección en formato de 6 dígitos, ej 20C2F4 */
+int toInt(int size, char** p){
+
+	int ret;
+	int i;
+	int dim = myStrlen(p[0]);
+	toUpperString(p[0]);
+	
+	
+	if(isValidPointer(p[0]) && dim == 6){
+		if(dim == 6){
+			for( i = 0, ret = 0; i < dim; i++){
+				if( p[0][i] >= '0' && p[0][i] <= '9'){
+					ret += (p[0][i] - '0') * myPow(16,dim - i);
+				}else if(p[0][i] >= 'A' && p[0][i] <= 'F'){
+					ret += (p[0][i] - 'A' + 10) * myPow(16,dim -1- i);
+					
+				}	
+			}
+		
+		}else{
+			ret = -1;
+		}
+	}else{
+		printf("Null pointer exception\n");
+	}
+	
+	return ret;
+}
+
+int myStrlen(char* s){
+	
+	int i = 0;
+	while(s[i] != '\0'){
+		i++;
+	}	
+	
+	return i;
+}
+
+int myPow(int base, int exp){
+	
+	int ret = base;
+	int i;
+	
+	if(exp == 0){
+		ret = 1;
+	}else{
+		if( exp == 1){
+			ret = base;
+		}else{
+			for( i = 1; i < exp; i++){
+				ret *= base;
+			}
+		}
+	}
+	return ret;
+}
+
+void toUpperString(char* s){
+	
+	int i;
+	int dim = myStrlen(s);
+	for( i = 0; i < dim; i++){
+		if(s[i] >= 'a' && s[i] <= 'z'){
+			s[i] = s[i] - 'a' + 'A';
+		}
+	}
+	
+}
+
+int isValidPointer(char* s){
+	int valid = 1;
+	int dim = myStrlen(s);
+	int i;
+	for(i = 0; i < dim && valid; i++){
+		if(!((s[i] >= 0 && s[i] <= 9) || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >= 'A' && s[i] <= 'F')))
+			valid = 0;
+	}
+	
+	return valid;
 }

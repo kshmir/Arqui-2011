@@ -21,7 +21,7 @@ void setup_IDT_entry(DESCR_INT *item, byte selector, dword offset, byte access, 
 }
 
 void setup_DESCR_PAGE(DESCR_PAGE * item,dword address) {
-	item->address = address | 0x00000003;// & //aca trengo que hacer la cuenta de cuantos bit queiro cuidar considerando que
+	item->address = address | 0x00000003;
 	//los ultimos dos deben estar en 1;
 	
 } 
