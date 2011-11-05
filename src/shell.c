@@ -63,11 +63,14 @@ char* onKey(int direction) {
 // Function names
 char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
 
-		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", "morse" , NULL };
+		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", "morse", "tryMalloc", "tryCalloc", "tryFree",
+		
+		"tryPrintPages", "tryPrintPage", "tryPrintMap", "tryPrintBlock", "tryWrite", "tryRealloc", NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
-		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, morse, NULL};
+		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, morse, tryMalloc,tryCalloc, tryFree,
+		tryPrintPages, tryPrintPage, tryPrintMap, tryPrintBlock, tryWrite, tryRealloc, NULL};
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -137,6 +140,7 @@ void shellStart() {
 char* loggedUser = NULL;
 char* command = NULL;
 void shellMain() {
+	initPaging();
 	while (1) {
 		if (loggedUser == NULL)
 			login(0, NULL);
@@ -252,9 +256,14 @@ int printHelp(int size, char** args) {
 		printf("Type `help confColor' to find out more about the function `confColor'.\n");
 		printf("Type `help clear' to find out more about the function `clear'.\n");
 		printf("Type `help morse' to find out more about the function `morse'.\n");
-
-
-		
+		printf("Type `help tryMalloc' to find out more about the function `tryMalloc'.\n");
+		printf("Type `help tryCalloc' to find out more about the function `tryCalloc'.\n");
+		printf("Type `help tryFree' to find out more about the function `tryFre'.\n");
+		printf("Type `help tryPrintfPages' to find out more about the function `tryPrintPages'.\n");
+		printf("Type `help tryPrintfPage' to find out more about the function `tryPrintPage'.\n");
+		printf("Type `help tryPrintfMap' to find out more about the function `tryPrintMap'.\n");
+		printf("Type `help tryPrintfBlock' to find out more about the function `tryPrintBlock'.\n");
+		printf("Type `help tryWrite' to find out more about the function `tryWrite'.\n");
 
 		
 		
@@ -298,7 +307,66 @@ int printHelp(int size, char** args) {
 			printf("morse will traslate wordToTranslate to morse code through the speaker");
 			printf("If no parameters are given nothing will happen");
 		}
+		
+		if(strcmp(command,"tryMalloc")==0){
 			
+			printf("Usage: tryMalloc size \n");
+			printf("tryMalloc allocates unused space for an object whose size in bytes is\n");
+			printf("specified by size and whose value is unspecified.\n");
+			
+		}
+		if(strcmp(command,"tryRealloc")==0){
+			
+			printf("Usage: tryRealloc pointer size \n");
+			printf("tryRealloc reallocates a used space from a pointer into a new one\n");
+			
+			
+		}
+		if(strcmp(command,"tryCalloc")==0){
+			
+			printf("Usage: tryCalloc size \n");
+			printf("tryCalloc allocates unused space for an \narray of nelem elements each of whose\n"); 
+			printf("size in bytes is elsize. The space shall \nbe initialized to all bits 0.\n");
+			
+		}
+		if(strcmp(command,"tryFree")==0){
+			
+			printf("Usage: tryFree pointer \n");
+			printf("tryFree release memory back to the heap, previously allocated\n"); 
+		}				
+		if(strcmp(command,"tryPrintPages")==0){
+			
+			printf("Usage: tryPrintPages\n");
+			printf("tryPrintPages prints pages pointers\nand their used memory size\n"); 
+		}				
+
+		if(strcmp(command,"tryPrintPage")==0){
+			
+			printf("Usage: tryPrintPage pointer\n");
+			printf("tryPrintPage prints a page showing blocks\n of used and free memory\n"); 
+		}
+		
+		if(strcmp(command,"tryPrintMap")==0){
+			
+			printf("Usage: tryPrintMap pointer\n");
+			printf("tryPrintMap prints the allocated block\n pointers and their size\n"); 
+		}
+		
+		if(strcmp(command,"tryPrintBlock")==0){
+			
+			printf("Usage: tryPrintBlock pointer\n");
+			printf("tryPrintBlock prints the memory\n"); 
+		}
+		
+		if(strcmp(command,"tryWrite")==0){
+			
+			printf("Usage: tryWrite pointer character_to_write\n");
+			printf("tryWrite write the character_to_write in te pointer\n");
+			printf("if the pointer was allocated previously\n");
+		}
+		
+		
+		
 		}	
 	//	 else
 	//		printf("Takes no parameters \n");
@@ -581,6 +649,175 @@ int toDecimal(int value){
 
 int morse(int size, char** args){
 	
-		toMorse(size, args);
+		toMorse(size, args);	
+}
+
+int tryMalloc(int size, char** args){
+
+	int dim;
+	void *p;
+	char pointer[9];
+	char *print;
 	
+	if(size > 1){
+		dim = atoi(args[1]);
+		if(dim > 0){
+			p = myMalloc(dim);
+			if( p != NULL){
+				print = toHexa(pointer,(char*)p);
+				printf("Pointer: %s\n",pointer);
+			}else{
+				printf("Out of memory exception\n");
+			}
+		}else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+}
+
+int tryCalloc(int size, char** args){
+
+	int dim;
+	void *p;
+	char pointer[9];
+	char *print;
+	
+	if(size > 1){
+		dim = atoi(args[1]);
+		if(dim > 0){
+			p = myCalloc(dim);
+			if( p != NULL){
+				print = toHexa(pointer,(char*)p);
+				printf("Pointer: %s\n",pointer);
+			}else{
+				printf("Out of memory exception\n");
+			}
+		}else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+}
+
+int tryFree(int size, char** args){
+	
+	int pointer;
+	
+	if(size > 1){
+		pointer = toInt(args[1]);
+		if(pointer != -1){
+			myFree((void*)pointer);
+		}
+		else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+}	
+
+int tryPrintPages(int size, char **args){		
+		printPages();		
+}
+
+int tryPrintPage(int size, char **args){
+		
+	int pointer;
+	
+	if(size > 1){
+		pointer = toInt(args[1]);
+		if(pointer != -1){
+			printPage((void*)pointer);
+		}
+		else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+	
+}
+
+int tryPrintMap(int size, char **args){
+		
+	int pointer;
+	
+	if(size > 1){
+		pointer = toInt(args[1]);
+		if(pointer != -1){
+			printMap((void*)pointer);
+		}
+		else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+	
+}
+
+int tryPrintBlock(int size, char **args){
+		
+	int pointer;
+	
+	if(size > 1){
+		pointer = toInt(args[1]);
+		if(pointer != -1){
+			printBlock((void*)pointer);
+		}
+		else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+	
+}
+
+int tryWrite(int size, char **args){
+	
+	int pointer;
+	
+	if(size > 2){
+		pointer = toInt(args[1]);
+		if(pointer != -1){
+			memInput(args[2][0],(void*)pointer);
+		}
+		else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
+	
+}
+
+int tryRealloc(int size, char** args){
+
+	int dim;
+	void *p;
+	char pointer[9];
+	int punt;
+	char *print;
+	
+	if(size > 2){
+		dim = atoi(args[2]);
+		punt = toInt(args[1]);
+		if(dim > 0 && punt != -1){
+			p = myRealloc((void*)punt,dim);
+			if( p != NULL){
+				print = toHexa(pointer,(char*)p);
+				printf("Pointer: %s\n",pointer);
+			}else{
+				printf("Out of memory exception\n");
+			}
+		}else{
+			printf("Invalid arguments\n");
+		}
+	}else{
+		printf("Missing arguments\n");		
+	}
 }

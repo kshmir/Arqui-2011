@@ -5,6 +5,16 @@
 
 page_array pages_struct;
 char* paginas[MAX_PAGES]; //vector de segmentos
+void initPaging()
+{
+	int i;
+	
+	for(i = 0; i < MAX_PAGES; i++){
+		initHeader(&pages_struct.pages[i]);
+	}
+	gen_pages_index();
+
+}
 
 void* myMalloc(int size){
 		
@@ -21,7 +31,10 @@ void* myMalloc(int size){
 		int bloques = getBlocks(size);
 		if( size > 0 && size < MAX_PAGE_SIZE){
 			/* Itero sobre el pages para ver si cuento con un segmento de memorio del tamaño solicitado */
+			
 			for (i = 0; i < MAX_PAGES && flag == NOT_FOUND; i++){
+				
+			
 				if((pages_struct.pages[i].blocks_cont) >= bloques){
 					
 					actual = &pages_struct.pages[i]; /* Header */
@@ -123,9 +136,11 @@ void myFree(void* p){
 	int dif;
 	int value;
 	int aux;
+	char vec[9];
 	mem_header* actual;
 	/* Calculo a que pagina debo momverme*/
 	i =getPageIndex(p);
+	if(i != -1){
 	actual = &pages_struct.pages[i];
 	//original vicky
 	//aux = (int)p - (i * MAX_PAGE_SIZE);
@@ -175,7 +190,7 @@ void myFree(void* p){
 				actual->header[j]=0;
 	
 	actual->blocks_cont=cantMaxBlocks(actual->header);
-	}
+	}}
 	return;
 }
 int abs(int num){
@@ -210,7 +225,7 @@ void printPages(){
 	printf("BASE ADDRESS   |  USED\n");
 	printf("----------------------\n");
 	for(i = 0, count=0; i < MAX_PAGES;){
-		while(count<20 && i<MAX_PAGES){
+		while(count<19 && i<MAX_PAGES){
 			printf("%s       |  %d\n",toHexa(pointer,paginas[i]),getUsed(&pages_struct.pages[i]));
 			i++;
 			count++;
@@ -233,9 +248,10 @@ void printPage(void* p){
 	int free = MAX_PAGE_SIZE;
 	char* puntero_ppio_header;
 	int page_index = getPageIndex(p);
-	puntero_ppio_header = pages_struct.pages[page_index].header;
+	
 	
 	if( page_index != -1){
+		puntero_ppio_header = pages_struct.pages[page_index].header;
 		printf("U: Used - F: Free\n|");
 		for(i = 0, count = 0; i < MAX_HEADER_SIZE && !end; ){
 		if(count < 6){
@@ -304,9 +320,10 @@ void printMap(void* p){
 	
 	char* puntero_ppio_header;
 	int page_index = getPageIndex(p);
-	puntero_ppio_header = pages_struct.pages[page_index].header;
+	
 	
 	if( page_index != -1){
+		puntero_ppio_header = pages_struct.pages[page_index].header;
 		printf("POINTER        |  USED\n");
 		printf("----------------------\n");
 		count++;
@@ -477,18 +494,20 @@ void printBlock(void* p){
 	int counter = 0;
 	int aux = 0;
 	char* pointer;
-	printf("header: %d   page: %d \n",header,page);
 	
 	if(header != -1 && page != -1){
+		printf("header: %d   page: %d \n",header,page);
+			
 		int bytes = abs(pages_struct.pages[page].header[header] * PADDING);
+		
 		for( i = 0; i < header; i++){
 			aux += pages_struct.pages[page].header[header];
 		}
 		aux *= PADDING;
 		pointer = (char*)(paginas[page]) + aux;
 		printf("| ");
-		for(i = 0; i < bytes; i++){
-			if(counter < 15){
+		for(i = 0; i < bytes;){
+			if(counter < 10){
 				printf("%c | ",pointer[i]);
 				counter++;
 				i++;
@@ -505,21 +524,22 @@ void printBlock(void* p){
 }	
 
 /* Tiene que ingresar la dirección en formato de 6 dígitos, ej 20C2F4 */
-int toInt(int size, char** p){
+int toInt(char* p){
 
 	int ret;
 	int i;
-	int dim = myStrlen(p[0]);
-	toUpperString(p[0]);
+	int dim = myStrlen(p);
+	toUpperString(p);
 	
 	
-	if(isValidPointer(p[0]) && dim == 6){
+	
+	if(isValidPointer(p) && dim == 6){
 		if(dim == 6){
 			for( i = 0, ret = 0; i < dim; i++){
-				if( p[0][i] >= '0' && p[0][i] <= '9'){
-					ret += (p[0][i] - '0') * myPow(16,dim - i);
-				}else if(p[0][i] >= 'A' && p[0][i] <= 'F'){
-					ret += (p[0][i] - 'A' + 10) * myPow(16,dim -1- i);
+				if( p[i] >= '0' && p[i] <= '9'){
+					ret += (p[i] - '0') * myPow(16,dim -1 - i);
+				}else if(p[i] >= 'A' && p[i] <= 'F'){
+					ret += (p[i] - 'A' + 10) * myPow(16,dim -1- i);
 					
 				}	
 			}
@@ -528,11 +548,32 @@ int toInt(int size, char** p){
 			ret = -1;
 		}
 	}else{
-		printf("Null pointer exception\n");
+		ret = -1;
 	}
 	
 	return ret;
 }
+
+void memInput(char c, void* p){
+	
+	int i;
+	int page_index = getPageIndex(p);
+	int header_index = getHeaderIndex(p);
+	
+	
+	if( page_index != -1 && header_index != -1){
+		if(pages_struct.pages[page_index].header[header_index] < 0){
+			((char*)p)[0] = c;
+		}else{
+			printf("Segmentation fault\n");
+		}
+	}
+	else{
+		printf("Invalid Pointer \n");
+	}
+	
+}
+
 
 int myStrlen(char* s){
 	
@@ -580,7 +621,7 @@ int isValidPointer(char* s){
 	int dim = myStrlen(s);
 	int i;
 	for(i = 0; i < dim && valid; i++){
-		if(!((s[i] >= 0 && s[i] <= 9) || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >= 'A' && s[i] <= 'F')))
+		if(!((s[i] >= '0' && s[i] <= '9') || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >= 'A' && s[i] <= 'F')))
 			valid = 0;
 	}
 	

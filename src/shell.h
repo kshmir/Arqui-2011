@@ -2,6 +2,7 @@
 #include "../src/drivers/video.h"
 #include "../src/libs/string.h"
 #include "../src/drivers/sound.h"
+#include "../src/libs/libmem.h"
 #include <stdarg.h>
 #define _START_H_
 
@@ -38,7 +39,15 @@ int confColor(int size, char** args);
 int changeHour(int size, char** args);
 int changeKeyboard(int size ,char** args);
 int morse(int size, char** args);
-
+int tryMalloc(int size, char** args);
+int tryCalloc(int size, char** args);
+int tryFree(int size, char** args);
+int tryPrintPages(int size, char **args);
+int tryPrintPage(int size, char **args);
+int tryPrintMap(int size, char **args);
+int tryPrintBlock(int size, char **args);
+int tryWrite(int size, char **args);
+int tryRealloc(int size, char** args);
 
 #endif
 
