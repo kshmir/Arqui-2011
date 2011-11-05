@@ -9,22 +9,14 @@ char* paginas[MAX_PAGES]; //vector de segmentos
 int main(void){
 	int i;
 	char * p;
+	char * p2;
 	float prueba;
 	page_array headers; //struct de vectores de headers
 	
 	initHeader(&pages_struct.pages[0])	;
 	
 	//muestro lo que hay en el header
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
-	gen_pages_index();
-	printf("Mi nueva funcion para imprimir bloques\n");
-	printPage(paginas[0]);
-	
-	// imprimo el espacio libre y en uso
-	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	gen_pages_index2();
 	
 	// ahora voy a reserbar algunos sectores y liberar otros
 	pages_struct.pages[0].header[0]=-2;
@@ -34,107 +26,29 @@ int main(void){
 	pages_struct.pages[0].blocks_cont-=8; // xq arriba reserve 8 bloques
 	pages_struct.pages[0].header[3]=-3;
 	pages_struct.pages[0].blocks_cont-=3; // xq arriba reserve 3 bloques
-	pages_struct.pages[0].header[4]=5;
+	pages_struct.pages[0].header[4]=-5;
 	
-	pages_struct.pages[0].header[5]=5;
-	pages_struct.pages[0].header[6]=5;
-	pages_struct.pages[0].header[7]=5;
-	pages_struct.pages[0].header[8]=5;
-	pages_struct.pages[0].header[9]=5;
-	pages_struct.pages[0].header[10]=5;
-	pages_struct.pages[0].header[11]=5;
-	pages_struct.pages[0].header[12]=5;
-	pages_struct.pages[0].header[13]=5;
-	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("cantidad de bloques contiguos libres %d\n",pages_struct.pages[0].blocks_cont);
-	printf("Mi nueva funcion para imprimir bloques\n");
-	printPage(paginas[0]);
-	//testeo de la funcion abs
-	printf("abs(%d)=%d\nabs(%d)=%d\nabs(%d)=%d\n",-1,abs(-1),0,abs(0),2,abs(2));
 	
-	//testeo de la funcion getblocks
-	printf("getBlocks(%d)=%d\n",31,getBlocks(31));
-	printf("getBlocks(%d)=%d\n",32,getBlocks(32));
-	printf("getBlocks(%d)=%d\n",33,getBlocks(33));
-	printf("getBlocks(%d)=%d\n",0,getBlocks(0));
-	
-	//testeo de la funcion malloc
-	
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(32);
-	printf("myMalloc(32)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(3*32);
-	printf("myMalloc(96)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(31);
-	printf("myMalloc(31)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	myMalloc(33);
-	printf("myMalloc(33)\n");
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	printf("myMalloc(20)\n");
-	p = myMalloc(20);
-	printf("El puntero p: %p \n",p);
-	printf("pagina 0: %p \n",paginas[0]);
-	printf("Espacio usado: %d \n", getUsed(&pages_struct.pages[0]));
-	printf("desplazo %d\n",(p-paginas[0])/32);
-	
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	printf("myFree(p)\n");
-	myFree(p);
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	//ahora voy a realizar un free de una posicion de memoria ya liberada
-	printf("myFree(p)\n");
-	myFree(p);
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-	//ahora voy a realizar un free de una posicion de memoria inexistente
-	printf("myFree(p+320)\n");
-	myFree(p+320);
-	for(i=0;i<MAX_HEADER_SIZE;i++)
-			printf("%d ",pages_struct.pages[0].header[i]);
-	printf("\n");
-	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
-	
-
 //	printPages();
 	
+	//ahora voy a testear la funcion de realloc
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	printf("hago un malloc conservo la posicion de memoria\n");
+	p=myMalloc(4*32);
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
+	printf("myRealloc(p,6*32)\n");
+	myRealloc(p,6*32);
+	for(i=0;i<MAX_HEADER_SIZE;i++)
+			printf("%d ",pages_struct.pages[0].header[i]);
+	printf("\n");
+	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
-
 	printf("funciono \n");
 
 
@@ -327,6 +241,17 @@ void initHeader(mem_header* h1){
 	 
 }
 
+ void gen_pages_index2(){
+	 
+		int i;
+		void* p=(void*)FIRST_PAGE;
+		for (i=0;i<MAX_PAGES;i++){
+				paginas[i]=malloc(4096);
+			
+			}
+	 
+}
+
 void printPages()
 {
 	int i, count;
@@ -417,4 +342,86 @@ char* indent(char* pchar, int size)
 		pchar[i]='\0';
 	}
 	return pchar;
+}
+
+void* myRealloc(void* p, size_t new_size)
+{
+	int index;
+	void* aux;
+	//pruebo si se hay espacio disponible en la misma pagina u otra para mover todo el paquete
+	if((aux=myMalloc(new_size))!=NULL)
+	{
+	//pages_struct
+		//copio todos los valores antes de liberar la memoria
+		printf("entra aca\n");
+		mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[getHeaderIndex(p)], aux); //me falta decr cuanto copiar
+		myFree(p);
+		p=aux;
+	}
+	else{
+		//me fijo si me puedo expander (aca se trabaja sobre header)
+		if((index=getHeaderIndex(p))!=-1){
+			//me fijo si tengo ANTECESOR, si esta libre y entre el y yo sumamos espacio suficiente
+			if(index>0 && pages_struct.pages[getPageIndex (p)].header[index-1]>0 && 
+				(pages_struct.pages[getPageIndex (p)].header[index-1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+				//en caso de que se cumplan las condiciones pedidas copio y luego hago el malloc y free
+				//el vector origen va a ser p y el vector destino va a ser p- (lo que ocupa mi antecesor)
+				mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[index],p-(pages_struct.pages[getPageIndex (p)].header[index-1]*PADDING));
+				myFree(p);
+				p=myMalloc(new_size);
+			}
+			//me fijo si tengo SUCESOR, si esta libre y si el y yo sumados sumamos espacio suficiente
+			else if(index<MAX_HEADER_SIZE-1 && pages_struct.pages[getPageIndex (p)].header[index+1]>0 && 
+					(pages_struct.pages[getPageIndex (p)].header[index+1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+					//en caso de que se cumplan las condiciones pedidas hago el malloc y free y deberia autoexpandirse solo
+					//debido a que primero trata de ubicarlo siempre en un segmetno ya existente por lo que si ingrresa por aca
+					//significa que no hay espacios mayores.
+					myFree(p);
+					p=myMalloc(new_size);
+			}
+			//me fijo si tengo sucesor y antecesor y juntos logramos ocupar el espacio pedido.
+			else if(index<MAX_HEADER_SIZE-1 && index>0 && pages_struct.pages[getPageIndex (p)].header[index+1]>0 && 
+					pages_struct.pages[getPageIndex (p)].header[index-1]>0 && 
+					(pages_struct.pages[getPageIndex (p)].header[index-1] + pages_struct.pages[getPageIndex (p)].header[index+1] + (pages_struct.pages[getPageIndex (p)].header[index]*-1))>=new_size){
+					//en caso de que se cumplan las condiciones pedidas copio y luego hago el malloc y free
+					//el vector origen va a ser p y el vector destino va a ser p- (lo que ocupa mi antecesor)
+					mymemcpy(p, pages_struct.pages[getPageIndex (p)].header[index],p-(pages_struct.pages[getPageIndex (p)].header[index-1]*PADDING));
+					myFree(p);
+					p=myMalloc(new_size);
+					}
+			else
+				p = NULL;
+		}
+		else //si no hay indice de header retorna null y no migra nada
+			p = NULL;
+	}	
+	return p;
+}
+
+int getHeaderIndex (void* p){
+	int page_index, index = -1, bloques, aux;
+	
+	//obtengo el indice de pagina y calculo los bloques que se desplazo p
+	if((page_index=getPageIndex(p))!=-1){
+		bloques = (int)((char*)p - ((char*)p)[page_index])/PADDING;
+		aux= bloques;
+		//itero buscando el indice sobre el header
+		for (index = 0; index<MAX_HEADER_SIZE && aux>0;index++){
+				aux -= abs(pages_struct.pages[page_index].header[index]); 
+		}
+		index=(aux==0?index:-1);
+	}
+	return index;
+}
+
+void mymemcpy(void* origen, size_t size, void* destino){
+	int i;
+	char* o;
+	char* d;
+	
+	o = (char*)origen;
+	d = (char*)destino;
+	for(i=0; i<size;i++){
+		d[i]=o[i];
+	}
 }
