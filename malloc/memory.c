@@ -36,15 +36,7 @@ int main(void){
 	pages_struct.pages[0].blocks_cont-=3; // xq arriba reserve 3 bloques
 	pages_struct.pages[0].header[4]=5;
 	
-	pages_struct.pages[0].header[5]=5;
-	pages_struct.pages[0].header[6]=5;
-	pages_struct.pages[0].header[7]=5;
-	pages_struct.pages[0].header[8]=5;
-	pages_struct.pages[0].header[9]=5;
-	pages_struct.pages[0].header[10]=5;
-	pages_struct.pages[0].header[11]=5;
-	pages_struct.pages[0].header[12]=5;
-	pages_struct.pages[0].header[13]=5;
+
 	printf("libre: %d\nuso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	for(i=0;i<MAX_HEADER_SIZE;i++)
 			printf("%d ",pages_struct.pages[0].header[i]);
@@ -131,10 +123,10 @@ int main(void){
 	printf("libre: %d uso: %d \n", getFreeSpace(&pages_struct.pages[0]), getUsed(&pages_struct.pages[0]));
 	
 
-//	printPages();
-	
-	
-
+	//printPages();
+	printMap(paginas[0]);
+	printf("%d\n",cantMaxBlocks(pages_struct.pages[0].header));
+	printPage(paginas[0]);
 	printf("funciono \n");
 
 
@@ -330,12 +322,13 @@ void initHeader(mem_header* h1){
 void printPages()
 {
 	int i, count;
+	char pointer[9];
 	
 	printf("BASE ADDRESS   |  USED\n");
 	printf("----------------------\n");
 	for(i = 0, count=0; i < MAX_PAGES;){
 		while(count<20 && i<MAX_PAGES){
-			printf("%p       |  %d\n",paginas[i],getUsed(&pages_struct.pages[i]));
+			printf("%s       |  %d\n",toHexa(pointer,paginas[i]),getUsed(&pages_struct.pages[i]));
 			i++;
 			count++;
 			}
@@ -362,17 +355,17 @@ void printPage(void* p){
 	if( page_index != -1){
 		printf("U: Used - F: Free\n|");
 		for(i = 0, count = 0; i < MAX_HEADER_SIZE && !end; ){
-		if(count < 10){
+		if(count < 6){
 			free = free - abs(puntero_ppio_header[i] * PADDING);
 			count++;
 			if(puntero_ppio_header[i] < 0){
-				printf(" Used: %s%d |", indent(indentation,puntero_ppio_header[i]*(-PADDING)),puntero_ppio_header[i]*(-PADDING));
+				printf(" U: %s%d |", indent(indentation,puntero_ppio_header[i]*(-PADDING)),puntero_ppio_header[i]*(-PADDING));
 			}
 			else{
 				if(puntero_ppio_header[i] > 0){
-					printf(" Free: %s%d |", indent(indentation,puntero_ppio_header[i]*(PADDING)), puntero_ppio_header[i]*(PADDING));
+					printf(" F: %s%d |", indent(indentation,puntero_ppio_header[i]*(PADDING)), puntero_ppio_header[i]*(PADDING));
 				}else{
-					printf(" Free: %s%d |\n", indent(indentation,free), free);
+					printf(" F: %s%d |\n", indent(indentation,free), free);
 					end = 1;
 				}	
 			}
@@ -417,4 +410,92 @@ char* indent(char* pchar, int size)
 		pchar[i]='\0';
 	}
 	return pchar;
+}
+
+void printMap(void* p){
+	
+	char pointer[9];
+	char end = 0;
+	int i;
+	int count;
+	
+	char* puntero_ppio_header;
+	int page_index = getPageIndex(p);
+	puntero_ppio_header = pages_struct.pages[page_index].header;
+	
+	if( page_index != -1){
+		printf("POINTER        |  USED\n");
+		printf("----------------------\n");
+		count++;
+		for(i = 0, count = 0; i < MAX_HEADER_SIZE;){
+			if(count < 10){
+				if(puntero_ppio_header[i] < 0){
+					printf("%s       |  %d\n",toHexa(pointer,paginas[i]),puntero_ppio_header[i] * (-PADDING));
+				count++;
+				}
+				i++;	
+			}else{
+				printf("Please enter any key for more results\n");
+				getchar();
+				count = 0;
+				printf("POINTER        |  USED\n");
+				printf("----------------------\n");		
+			}
+		}
+	
+	}else{
+		printf("Invalid Pointer \n");
+	}
+}
+
+char* toHexa(char* hexa, char* p){
+	
+	int r;
+	int i;
+	int num = (int)p;
+	
+	
+	hexa[0] = '0';
+	hexa[1] = 'x';
+	
+	for(i = 7; i > 1; i--){
+		r = num %16;
+		if( r < 10){
+			hexa[i] = r +'0';
+		}else{
+			hexa[i] = r - 10 + 'a';
+		}
+	num /= 16;
+	}
+	hexa[8] = '\0';
+	
+	return hexa;
+}
+
+int cantMaxBlocks(char* header){
+	int i;
+	int ret = 0;
+	int aux = MAX_HEADER_SIZE;
+	
+	for(i = 0; header[i] != 0; i++){
+		aux = aux - abs(header[i]);		
+		if( header[i] > 0 && ret < header[i]){
+			ret = header[i];
+		}
+	}
+	
+	if(ret < aux){
+		ret = aux;
+	}	
+	
+	return ret;
+}
+
+void printBlock(void* p){
+	
+	int bytes;
+	int header ;
+	
+	
+	
 }
