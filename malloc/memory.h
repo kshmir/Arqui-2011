@@ -1,4 +1,5 @@
-
+#include "../src/libs/stdio.h"
+#include "../src/libs/stdlib.h"
 
 #define MAX_HEADER_SIZE 128 /* Tamaño del header */
 #define MAX_PAGE_SIZE 4096 /* 4K */
