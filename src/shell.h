@@ -48,6 +48,6 @@ int tryPrintMap(int size, char **args);
 int tryPrintBlock(int size, char **args);
 int tryWrite(int size, char **args);
 int tryRealloc(int size, char** args);
-
+int getStack(int size, char** args);
 #endif
 

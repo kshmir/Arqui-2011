@@ -1,6 +1,7 @@
 global _loader		; making entry point visible to linker
 global eokl		; end of kernel land
 extern kmain		; _main is defined elsewhere
+global stack
 
 
 ; setting up the Multiboot header - see GRUB docs for details

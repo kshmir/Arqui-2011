@@ -16,7 +16,10 @@ GLOBAL _getSeconds
 GLOBAL _getMinutes
 GLOBAL _getHour
 GLOBAL _set_CR
+GLOBAL _printStack
 
+EXTERN	eokl
+EXTERN  stack
 EXTERN  int_08
 EXTERN  int_09
 EXTERN	int_80
@@ -262,6 +265,24 @@ _getSeconds:
 	ret
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
+
+_printStack:
+	push ebp
+	mov ebp,esp
+
+	;mov ebx,eokl
+	;sub ebx,stack
+	;mov eax, 0
+	;mov ax,sp
+	;sub eax,ebx
+	;mov esp,ebp
+	mov eax, 0
+	mov bx,sp
+	mov ax,ss
+	sub ax, bx
+	pop ebp
+	ret
+	
 
 
 _debug:

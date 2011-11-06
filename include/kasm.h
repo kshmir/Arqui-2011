@@ -32,6 +32,8 @@ void _int_80_hand(int systemCall, int fd, char *buffer, int count);
 
 int _rdtsc();
 
+int _printStack();
+
 void _doManyCicles();
 void _doManyCicles2();
 /* System call write */
