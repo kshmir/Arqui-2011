@@ -134,7 +134,7 @@ void shellStart() {
 
 	setKeyboard(0);
 	
-	printf("valor del stack %d\n",_printStack());
+	//printf("valor del stack %d\n",_printStack());
 	
 }
 
@@ -178,12 +178,12 @@ int login(int size, char** args) {
 			loggedUser = getConsoleString(FALSE);
 		} while (loggedUser[0] == 0 || loggedUser[0] == '\n');
 
-		printf(
-				"Type `help cpuSpeed' to find out more about the function `cpuSpeed'.\n");
+	//	printf(
+		//		"Type `help cpuSpeed' to find out more about the function `cpuSpeed'.\n");
 		printf("   Ortiz, Ezequiel\n");
 		printf("   Reznik, Luciana\n");
 		printf("   Mesa Alcorta, Victoria\n");
-		printf("   valor del stack %d\n",_printStack());
+		//printf("   valor del stack %d\n",_printStack());
 	}
 }
 
@@ -261,10 +261,10 @@ int printHelp(int size, char** args) {
 		printf("Type `help tryMalloc' to find out more about the function `tryMalloc'.\n");
 		printf("Type `help tryCalloc' to find out more about the function `tryCalloc'.\n");
 		printf("Type `help tryFree' to find out more about the function `tryFre'.\n");
-		printf("Type `help tryPrintfPages' to find out more about the function `tryPrintPages'.\n");
-		printf("Type `help tryPrintfPage' to find out more about the function `tryPrintPage'.\n");
-		printf("Type `help tryPrintfMap' to find out more about the function `tryPrintMap'.\n");
-		printf("Type `help tryPrintfBlock' to find out more about the function `tryPrintBlock'.\n");
+		printf("Type `help tryPrintPages' to find out more about the function `tryPrintPages'.\n");
+		printf("Type `help tryPrintPage' to find out more about the function `tryPrintPage'.\n");
+		printf("Type `help tryPrintMap' to find out more about the function `tryPrintMap'.\n");
+		printf("Type `help tryPrintBlock' to find out more about the function `tryPrintBlock'.\n");
 		printf("Type `help tryWrite' to find out more about the function `tryWrite'.\n");
 
 		
@@ -826,7 +826,7 @@ int tryRealloc(int size, char** args){
 
 int getStack(int size, char** args)
 {	
-	printf("valor del stack %d\n",_printStack());
+	printf("Stack value %d\n",_printStack());
 
 }
 
