@@ -619,9 +619,9 @@ void showHour(){
 		setCursorY(0);
 		clearFirstLine();
 		if(hour<10)
-		printf("hora 0%d:",hour);
+		printf("hour 0%d:",hour);
 		else{
-		printf("hora %d:",hour);
+		printf("hour %d:",hour);
 		}
 		if(minutes<10){
 		printf("0%d:",minutes);
