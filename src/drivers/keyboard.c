@@ -438,7 +438,7 @@ void printKeyboard(){
 		if(currentKeyboard==EN){
 			lang="English";
 		}
-		printf("Current lenguage: %s",lang);
+		printf("Current language: %s",lang);
 		
 		setCursorX(x);
 		setCursorY(y);
