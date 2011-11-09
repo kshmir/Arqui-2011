@@ -134,7 +134,7 @@ void shellStart() {
 
 	setKeyboard(0);
 	
-	//printf("valor del stack %d\n",_printStack());
+	printf("valor del stack %d\n",_printStack());
 	
 }
 
