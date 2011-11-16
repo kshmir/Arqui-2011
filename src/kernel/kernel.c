@@ -226,6 +226,7 @@ kmain() {
 
 	startKeyboard();
 	initVideo();
+	initpages();
 	shellStart();
 
 	/* KeepAlive loop */

@@ -65,12 +65,12 @@ char* function_names[] = { "logout", "login", "ninline", "help", "cpuSpeed",
 
 		"test", "clear", "ssh", "confColor", "changeKeyboard", "changeHour", "morse", "tryMalloc", "tryCalloc", "tryFree",
 		
-		"tryPrintPages", "tryPrintPage", "tryPrintMap", "tryPrintBlock", "tryWrite", "tryRealloc", NULL };
+		"tryPrintPages", "tryPrintPage", "tryPrintMap", "tryPrintBlock", "tryWrite", "tryRealloc", "getStack", NULL };
 
 // Functions
 int ((*functions[])(int, char**)) = { logout, login, nInLineStart, printHelp,
 		cpuSpeed, test, clear, ssh, confColor, changeKeyboard, changeHour, morse, tryMalloc,tryCalloc, tryFree,
-		tryPrintPages, tryPrintPage, tryPrintMap, tryPrintBlock, tryWrite, tryRealloc, NULL};
+		tryPrintPages, tryPrintPage, tryPrintMap, tryPrintBlock, tryWrite, tryRealloc, getStack, NULL};
 
 // Tab callback for autocomplete.
 char* whenTabCalls(char* s) {
@@ -134,6 +134,7 @@ void shellStart() {
 
 	setKeyboard(0);
 	
+	printf("valor del stack %d\n",_printStack());
 	
 }
 
@@ -182,6 +183,7 @@ int login(int size, char** args) {
 		printf("   Ortiz, Ezequiel\n");
 		printf("   Reznik, Luciana\n");
 		printf("   Mesa Alcorta, Victoria\n");
+		printf("   valor del stack %d\n",_printStack());
 	}
 }
 
@@ -821,3 +823,10 @@ int tryRealloc(int size, char** args){
 		printf("Missing arguments\n");		
 	}
 }
+
+int getStack(int size, char** args)
+{	
+	printf("valor del stack %d\n",_printStack());
+
+}
+
